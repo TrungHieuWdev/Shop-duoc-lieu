@@ -2,6 +2,12 @@ import { create } from 'zustand';
 
 export const useCartStore = create((set, get) => ({
   items: JSON.parse(localStorage.getItem('nganha_herbal_cart') || '[]'),
+  cartBounceTick: 0,
+
+  // Kích hoạt rung giỏ hàng 1 nhịp khi hàng rơi vào giỏ
+  triggerCartBounce: () => {
+    set((state) => ({ cartBounceTick: state.cartBounceTick + 1 }));
+  },
 
   // Thêm sản phẩm vào giỏ hàng
   addItem: (product, quantity = 1) => {

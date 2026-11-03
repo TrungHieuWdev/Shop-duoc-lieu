@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { useCartStore } from '@/store/useCartStore';
+import { flyItemToCart } from '@/utils/cartAnimation';
 
 const MOCK_DETAILS = {
   'bai-thuoc-xong-tam-tong-hop-7-vi-thao-duoc': {
@@ -114,14 +115,24 @@ export const ProductDetailPage = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
   const addItem = useCartStore((state) => state.addItem);
+  const imgRef = useRef(null);
 
   const product = MOCK_DETAILS[slug] || MOCK_DETAILS['bai-thuoc-xong-tam-tong-hop-7-vi-thao-duoc'];
 
   const [quantity, setQuantity] = useState(1);
   const [toastVisible, setToastVisible] = useState(false);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e) => {
+    // 1. Lưu sản phẩm vào store
     addItem(product, quantity);
+
+    // 2. Kích hoạt hiệu ứng bay vào giỏ và rung giỏ hàng
+    const sourceEl = imgRef.current || e.currentTarget;
+    flyItemToCart({
+      sourceElement: sourceEl,
+      imageUrl: product.image_url || product.thumbnail_url,
+    });
+
     setToastVisible(true);
     setTimeout(() => setToastVisible(false), 3000);
   };
@@ -147,6 +158,7 @@ export const ProductDetailPage = () => {
         <div className="lg:col-span-6 bg-surface-container-lowest rounded-xl p-4 border border-border-herbal shadow-sm">
           <div className="aspect-square rounded-lg overflow-hidden bg-surface-container">
             <img
+              ref={imgRef}
               src={product.image_url}
               alt={product.name}
               className="w-full h-full object-cover"

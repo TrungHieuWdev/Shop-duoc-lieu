@@ -60,8 +60,8 @@ export default {
         "error-container": "#ffdad6",
       },
       fontFamily: {
-        serif: ["'Noto Serif'", "Georgia", "serif"],
-        sans: ["'Be Vietnam Pro'", "system-ui", "-apple-system", "sans-serif"],
+        serif: ["'Vollkorn'", "'Noto Serif'", "Georgia", "serif"],
+        sans: ["'Manrope'", "'Be Vietnam Pro'", "system-ui", "-apple-system", "sans-serif"],
       },
       borderRadius: {
         DEFAULT: "0.25rem",

@@ -1,22 +1,41 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { useCartStore } from '@/store/useCartStore';
+import { flyItemToCart } from '@/utils/cartAnimation';
 
 export const ProductCard = ({ product, onAddToCartSuccess }) => {
+  const cardRef = useRef(null);
   const addItem = useCartStore((state) => state.addItem);
 
   const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
+
+    // 1. Lưu sản phẩm vào giỏ hàng ngay lập tức
     addItem(product, 1);
-    if (onAddToCartSuccess) {
-      onAddToCartSuccess(product);
-    }
+
+    // 2. Tìm ảnh sản phẩm làm điểm xuất phát bay
+    const imgEl = cardRef.current?.querySelector('img') || e.currentTarget;
+    const imageUrl = product.thumbnail_url || product.image_url;
+
+    // 3. Kích hoạt hiệu ứng hình ảnh thu nhỏ bay vào giỏ hàng và làm giỏ hàng rung lên 1 nhịp
+    flyItemToCart({
+      sourceElement: imgEl,
+      imageUrl,
+      onComplete: () => {
+        if (onAddToCartSuccess) {
+          onAddToCartSuccess(product);
+        }
+      },
+    });
   };
 
   return (
-    <div className="group relative flex flex-col bg-surface-container-lowest rounded p-4 border border-border-herbal/60 shadow-sm hover:shadow-md transition-all duration-300">
+    <div
+      ref={cardRef}
+      className="group relative flex flex-col bg-surface-container-lowest rounded p-4 border border-border-herbal/60 shadow-sm hover:shadow-md transition-all duration-300"
+    >
       {/* Product Image */}
       <Link to={`/san-pham/${product.slug}`} className="relative w-full aspect-square bg-surface-container rounded overflow-hidden block">
         <img

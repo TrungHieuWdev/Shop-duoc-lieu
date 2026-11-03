@@ -4,6 +4,8 @@ import { MainLayout } from '@/layouts/MainLayout';
 import { HomePage } from '@/pages/HomePage';
 import { ProductsPage } from '@/pages/ProductsPage';
 import { ProductDetailPage } from '@/pages/ProductDetailPage';
+import { HerbsAboutPage } from '@/pages/HerbsAboutPage';
+import { UsageGuidePage } from '@/pages/UsageGuidePage';
 import { CartPage } from '@/pages/CartPage';
 import { CheckoutPage } from '@/pages/CheckoutPage';
 import { PaymentPage } from '@/pages/PaymentPage';
@@ -19,6 +21,10 @@ export const AppRoutes = () => {
         <Route index element={<HomePage />} />
         <Route path="san-pham" element={<ProductsPage />} />
         <Route path="san-pham/:slug" element={<ProductDetailPage />} />
+        <Route path="ve-thao-duoc" element={<HerbsAboutPage />} />
+        <Route path="cach-dung" element={<UsageGuidePage />} />
+        <Route path="huong-dan-su-dung" element={<UsageGuidePage />} />
+        <Route path="huong-dan" element={<UsageGuidePage />} />
         <Route path="gio-hang" element={<CartPage />} />
         <Route path="dat-hang" element={<CheckoutPage />} />
         <Route path="thanh-toan/:orderCode" element={<PaymentPage />} />

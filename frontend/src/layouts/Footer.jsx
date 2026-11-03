@@ -26,7 +26,7 @@ export const Footer = () => {
                 Chứng Nhận Dược Liệu
               </span>
               <p className="text-body-sm text-on-surface-variant">
-                Dược liệu sấy lạnh kiểm định chất lượng an toàn, không pha trộn tạp chất.
+                Dược liệu phơi khô tự nhiên, kiểm định chất lượng an toàn, không pha trộn tạp chất.
               </p>
             </div>
           </div>
@@ -37,7 +37,7 @@ export const Footer = () => {
             <ul className="flex flex-col gap-2.5 text-body-sm text-on-surface-variant">
               <li className="flex items-start gap-2">
                 <span className="material-symbols-outlined text-secondary text-[1rem] mt-0.5">eco</span>
-                <span>100% thảo mộc bản địa vùng cao</span>
+                <span>100% thảo mộc bản địa Việt Nam</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="material-symbols-outlined text-secondary text-[1rem] mt-0.5">spa</span>
@@ -48,19 +48,19 @@ export const Footer = () => {
                 <span>Không chất bảo quản công nghiệp</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="material-symbols-outlined text-secondary text-[1rem] mt-0.5">local_florist</span>
-                <span>Quy trình sấy lạnh đối lưu 35°C</span>
+                <span className="material-symbols-outlined text-secondary text-[1rem] mt-0.5">wb_sunny</span>
+                <span>Phơi khô tự nhiên giữ trọn tinh dầu</span>
               </li>
             </ul>
           </div>
 
           {/* Cột 3: Vùng dược liệu & Liên hệ */}
           <div className="flex flex-col gap-4">
-            <h4 className="font-serif text-lg font-bold text-primary">Liên Hệ & Vùng Dược Liệu</h4>
+            <h4 className="font-serif text-lg font-bold text-primary">Liên Hệ & Cửa Hàng</h4>
             <ul className="flex flex-col gap-2.5 text-body-sm text-on-surface-variant">
               <li className="flex items-start gap-2">
                 <span className="material-symbols-outlined text-primary text-[1.125rem] mt-0.5">location_on</span>
-                <span>Vườn dược liệu Ba Vì (Hà Nội) & dãy Tây Bắc</span>
+                <span>Dược liệu bản địa thu hái từ các vùng đất lành Việt Nam</span>
               </li>
               <li className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary text-[1.125rem]">call</span>
@@ -77,28 +77,33 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Cột 4: Danh mục sản phẩm */}
+          {/* Cột 4: Liên kết nhanh theo 4 trang điều hướng */}
           <div className="flex flex-col gap-4">
-            <h4 className="font-serif text-lg font-bold text-primary">Dòng Sản Phẩm</h4>
+            <h4 className="font-serif text-lg font-bold text-primary">Liên Kết Nhanh</h4>
             <ul className="flex flex-col gap-2 text-body-sm text-on-surface-variant">
               <li>
-                <Link to="/san-pham?category=thao-moc-xong-tam" className="hover:text-primary transition-colors">
-                  Thảo Mộc Xông Tắm Sau Sinh
+                <Link to="/" className="hover:text-primary transition-colors">
+                  Trang chủ
                 </Link>
               </li>
               <li>
-                <Link to="/san-pham?category=muoi-ngam-chan-duoc-lieu" className="hover:text-primary transition-colors">
-                  Muối Ngâm Chân Thảo Dược
+                <Link to="/san-pham" className="hover:text-primary transition-colors">
+                  Sản phẩm thảo mộc
                 </Link>
               </li>
               <li>
-                <Link to="/san-pham?category=cham-soc-toc-tu-nhien" className="hover:text-primary transition-colors">
-                  Cao Bồ Kết & Dưỡng Tóc Vỏ Bưởi
+                <Link to="/ve-thao-duoc" className="hover:text-primary transition-colors">
+                  Về thảo dược bản địa
                 </Link>
               </li>
               <li>
-                <Link to="/san-pham?category=xa-bong-sinh-duoc" className="hover:text-primary transition-colors">
-                  Xà Bông Nghệ & Khổ Qua Sinh Dược
+                <Link to="/cach-dung" className="hover:text-primary transition-colors">
+                  Cách dùng & nấu nước tắm
+                </Link>
+              </li>
+              <li>
+                <Link to="/san-pham/bai-thuoc-xong-tam-tong-hop-7-vi-thao-duoc" className="hover:text-primary transition-colors font-semibold text-primary">
+                  Bài thuốc 7 vị (50.000đ)
                 </Link>
               </li>
             </ul>
@@ -108,7 +113,7 @@ export const Footer = () => {
         {/* Chân trang bản quyền */}
         <div className="border-t border-border-herbal mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-body-sm text-on-surface-variant text-center sm:text-left">
-            © 2026 Mộc Nhiên Thảo (NganHa Shop). Tinh hoa thảo mộc bản địa Việt Nam.
+            © 2026 Ngân Hà Thảo Mộc. Tinh hoa dược liệu bản địa phơi khô tự nhiên.
           </p>
           <div className="flex items-center gap-6 text-[0.75rem] font-semibold text-secondary uppercase tracking-widest">
             <span>Thuần Lành</span>

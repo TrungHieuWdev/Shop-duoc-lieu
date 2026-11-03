@@ -7,27 +7,43 @@ export const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const totalItems = useCartStore((state) => state.getTotalItems());
+  const cartBounceTick = useCartStore((state) => state.cartBounceTick);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeNav, setActiveNav] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isCartBouncing, setIsCartBouncing] = useState(false);
+
+  // Hiệu ứng giỏ hàng rung lên 1 nhịp khi có món hàng rơi vào giỏ
+  useEffect(() => {
+    if (cartBounceTick > 0) {
+      setIsCartBouncing(true);
+      const timer = setTimeout(() => {
+        setIsCartBouncing(false);
+      }, 620);
+      return () => clearTimeout(timer);
+    }
+  }, [cartBounceTick]);
 
   // Tự động nhận diện tab active dựa theo URL và đóng mobile menu khi chuyển trang
   useEffect(() => {
     setMobileMenuOpen(false);
+
     if (location.pathname === '/san-pham') {
       setActiveNav('san-pham');
+    } else if (location.pathname === '/ve-thao-duoc') {
+      setActiveNav('ve-thao-duoc');
+    } else if (
+      location.pathname === '/cach-dung' ||
+      location.pathname === '/huong-dan-su-dung' ||
+      location.pathname === '/huong-dan'
+    ) {
+      setActiveNav('cach-dung');
     } else if (location.pathname === '/') {
-      if (location.hash === '#san-pham') {
-        setActiveNav('san-pham');
-      } else if (location.hash === '#quy-trinh' || location.hash === '#huong-dan') {
-        setActiveNav('huong-dan');
-      } else {
-        setActiveNav('home');
-      }
+      setActiveNav('home');
     } else {
       setActiveNav('');
     }
-  }, [location.pathname, location.hash]);
+  }, [location.pathname]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -39,49 +55,16 @@ export const Header = () => {
   const handleHomeClick = (e) => {
     setActiveNav('home');
     if (location.pathname === '/') {
-      // Đang ở trang chủ (ở trên đầu hay ở các mục phía dưới như quy trình, hướng dẫn)
-      if (e) e.preventDefault();
-      if (location.hash) {
-        navigate('/', { replace: true });
-      }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    // Nếu đang ở trang khác (vd: /san-pham, /gio-hang), không gọi e.preventDefault()
-    // để React Router <Link to="/"> tự động chuyển trang một cách chuẩn xác
-  };
-
-  const handleProductsClick = (e) => {
-    setActiveNav('san-pham');
-    if (location.pathname === '/san-pham') {
-      // Đang ở trang sản phẩm mà đã cuộn xuống dưới -> cuộn mượt lên đầu
       if (e) e.preventDefault();
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    // Nếu đang ở trang khác (trang chủ, các mục dưới trang chủ...), không gọi e.preventDefault()
-    // để React Router <Link to="/san-pham"> tự động chuyển trang một cách chuẩn xác
-  };
-
-  const handleNavAnchor = (e, targetId) => {
-    if (e) e.preventDefault();
-    setActiveNav(targetId);
-    if (location.pathname === '/') {
-      // Đang ở trang chủ -> cuộn mượt tới phần tử đó và cập nhật hash sạch qua React Router
-      navigate(`/#${targetId}`, { replace: true });
-      const el = document.getElementById(targetId);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
-    } else {
-      // Đang ở trang khác -> điều hướng về trang chủ kèm hash
-      navigate(`/#${targetId}`);
     }
   };
 
   // Chỉ item active mới có gạch chân xanh đậm. Item inactive chỉ đổi màu chữ khi hover, KHÔNG hiện vạch mờ.
   const getLinkClasses = (isActive) => {
     return isActive
-      ? 'text-primary font-semibold border-b-2 border-primary pb-1 transition-colors whitespace-nowrap'
-      : 'text-on-surface-variant hover:text-primary transition-colors py-1 border-b-2 border-transparent whitespace-nowrap';
+      ? 'text-primary font-bold border-b-2 border-primary pb-1 transition-all whitespace-nowrap active:scale-95'
+      : 'text-on-surface-variant hover:text-primary transition-all py-1 border-b-2 border-transparent whitespace-nowrap active:scale-95';
   };
 
   return (
@@ -104,7 +87,7 @@ export const Header = () => {
           </div>
         </Link>
 
-        {/* Navigation Links with Clean Single Active State (Desktop >= lg) */}
+        {/* Navigation Links with 4 Distinct Routes (Desktop >= lg) */}
         <nav className="hidden lg:flex items-center gap-5 xl:gap-8 text-body-sm font-medium shrink-0">
           <Link
             to="/"
@@ -113,26 +96,30 @@ export const Header = () => {
           >
             Trang chủ
           </Link>
-          <a
-            href="/#san-pham"
-            onClick={(e) => handleNavAnchor(e, 'san-pham')}
+          <Link
+            to="/san-pham"
             className={getLinkClasses(activeNav === 'san-pham')}
           >
             Sản phẩm
-          </a>
-          <a
-            href="/#huong-dan"
-            onClick={(e) => handleNavAnchor(e, 'huong-dan')}
-            className={getLinkClasses(activeNav === 'huong-dan')}
+          </Link>
+          <Link
+            to="/ve-thao-duoc"
+            className={getLinkClasses(activeNav === 've-thao-duoc')}
           >
-            Hướng dẫn sử dụng
-          </a>
+            Về thảo dược
+          </Link>
+          <Link
+            to="/cach-dung"
+            className={getLinkClasses(activeNav === 'cach-dung')}
+          >
+            Cách dùng
+          </Link>
         </nav>
 
-        {/* Right Controls: Search, Hotline, Cart, Mobile/Tablet Menu */}
+        {/* Right Controls: Search, Cart, Mobile/Tablet Menu */}
         <div className="flex items-center gap-2 sm:gap-3 xl:gap-4 shrink-0">
           {/* Quick Search on Tablet & Desktop */}
-          <form onSubmit={handleSearch} className="relative hidden md:block w-36 lg:w-44 xl:w-56">
+          <form onSubmit={handleSearch} className="relative hidden md:block w-40 lg:w-52 xl:w-64">
             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[1.125rem]">
               search
             </span>
@@ -145,26 +132,34 @@ export const Header = () => {
             />
           </form>
 
-          {/* Hotline */}
-          <a
-            href="tel:19006826"
-            className="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded border border-border-herbal bg-surface-container-lowest text-primary hover:bg-surface-container transition-colors shadow-sm shrink-0 whitespace-nowrap"
-          >
-            <span className="material-symbols-outlined text-[1rem] text-tertiary-container">
-              call
-            </span>
-            <span className="text-xs font-semibold tracking-wider">1900 6826</span>
-          </a>
-
-          {/* Cart Icon with Dynamic Badge */}
+          {/* Cart Icon with Dynamic Badge & Shake Animation */}
           <Link
             to="/gio-hang"
+            id="header-cart-btn"
+            data-cart-btn
             aria-label="Giỏ hàng"
-            className="relative p-2 rounded hover:bg-surface-container-low transition-colors text-primary shrink-0"
+            className={`relative p-2 rounded hover:bg-surface-container-low transition-colors text-primary shrink-0 ${
+              isCartBouncing ? 'animate-cart-shake' : ''
+            }`}
           >
-            <span className="material-symbols-outlined text-[1.625rem] sm:text-[1.75rem]">shopping_bag</span>
+            {/* Vòng sóng ánh vàng B ECO lan tỏa khi sản phẩm rơi vào giỏ */}
+            {isCartBouncing && (
+              <span className="absolute inset-0 m-auto w-8 h-8 rounded-full border-2 border-[#cbb07c] animate-cart-ripple pointer-events-none" />
+            )}
+            <span
+              className={`material-symbols-outlined text-[1.625rem] sm:text-[1.75rem] transition-colors ${
+                isCartBouncing ? 'text-[#b89667]' : ''
+              }`}
+            >
+              shopping_bag
+            </span>
             {totalItems > 0 && (
-              <span className="absolute top-1 right-1 flex items-center justify-center min-w-[1.25rem] h-[1.25rem] px-1 text-[0.6875rem] font-bold text-on-tertiary bg-tertiary-container rounded-full shadow-sm animate-pulse">
+              <span
+                key={`badge-${totalItems}-${cartBounceTick}`}
+                className={`absolute top-1 right-1 flex items-center justify-center min-w-[1.25rem] h-[1.25rem] px-1 text-[0.6875rem] font-bold text-on-tertiary bg-tertiary-container rounded-full shadow-sm ${
+                  isCartBouncing ? 'animate-badge-pop' : 'animate-pulse'
+                }`}
+              >
                 {totalItems}
               </span>
             )}
@@ -215,9 +210,9 @@ export const Header = () => {
               <span>Trang chủ</span>
               {activeNav === 'home' && <span className="material-symbols-outlined text-sm">check</span>}
             </Link>
-            <a
-              href="/#san-pham"
-              onClick={(e) => { handleNavAnchor(e, 'san-pham'); setMobileMenuOpen(false); }}
+            <Link
+              to="/san-pham"
+              onClick={() => setMobileMenuOpen(false)}
               className={`px-3 py-2.5 rounded font-medium text-body-sm transition-colors flex items-center justify-between ${
                 activeNav === 'san-pham'
                   ? 'bg-primary-container text-primary font-bold'
@@ -226,33 +221,32 @@ export const Header = () => {
             >
               <span>Sản phẩm</span>
               {activeNav === 'san-pham' && <span className="material-symbols-outlined text-sm">check</span>}
-            </a>
-            <a
-              href="/#huong-dan"
-              onClick={(e) => { handleNavAnchor(e, 'huong-dan'); setMobileMenuOpen(false); }}
+            </Link>
+            <Link
+              to="/ve-thao-duoc"
+              onClick={() => setMobileMenuOpen(false)}
               className={`px-3 py-2.5 rounded font-medium text-body-sm transition-colors flex items-center justify-between ${
-                activeNav === 'huong-dan'
+                activeNav === 've-thao-duoc'
                   ? 'bg-primary-container text-primary font-bold'
                   : 'text-on-surface hover:bg-surface-container'
               }`}
             >
-              <span>Hướng dẫn sử dụng</span>
-              {activeNav === 'huong-dan' && <span className="material-symbols-outlined text-sm">check</span>}
-            </a>
-          </nav>
-
-          {/* Hotline in Drawer */}
-          <div className="pt-3 border-t border-border-herbal flex items-center justify-between">
-            <a
-              href="tel:19006826"
-              className="flex items-center gap-2 text-primary font-semibold text-body-sm"
+              <span>Về thảo dược</span>
+              {activeNav === 've-thao-duoc' && <span className="material-symbols-outlined text-sm">check</span>}
+            </Link>
+            <Link
+              to="/cach-dung"
+              onClick={() => setMobileMenuOpen(false)}
+              className={`px-3 py-2.5 rounded font-medium text-body-sm transition-colors flex items-center justify-between ${
+                activeNav === 'cach-dung'
+                  ? 'bg-primary-container text-primary font-bold'
+                  : 'text-on-surface hover:bg-surface-container'
+              }`}
             >
-              <span className="material-symbols-outlined text-[1.125rem] text-tertiary-container">
-                call
-              </span>
-              <span>Hotline tư vấn: 1900 6826</span>
-            </a>
-          </div>
+              <span>Cách dùng</span>
+              {activeNav === 'cach-dung' && <span className="material-symbols-outlined text-sm">check</span>}
+            </Link>
+          </nav>
         </div>
       )}
     </header>

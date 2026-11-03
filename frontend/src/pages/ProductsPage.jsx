@@ -141,53 +141,85 @@ export const ProductsPage = () => {
   };
 
   return (
-    <div className="max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 py-12">
-      {/* Header trang sản phẩm */}
-      <div className="mb-8">
-        <span className="text-[0.6875rem] font-semibold text-secondary uppercase tracking-widest block mb-1">
-          Dược Thảo Bản Địa Việt Nam
-        </span>
-        <h1 className="font-serif text-3xl font-bold text-primary">Danh Mục Sản Phẩm Thảo Mộc Phơi Khô</h1>
-        <p className="text-body-sm text-on-surface-variant mt-2 max-w-xl">
-          100% thảo mộc tự nhiên phơi khô cẩn thận, gồm bài thuốc xông tắm tổng hợp 7 vị và các loại thảo dược nguyên liệu bán lẻ.
-        </p>
-      </div>
+    <div className="max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 py-8 sm:py-12">
+      {/* 1. HERO BANNER TRANG SẢN PHẨM (THEO BỐ CỤC KHUNG THẺ 2 CỘT CỦA B-ECO) */}
+      <section className="mb-10 overflow-hidden rounded-2xl border border-border-herbal/70 bg-surface-container-low shadow-sm">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] items-stretch">
+          {/* Cột chữ bên trái */}
+          <div className="flex flex-col justify-center p-8 sm:p-12 lg:p-14">
+            <span className="text-[0.6875rem] sm:text-xs font-semibold text-secondary uppercase tracking-[0.25em] mb-2 flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-[1rem] text-[#8a7258]">spa</span>
+              DƯỢC LIỆU BẢN ĐỊA • PHƠI KHÔ TỰ NHIÊN
+            </span>
+            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary tracking-tight leading-tight mb-3">
+              Sản Phẩm Ngân Hà
+            </h1>
+            <p className="font-serif text-base sm:text-lg text-[#8a7258] font-medium mb-3">
+              Gieo Mầm Lành — Từ từng chiếc lá nhỏ
+            </p>
+            <p className="text-xs sm:text-sm text-on-surface-variant max-w-[50ch] leading-relaxed">
+              Tuyển chọn bài thuốc xông tắm cổ truyền 7 vị dân gian và các loại thảo dược đơn vị phơi khô giữ trọn tinh dầu bản địa.
+            </p>
+          </div>
 
-      {/* Bộ lọc danh mục & Sắp xếp */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-border-herbal mb-8">
-        {/* Category Tabs */}
-        <div className="flex flex-wrap gap-2">
-          {[
-            { label: 'Tất Cả Thảo Dược', slug: 'all' },
-            { label: 'Bài Thuốc Xông Tắm (7 Vị)', slug: 'bai-thuoc-xong-tam' },
-            { label: 'Dược Liệu Lẻ Phơi Khô', slug: 'duoc-lieu-le' },
-          ].map((cat) => (
-            <button
-              key={cat.slug}
-              onClick={() => handleCategoryChange(cat.slug)}
-              className={`px-4 py-2 rounded text-xs font-semibold transition-colors ${
-                selectedCategory === cat.slug
-                  ? 'bg-primary text-on-primary shadow-sm'
-                  : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container border border-border-herbal/50'
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
+          {/* Cột ảnh bên phải với lớp hòa màu mộc mạc sang trái */}
+          <div className="relative min-h-[260px] sm:min-h-[320px] bg-surface-container overflow-hidden">
+            <img
+              src="/images/products/bai-thuoc-7-vi.jpg"
+              alt="7 Nia Thảo Mộc Phơi Khô Ngân Hà"
+              className="absolute inset-0 w-full h-full object-cover object-center"
+            />
+            {/* Lớp gradient hòa tan ảnh vào khối chữ bên trái */}
+            <div className="absolute inset-y-0 left-0 hidden lg:block w-32 bg-gradient-to-r from-surface-container-low to-transparent"></div>
+            {/* Lớp phủ chuyển sắc nhẹ */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent lg:hidden"></div>
+          </div>
         </div>
+      </section>
 
-        {/* Sort Select */}
-        <div className="flex items-center gap-2 shrink-0">
-          <span className="text-xs text-on-surface-variant">Sắp xếp:</span>
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="px-3 py-1.5 bg-surface-container-low border border-border-herbal rounded text-xs text-on-surface focus:outline-none focus:border-primary"
-          >
-            <option value="newest">Mới nhất</option>
-            <option value="price_asc">Giá tăng dần</option>
-            <option value="price_desc">Giá giảm dần</option>
-          </select>
+      {/* 2. THANH CÔNG CỤ LỌC STICKY (CHUẨN UX B-ECO: GHIM ĐẦU TRANG KHI CUỘN) */}
+      <div className="sticky top-16 md:top-20 z-30 -mx-4 sm:-mx-8 lg:-mx-12 xl:-mx-16 px-4 sm:px-8 lg:px-12 xl:px-16 py-3.5 bg-surface/95 backdrop-blur-md border-y border-border-herbal mb-8 shadow-2xs">
+        <div className="max-w-[1536px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
+          {/* Nhóm Tabs danh mục */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
+            {[
+              { label: 'Tất Cả', slug: 'all' },
+              { label: 'Bài Thuốc 7 Vị', slug: 'bai-thuoc-xong-tam' },
+              { label: 'Dược Liệu Lẻ', slug: 'duoc-lieu-le' },
+            ].map((cat) => (
+              <button
+                key={cat.slug}
+                onClick={() => handleCategoryChange(cat.slug)}
+                className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                  selectedCategory === cat.slug
+                    ? 'bg-primary text-on-primary shadow-xs'
+                    : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container border border-border-herbal/60'
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Ô tìm kiếm & Sắp xếp */}
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <span className="text-xs text-on-surface-variant hidden sm:inline whitespace-nowrap">
+              <strong>{filteredProducts.length}</strong> sản phẩm
+            </span>
+
+            <div className="flex items-center gap-1.5 bg-surface-container-low border border-border-herbal/70 rounded-full px-3 py-1.5 text-xs text-on-surface">
+              <span className="material-symbols-outlined text-[1rem] text-[#8a7258]">sort</span>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="bg-transparent text-xs text-on-surface focus:outline-none cursor-pointer"
+              >
+                <option value="newest">Phổ biến nhất</option>
+                <option value="price_asc">Giá: Thấp đến cao</option>
+                <option value="price_desc">Giá: Cao đến thấp</option>
+              </select>
+            </div>
+          </div>
         </div>
       </div>
 
