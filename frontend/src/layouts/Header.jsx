@@ -35,27 +35,41 @@ export const Header = () => {
     }
   };
 
-  const handleHomeClick = () => {
+  const handleHomeClick = (e) => {
     setActiveNav('home');
-    if (location.pathname === '/') {
-      window.history.pushState(null, '', '/');
+    if (location.pathname === '/' && !location.hash) {
+      if (e) e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      if (e) e.preventDefault();
+      navigate('/');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handleProductsClick = (e) => {
+    setActiveNav('san-pham');
+    if (location.pathname === '/san-pham') {
+      if (e) e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      if (e) e.preventDefault();
+      navigate('/san-pham');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   const handleNavAnchor = (e, targetId) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     setActiveNav(targetId);
-    if (location.pathname !== '/') {
-      navigate(`/#${targetId}`);
-      setTimeout(() => {
-        const el = document.getElementById(targetId);
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    } else {
+    if (location.pathname === '/') {
       window.history.pushState(null, '', `/#${targetId}`);
       const el = document.getElementById(targetId);
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      navigate(`/#${targetId}`);
     }
   };
 
@@ -99,7 +113,7 @@ export const Header = () => {
           </Link>
           <Link
             to="/san-pham"
-            onClick={() => setActiveNav('san-pham')}
+            onClick={handleProductsClick}
             className={getLinkClasses(activeNav === 'san-pham')}
           >
             Sản phẩm
@@ -196,7 +210,7 @@ export const Header = () => {
           <nav className="flex flex-col gap-1">
             <Link
               to="/"
-              onClick={() => { handleHomeClick(); setMobileMenuOpen(false); }}
+              onClick={(e) => { handleHomeClick(e); setMobileMenuOpen(false); }}
               className={`px-3 py-2.5 rounded font-medium text-body-sm transition-colors flex items-center justify-between ${
                 activeNav === 'home'
                   ? 'bg-primary-container text-primary font-bold'
@@ -208,7 +222,7 @@ export const Header = () => {
             </Link>
             <Link
               to="/san-pham"
-              onClick={() => { setActiveNav('san-pham'); setMobileMenuOpen(false); }}
+              onClick={(e) => { handleProductsClick(e); setMobileMenuOpen(false); }}
               className={`px-3 py-2.5 rounded font-medium text-body-sm transition-colors flex items-center justify-between ${
                 activeNav === 'san-pham'
                   ? 'bg-primary-container text-primary font-bold'
