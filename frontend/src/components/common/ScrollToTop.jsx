@@ -1,14 +1,38 @@
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 /**
  * Tự động cuộn trang mượt mà khi chuyển trang trong toàn bộ ứng dụng,
- * hoặc cuộn chính xác đến vị trí phần tử có id khớp với hash (#quy-trinh, #huong-dan...)
+ * và đặc biệt: khi loading / reload lại trang (F5) thì luôn tự động cuộn về đỉnh Trang chủ.
  */
 export const ScrollToTop = () => {
   const { pathname, hash } = useLocation();
+  const navigate = useNavigate();
+  const isInitialLoad = useRef(true);
 
   useEffect(() => {
+    // 1. Khi F5 / reload lại trang: luôn cuộn về đầu Trang chủ
+    if (isInitialLoad.current) {
+      isInitialLoad.current = false;
+      if (pathname === '/' && hash) {
+        navigate('/', { replace: true });
+      }
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
+      const timer = setTimeout(() => {
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'smooth',
+        });
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+
+    // 2. Khi người dùng thao tác click vào các mục có hash (#san-pham, #quy-trinh, #huong-dan)
     if (hash) {
       const targetId = hash.replace('#', '');
       let attempts = 0;
@@ -34,7 +58,7 @@ export const ScrollToTop = () => {
         behavior: 'smooth',
       });
     }
-  }, [pathname, hash]);
+  }, [pathname, hash, navigate]);
 
   return null;
 };

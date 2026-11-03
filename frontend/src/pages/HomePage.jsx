@@ -1,57 +1,105 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ProductCard } from '@/features/products/components/ProductCard';
+import { NaturalHerbsSlider } from '@/features/products/components/NaturalHerbsSlider';
+import { BotanicalDivider } from '@/components/common/BotanicalDivider';
+import { BotanicalWatermark } from '@/components/common/BotanicalWatermark';
 
-// Dữ liệu mẫu đồng bộ với database/seed.sql và hình ảnh từ Stitch
+// Dữ liệu mẫu đồng bộ với danh mục thảo mộc phơi khô thực tế của shop
 const FEATURED_PRODUCTS = [
   {
     id: 1,
-    name: 'Túi Thảo Mộc Tắm Sau Sinh Cổ Truyền (10 túi lọc)',
-    slug: 'tui-thao-moc-tam-sau-sinh-co-truyen-10-tui-loc',
-    category_name: 'Nấu Tắm Cổ Truyền',
-    unit: '500g (10 túi lọc lớn)',
-    price: 185000,
-    original_price: 220000,
+    name: 'Bài Thuốc Xông Tắm Tổng Hợp 7 Vị Thảo Dược (Phơi Khô)',
+    slug: 'bai-thuoc-xong-tam-tong-hop-7-vi-thao-duoc',
+    category_name: 'Bài Thuốc Xông Tắm',
+    unit: 'Gói 1 nồi xông (150g)',
+    price: 50000,
+    original_price: 65000,
     is_featured: true,
-    thumbnail_url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCq1sMtLK0ySLwW4N6VGPDz2QXIhEGK9eauIEVne7CI4wigWTOllcM5pG7PJDmY3czSpZp9-cG6c84E9Pkdu_TVFi-fLWqmzcLJuZWdwoYUX7GrXu3VjRFeYQE12sQtIiY5TqcmFU0eKM-nd27jskX7bhGZ5KNWY5XkwCQDCZZzq7Wyl6lcxqn5J2tXI5Q5FO9_omT_XOHPxWXFjUUiOTFIEFlgdqMf07j4czAuP_Nh',
+    thumbnail_url: '/images/products/bai-thuoc-7-vi.jpg',
   },
   {
-    id: 5,
-    name: 'Cao Bồ Kết & Hương Nhu Rừng Cô Đặc (300ml)',
-    slug: 'cao-bo-ket-co-dac-goi-dau-co-nho-noi-vo-buoi-300ml',
-    category_name: 'Gội Đầu Dân Gian',
-    unit: 'Chai vòi nhấn 300ml',
-    price: 190000,
-    original_price: 225000,
+    id: 2,
+    name: 'Lá Đinh Lăng Phơi Khô',
+    slug: 'la-dinh-lang-phoi-kho-200g',
+    category_name: 'Dược Liệu Lẻ',
+    unit: 'Túi zip 200g',
+    price: 50000,
+    original_price: 65000,
     is_featured: true,
-    thumbnail_url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBg1tWFyC5_Y5npw1UxMl9abFxhEnSAyopTGUU4uxUPtAxhZNongE4jBeB80V6DGEI4p3qrQIR05uK33JRl-8mwGJVIb8DE4ZSOJYJGvt3LQ8ngq7mH-_CbuYs1l-EFhxDri2e3zUNmW6ZlawptZMU0x_oNN2c8M6dhZ0-4wUbcaYXidtypXk9LM5nxLAAK0xx1ZefSQMIRa41y03tEA5EAQBBxF528DO7hJ39a-GVp',
-  },
-  {
-    id: 4,
-    name: 'Thảo Mộc Ngâm Chân Gừng Gió & Ngải Cứu (500g)',
-    slug: 'muoi-ngam-chan-thao-duoc-gung-gio-ngai-cuu-500g',
-    category_name: 'Dưỡng Thể & Ngâm Chân',
-    unit: 'Hũ thủy tinh 500g',
-    price: 125000,
-    original_price: 150000,
-    is_featured: true,
-    thumbnail_url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAFt51Z7eIYVvR9JtXpW19mXZznbPvG007nSX8aIYDBQ6LEyq7BNwAvyDSNfOBKKVR5NB9Ql0FfWTxHVr1mzY_S6uYpU6GmwVvHICrYKjB7BLkdal30oIBgbm5fWvJYvyhV3CF1bxKxiX04iSXlqYMJaC0MeNcZCvceK_EBD8AC5fda_IaDNH-jqOqiM4HipgGPs5LTQrtlxwC9BmPRVmB4w4kQdhq15BmxiwWiShKR',
+    thumbnail_url: '/images/herbs/dinh-lang.jpg',
   },
   {
     id: 3,
-    name: 'Muối Khoáng Ngâm Chân Thảo Mộc Quế Chi (500g)',
-    slug: 'muoi-khoang-ngam-chan-thao-moc-hoa-hoi-que-chi-500g',
-    category_name: 'Thư Giãn Khí Huyết',
-    unit: 'Hũ thủy tinh 500g',
-    price: 120000,
-    original_price: 140000,
-    is_featured: false,
-    thumbnail_url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBa0Jt1aOkLc_k79PSaLoTtd4sgsSrzTWsJKqYsAUFGd0iPiVA2LzzjIOgyBlYTdFvPMdMxdOA2xX9gwhzIe4wftlB38IagisD-QcduNRdpmlrdZybuCTITyntP5xpIanXU_mFfY4cvOOnvrTFecssu5LEKUERyFElsb6s6bCUXQAt48MW-8BSqeVGXYyyfYBN3kE91_vTxkD6OqBYb6bUg5Wgy2ejBFSZAYK1EfWIb',
+    name: 'Gừng Phơi Khô (Gừng Sẻ Thái Lát)',
+    slug: 'gung-se-phoi-kho-thai-lat-200g',
+    category_name: 'Dược Liệu Lẻ',
+    unit: 'Túi zip 200g',
+    price: 40000,
+    original_price: 50000,
+    is_featured: true,
+    thumbnail_url: '/images/herbs/gung-kho.jpg',
+  },
+  {
+    id: 4,
+    name: 'Lá Sả Phơi Khô (Cắt Khúc)',
+    slug: 'la-sa-phoi-kho-thai-khuc-200g',
+    category_name: 'Dược Liệu Lẻ',
+    unit: 'Túi zip 200g',
+    price: 30000,
+    original_price: 40000,
+    is_featured: true,
+    thumbnail_url: '/images/herbs/sa-chanh.jpg',
+  },
+  {
+    id: 5,
+    name: 'Lá Trầu Không Phơi Khô',
+    slug: 'la-trau-khong-phoi-kho-150g',
+    category_name: 'Dược Liệu Lẻ',
+    unit: 'Túi zip 150g',
+    price: 45000,
+    original_price: 55000,
+    is_featured: true,
+    thumbnail_url: '/images/herbs/la-trau-khong.jpg',
+  },
+  {
+    id: 6,
+    name: 'Lá Ngải Cứu Nếp Phơi Khô',
+    slug: 'la-ngai-cuu-nep-phoi-kho-200g',
+    category_name: 'Dược Liệu Lẻ',
+    unit: 'Túi zip 200g',
+    price: 35000,
+    original_price: 45000,
+    is_featured: true,
+    thumbnail_url: '/images/herbs/ngai-cuu.jpg',
+  },
+  {
+    id: 7,
+    name: 'Lá Bưởi Phơi Khô',
+    slug: 'la-buoi-phoi-kho-thom-150g',
+    category_name: 'Dược Liệu Lẻ',
+    unit: 'Túi zip 150g',
+    price: 35000,
+    original_price: 45000,
+    is_featured: true,
+    thumbnail_url: '/images/herbs/la-buoi.jpg',
+  },
+  {
+    id: 8,
+    name: 'Hoa Hồng Phơi Khô (Nụ & Cánh)',
+    slug: 'hoa-hong-phoi-kho-100g',
+    category_name: 'Dược Liệu Lẻ',
+    unit: 'Túi zip 100g',
+    price: 55000,
+    original_price: 70000,
+    is_featured: true,
+    thumbnail_url: '/images/herbs/hoa-hong.jpg',
   },
 ];
 
 export const HomePage = () => {
   const [toastMessage, setToastMessage] = useState(null);
+  const [heroBgType, setHeroBgType] = useState('cinematic'); // 'cinematic' (B ECO style) | 'authentic' (ảnh thật 7 nia)
 
   const handleAddToCartSuccess = (product) => {
     setToastMessage({
@@ -65,191 +113,106 @@ export const HomePage = () => {
 
   return (
     <div className="flex flex-col">
-      {/* 1. HERO SECTION - Tối ưu khoảng cách và responsive trên PC, Mobile, iPad */}
-      <section className="relative px-4 sm:px-8 lg:px-12 xl:px-16 pt-3 sm:pt-5 lg:pt-7 pb-10 sm:pb-14 lg:pb-16 max-w-[1536px] mx-auto w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          {/* Cột Nội Dung Bên Trái: Căn trái đồng nhất trên cùng một trục */}
-          <div className="lg:col-span-7 flex flex-col items-start text-left">
-            {/* Badge Tự Nhiên */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 mb-3 sm:mb-4 rounded bg-secondary-container text-on-secondary-container w-fit">
-              <span className="material-symbols-outlined text-[1rem]">eco</span>
-              <span className="text-[0.6875rem] font-semibold tracking-widest uppercase">
-                100% Dược Liệu Tự Nhiên
+      {/* 1. HERO SECTION - PHONG CÁCH CINEMATIC EDITORIAL (THEO MẪU B ECO) */}
+      <section className="relative w-full overflow-hidden bg-[#07130b] h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)] min-h-[560px] flex items-center border-b border-[#1f3627]">
+        {/* Hình nền: Chuyển đổi linh hoạt giữa phong cách B ECO điện ảnh và ảnh thật 7 nia */}
+        <img
+          src={heroBgType === 'cinematic' ? '/images/hero-cinematic-b-eco.jpg' : '/images/products/bai-thuoc-7-vi.jpg'}
+          alt="Ngân Hà Thảo Mộc - Phong cách B ECO mộc mạc"
+          className={`absolute inset-0 w-full h-full object-cover ${heroBgType === 'cinematic' ? 'object-right sm:object-center' : 'object-center sm:object-[72%_center]'
+            } opacity-95 transition-all duration-700 ease-out`}
+        />
+
+        {/* Lớp phủ chuyển màu nghệ thuật: Tối sâu sang bên trái để nổi bật chữ, trong suốt dần sang bên phải */}
+        <div className="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-[#06120a] via-[#06120a]/85 sm:via-[#06120a]/75 to-transparent/30 sm:to-transparent pointer-events-none"></div>
+
+        {/* Lớp đổ bóng mờ tạo chiều sâu điện ảnh */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_50%,rgba(6,18,10,0.85)_0%,transparent_75%)] pointer-events-none"></div>
+
+        {/* Viền bóng mờ cạnh phải và cạnh đáy để hình ảnh hòa tan tuyệt đối vào nền tối, không bị hở mép */}
+        <div className="absolute inset-y-0 right-0 w-24 sm:w-44 bg-gradient-to-l from-[#07130b] via-[#07130b]/60 to-transparent pointer-events-none z-10"></div>
+        <div className="absolute inset-x-0 bottom-0 h-20 sm:h-28 bg-gradient-to-t from-[#07130b] via-[#07130b]/50 to-transparent pointer-events-none z-10"></div>
+
+        {/* Khối Nội Dung Bên Trái (Đã tinh gọn chữ tối đa theo phong cách tối giản cao cấp B ECO) */}
+        <div className="relative z-10 max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 w-full py-12 sm:py-20 flex flex-col justify-center items-start text-left">
+          {/* Nhãn phụ tinh tế */}
+          <span className="text-[0.6875rem] sm:text-xs font-semibold text-[#cbb07c] uppercase tracking-[0.3em] mb-3 sm:mb-4 flex items-center gap-2 drop-shadow-sm">
+            <span className="material-symbols-outlined text-[1rem]">spa</span>
+            DƯỢC LIỆU BẢN ĐỊA • PHƠI KHÔ TỰ NHIÊN
+          </span>
+
+          {/* Tên thương hiệu lớn phong cách B ECO */}
+          <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold tracking-[0.2em] sm:tracking-[0.25em] text-[#fbf9f2] drop-shadow-lg leading-tight mb-3">
+            N G Â N &nbsp;H À
+          </h1>
+
+          {/* Slogan màu vàng rơm mộc mạc */}
+          <p className="font-serif text-lg sm:text-xl lg:text-2xl text-[#d8c9aa] font-medium tracking-wide mb-8 sm:mb-10 drop-shadow-sm">
+            Gom hương thảo mộc – Gói trọn an nhiên
+          </p>
+
+          {/* Cặp Nút Hành Động (Dual CTA) chuẩn phong cách B ECO */}
+          <div className="flex flex-wrap items-center gap-3.5 sm:gap-4">
+            {/* Nút chính: Màu vàng rơm đất ấm */}
+            <Link
+              to="/san-pham/bai-thuoc-xong-tam-tong-hop-7-vi-thao-duoc"
+              className="px-6 sm:px-8 py-3.5 sm:py-4 bg-[#cbb07c] hover:bg-[#dfc492] text-[#14261a] font-bold text-xs sm:text-sm tracking-widest uppercase rounded shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all flex items-center gap-2 group"
+            >
+              <span>MUA NGAY</span>
+              <span className="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">
+                arrow_forward
               </span>
-            </div>
+            </Link>
 
-            {/* Tiêu đề H1: 48-56px trên desktop, leading ~1.1, max-w 750-800px, ngắt sau "dịu lành", giữ "thảo mộc" không gãy dòng */}
-            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-[3.25rem] text-primary font-bold leading-[1.2] sm:leading-[1.15] lg:leading-[1.1] tracking-tight max-w-[780px] mb-3 sm:mb-4 lg:mb-5">
-              Chăm sóc cơ thể dịu lành{' '}
-              <br className="hidden sm:inline" />
-              từ <span className="whitespace-nowrap">thảo mộc</span> thiên nhiên
-            </h1>
-
-            {/* Đoạn mô tả: max-w 650-700px, font 18-19px desktop, line-height 1.65, tránh từ mồ côi dòng cuối */}
-            <p className="text-sm sm:text-base lg:text-[1.1875rem] leading-[1.65] text-on-surface-variant max-w-[680px] mb-6 sm:mb-8 [text-wrap:balance]">
-              Tuyển chọn các loại thảo mộc tắm gội truyền thống, được thu hái và chế biến cẩn thận, mang đến giải pháp chăm sóc cơ thể gần gũi với thiên nhiên.
-            </p>
-
-            {/* Nút Kêu Gọi Hành Động (CTA) */}
-            <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
-              <Link
-                to="/san-pham"
-                className="px-5 py-3 sm:px-6 sm:py-3.5 bg-primary hover:bg-primary-container text-on-primary font-medium rounded text-sm sm:text-base shadow-sm hover:shadow transition-all flex items-center gap-2"
-              >
-                <span>Khám Phá Dược Thảo</span>
-                <span className="material-symbols-outlined text-[1.125rem]">arrow_forward</span>
-              </Link>
-              <a
-                href="#quy-trinh"
-                className="px-5 py-3 sm:px-6 sm:py-3.5 bg-surface-container border border-border-herbal hover:bg-surface-container-high text-primary font-medium rounded text-sm sm:text-base transition-colors"
-              >
-                Tìm hiểu quy trình
-              </a>
-            </div>
-
-            {/* Thống kê 3 cột */}
-            <div className="w-full max-w-[680px] grid grid-cols-3 gap-2 sm:gap-4 pt-4 sm:pt-6 border-t border-border-herbal">
-              <div className="flex flex-col">
-                <span className="font-serif text-lg sm:text-xl lg:text-2xl font-bold text-primary">35°C</span>
-                <span className="text-[0.6875rem] sm:text-xs text-on-surface-variant leading-tight">Sấy lạnh giữ tinh dầu</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="font-serif text-lg sm:text-xl lg:text-2xl font-bold text-primary">0%</span>
-                <span className="text-[0.6875rem] sm:text-xs text-on-surface-variant leading-tight">Không chất bảo quản</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="font-serif text-lg sm:text-xl lg:text-2xl font-bold text-primary">100%</span>
-                <span className="text-[0.6875rem] sm:text-xs text-on-surface-variant leading-tight">Thảo mộc thu hái sạch</span>
-              </div>
-            </div>
+            {/* Nút phụ: Khung viền mỏng trong suốt kính mờ */}
+            <a
+              href="#huong-dan"
+              className="px-6 sm:px-8 py-3.5 sm:py-4 border border-white/40 hover:border-white bg-black/25 hover:bg-white/10 text-white font-medium text-xs sm:text-sm tracking-widest uppercase rounded backdrop-blur-sm transition-all hover:-translate-y-0.5"
+            >
+              HƯỚNG DẪN SỬ DỤNG
+            </a>
           </div>
+        </div>
 
-          {/* Cột Hình Ảnh Bên Phải: Tối ưu tỷ lệ và kích thước chuẩn cho mobile & iPad */}
-          <div className="lg:col-span-5 relative w-full max-w-sm sm:max-w-md lg:max-w-none mx-auto mt-4 lg:mt-0">
-            <div className="relative aspect-[4/5] rounded overflow-hidden shadow-md border border-border-herbal">
-              <img
-                src="/images/hero-herbs.jpg"
-                alt="Khay thảo mộc tự nhiên: Gừng sẻ, lá trầu, sả chanh và ngải cứu sấy lạnh"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/30 to-transparent"></div>
-              <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 bg-surface/90 backdrop-blur-sm p-3 sm:p-4 rounded border border-border-herbal">
-                <span className="text-[0.625rem] sm:text-[0.6875rem] font-semibold text-secondary uppercase tracking-widest block">
-                  Dược liệu sấy lạnh đối lưu
-                </span>
-                <span className="font-serif text-xs sm:text-sm font-bold text-primary">
-                  Gừng sẻ, lá trầu, sả chanh & ngải cứu bản địa
-                </span>
-              </div>
-            </div>
-          </div>
+        {/* Nút chuyển đổi phong cách ảnh góc dưới phải */}
+        <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 z-20 flex items-center bg-black/45 backdrop-blur-md border border-white/15 rounded-full p-1 shadow-lg">
+          <button
+            type="button"
+            onClick={() => setHeroBgType('cinematic')}
+            className={`px-3 py-1 text-[11px] font-medium rounded-full transition-all flex items-center gap-1.5 cursor-pointer ${heroBgType === 'cinematic'
+              ? 'bg-[#cbb07c] text-[#14261a] font-semibold shadow-xs'
+              : 'text-white/70 hover:text-white'
+              }`}
+          >
+            <span className="material-symbols-outlined text-[0.875rem]">auto_awesome</span>
+            <span>Mẫu B ECO</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setHeroBgType('authentic')}
+            className={`px-3 py-1 text-[11px] font-medium rounded-full transition-all flex items-center gap-1.5 cursor-pointer ${heroBgType === 'authentic'
+              ? 'bg-[#cbb07c] text-[#14261a] font-semibold shadow-xs'
+              : 'text-white/70 hover:text-white'
+              }`}
+          >
+            <span className="material-symbols-outlined text-[0.875rem]">photo_camera</span>
+            <span>Ảnh Thật 7 Nia</span>
+          </button>
         </div>
       </section>
 
-      {/* 2. CATEGORIES SECTION */}
-      <section className="bg-surface-container-low py-16 px-4 sm:px-8 lg:px-12 xl:px-16 border-y border-border-herbal">
-        <div className="max-w-[1536px] mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
-            <div>
-              <span className="text-[0.6875rem] font-semibold text-secondary uppercase tracking-widest">
-                Phân Loại Dược Thảo
-              </span>
-              <h2 className="font-serif text-2xl lg:text-3xl text-primary font-bold mt-2">
-                Dưỡng Thể Tự Nhiên
-              </h2>
-            </div>
-            <Link to="/san-pham" className="text-body-sm text-secondary hover:text-primary font-medium flex items-center gap-1 mt-4 md:mt-0">
-              <span>Xem tất cả sản phẩm</span>
-              <span className="material-symbols-outlined text-[1rem]">arrow_forward</span>
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Mục 1: Thảo mộc nấu tắm */}
-            <Link to="/san-pham?category=thao-moc-xong-tam" className="group bg-surface rounded overflow-hidden border border-border-herbal shadow-sm hover:shadow-md transition-all">
-              <div className="aspect-[4/3] overflow-hidden bg-surface-container">
-                <img
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCogreer1-cEtRhQXeDCZLyNwFt7bWX1QbFrbPpr7GpZvql_ohYiXMkDicQwZCcsUUuGSgP75RkizDXqMb6mVxoJIo8M8mPsHMCqwctTBvVdFxbtQHKk_xlEjTDZxBDaAJnhFRR2WHnWMv8l74JXEUFU3bcZ7N4lSupp9IOiEiKYvIH-6vcPP1fl47sOkcWU0Jqwe_YFP1nWB9vj6lSmKviVRNJWsc0mhUkBeyOBDa"
-                  alt="Thảo mộc nấu tắm"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div className="p-4">
-                <h3 className="font-serif text-base font-bold text-primary group-hover:text-secondary transition-colors">
-                  Thảo mộc nấu tắm
-                </h3>
-                <p className="text-xs text-on-surface-variant mt-1">Lá tắm sau sinh & xông giải cảm</p>
-              </div>
-            </Link>
-
-            {/* Mục 2: Thảo mộc gội đầu */}
-            <Link to="/san-pham?category=cham-soc-toc-tu-nhien" className="group bg-surface rounded overflow-hidden border border-border-herbal shadow-sm hover:shadow-md transition-all">
-              <div className="aspect-[4/3] overflow-hidden bg-surface-container">
-                <img
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHfFwia3XDlTQf7wLbjHsli91WNjFKcGImwhxfD_n_RwVKbQfKE4LRGdAUcTCnjyL4QD7XyW54bOpBKBR3Zlhz8Pf8bzi7nmXrU1VH_q6tDCzgk033ROx6HmXeBMLQjDNeuItKDIc6lH9j1VCRmsYY0d-mONbkp3uyA9pA_-U5JViKGArU0zsY8F90Zre_w4mFDn2jo8cnRznlleqlRiiuzuTnBafK4h7hPADR1Qm"
-                  alt="Thảo mộc gội đầu"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div className="p-4">
-                <h3 className="font-serif text-base font-bold text-primary group-hover:text-secondary transition-colors">
-                  Thảo mộc gội đầu
-                </h3>
-                <p className="text-xs text-on-surface-variant mt-1">Cao bồ kết & cỏ nhọ nồi tự nhiên</p>
-              </div>
-            </Link>
-
-            {/* Mục 3: Thảo mộc ngâm chân */}
-            <Link to="/san-pham?category=muoi-ngam-chan-duoc-lieu" className="group bg-surface rounded overflow-hidden border border-border-herbal shadow-sm hover:shadow-md transition-all">
-              <div className="aspect-[4/3] overflow-hidden bg-surface-container">
-                <img
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNfaDVW16QhgVn26Fgnv1wGG3nsXciuyTm6bfGb0QAcdC-W5ZSmmmdDaE9VEFm0poPb3wOBinlA4Z5qa6Nss-9bs8EvUbJm20C4F6C-S0gnVDk_FX5JoL3Y7lEGRrDa5YcNP8-Fpsht15dZYpEMBQHlyjJFHKRFxtkTzqzyeWYx4NHQZeNSTa7eoJfByVIodbkWuyXKXWbGQJo7Ut9Itm9M-wieqcSZH5K_iS4mrVe"
-                  alt="Thảo mộc ngâm chân"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div className="p-4">
-                <h3 className="font-serif text-base font-bold text-primary group-hover:text-secondary transition-colors">
-                  Thảo mộc ngâm chân
-                </h3>
-                <p className="text-xs text-on-surface-variant mt-1">Muối khoáng gừng gió & ngải cứu</p>
-              </div>
-            </Link>
-
-            {/* Mục 4: Xà bông sinh dược */}
-            <Link to="/san-pham?category=xa-bong-sinh-duoc" className="group bg-surface rounded overflow-hidden border border-border-herbal shadow-sm hover:shadow-md transition-all">
-              <div className="aspect-[4/3] overflow-hidden bg-surface-container">
-                <img
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNyVlRHU96SFxzv3eDAmOhHPvUSS7nKx3cgUygbNnbFzWavwQQdJPG2tHsxtXyOFNgIodnr9_5C9iRxFrdxXAIBlWZ7yT6eSUmz8rrOmFUhhsmx9b7KPa7Fr3MiJSocffLBC-zj9zuhUIKmbXiSFU0yGktlFnQk2a_Ak2z1PR1eCayRV6QEFyao-HPNY0UuyXRsUjsHAw4ZZ-cbJHTfRd1M71QC8J87N7JGWkh81AL"
-                  alt="Xà bông sinh dược"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div className="p-4">
-                <h3 className="font-serif text-base font-bold text-primary group-hover:text-secondary transition-colors">
-                  Xà bông sinh dược
-                </h3>
-                <p className="text-xs text-on-surface-variant mt-1">Nghệ mật ong & mướp đắng tràm trà</p>
-              </div>
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* 2. THẢO DƯỢC TỰ NHIÊN (CHUYỂN ĐỘNG NGANG TUẦN TỰ) */}
+      <NaturalHerbsSlider />
 
       {/* 3. FEATURED PRODUCTS */}
-      <section className="py-20 px-4 sm:px-8 lg:px-12 xl:px-16 max-w-[1536px] mx-auto w-full">
+      <section id="san-pham" className="scroll-mt-24 py-20 px-4 sm:px-8 lg:px-12 xl:px-16 max-w-[1536px] mx-auto w-full">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
           <div>
-            <span className="text-[0.6875rem] font-semibold text-secondary uppercase tracking-widest">
-              Tuyển Chọn Độc Bản
-            </span>
             <h2 className="font-serif text-2xl lg:text-3xl text-primary font-bold mt-2">
               Sản Phẩm Được Yêu Thích Nhất
             </h2>
           </div>
           <div className="flex items-center gap-2 mt-4 md:mt-0 text-secondary text-body-sm font-medium">
-            <span className="material-symbols-outlined text-[1.25rem]">verified</span>
-            <span>Chứng nhận kiểm nghiệm dược liệu an toàn</span>
           </div>
         </div>
 
@@ -260,97 +223,121 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* 4. HERBAL PROCESS (QUY TRÌNH 4 BƯỚC) */}
-      <section id="quy-trinh" className="scroll-mt-24 bg-surface-container py-20 px-4 sm:px-8 lg:px-12 xl:px-16 border-y border-border-herbal">
+      {/* 4. HƯỚNG DẪN SỬ DỤNG THẢO MỘC (5 BƯỚC NẤU TẮM DÂN GIAN) */}
+      <div id="quy-trinh" className="scroll-mt-24"></div>
+      <section id="huong-dan" className="scroll-mt-24 bg-surface-container-low py-14 sm:py-16 px-4 sm:px-8 lg:px-12 xl:px-16 border-y border-border-herbal">
         <div className="max-w-[1536px] mx-auto">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-[0.6875rem] font-semibold text-secondary uppercase tracking-widest">
-              Nguồn Gốc & Quy Trình
+          {/* Tiêu đề ngắn gọn */}
+          <div className="text-center max-w-xl mx-auto mb-8 sm:mb-10">
+            <span className="text-[0.6875rem] sm:text-xs font-semibold text-secondary uppercase tracking-widest flex items-center justify-center gap-1.5 mb-1.5">
+              <span className="material-symbols-outlined text-[1rem] text-[#8a7258]">menu_book</span>
+              HƯỚNG DẪN DÂN GIAN
             </span>
-            <h2 className="font-serif text-2xl lg:text-4xl text-primary font-bold mt-2">
-              Gìn Giữ Hồn Thảo Mộc Tự Nhiên
+            <h2 className="font-serif text-2xl sm:text-3xl text-primary font-bold">
+              1. Nấu Nước Tắm Thảo Mộc
             </h2>
-            <p className="text-body-sm text-on-surface-variant mt-3">
-              Mỗi túi thảo mộc đến tay bạn đều trải qua quy trình khép kín, lưu giữ trọn vẹn dược tính và hương thơm tinh dầu tự nhiên.
+            <p className="text-xs sm:text-sm text-on-surface-variant mt-1.5">
+              5 bước nấu nước xông tắm giữ trọn tinh dầu và dược tính tự nhiên
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-surface p-6 rounded border border-border-herbal flex flex-col gap-3">
-              <span className="text-2xl font-serif font-bold text-tertiary">01</span>
-              <h3 className="font-serif text-base font-bold text-primary">Thu hái ban mai</h3>
-              <p className="text-xs text-on-surface-variant leading-relaxed">
-                Dược liệu được hái tay vào sáng sớm khi còn đọng sương mai, bảo toàn hàm lượng tinh dầu cao nhất trong từng phiến lá.
-              </p>
+          {/* Khung hướng dẫn 5 bước */}
+          <div className="bg-surface rounded-2xl border border-border-herbal p-6 sm:p-8 shadow-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+              {/* Bước 1 */}
+              <div className="bg-surface-container-lowest rounded-xl p-4 sm:p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
+                <div className="flex items-center justify-between mb-2.5">
+                  <span className="font-serif text-xl font-bold text-tertiary">01</span>
+                  <div className="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                    <span className="material-symbols-outlined text-[1.125rem]">inventory_2</span>
+                  </div>
+                </div>
+                <h4 className="font-serif text-sm font-bold text-primary mb-1">
+                  Chuẩn bị
+                </h4>
+                <p className="text-xs text-on-surface-variant leading-relaxed">
+                  Chuẩn bị 1 gói thảo mộc, rửa sơ qua nước sạch.
+                </p>
+              </div>
+
+              {/* Bước 2 */}
+              <div className="bg-surface-container-lowest rounded-xl p-4 sm:p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
+                <div className="flex items-center justify-between mb-2.5">
+                  <span className="font-serif text-xl font-bold text-tertiary">02</span>
+                  <div className="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                    <span className="material-symbols-outlined text-[1.125rem]">water_drop</span>
+                  </div>
+                </div>
+                <h4 className="font-serif text-sm font-bold text-primary mb-1">
+                  Thêm nước
+                </h4>
+                <p className="text-xs text-on-surface-variant leading-relaxed">
+                  Cho vào nồi cùng khoảng 3–5 lít nước.
+                </p>
+              </div>
+
+              {/* Bước 3 */}
+              <div className="bg-surface-container-lowest rounded-xl p-4 sm:p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
+                <div className="flex items-center justify-between mb-2.5">
+                  <span className="font-serif text-xl font-bold text-tertiary">03</span>
+                  <div className="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                    <span className="material-symbols-outlined text-[1.125rem]">mode_heat</span>
+                  </div>
+                </div>
+                <h4 className="font-serif text-sm font-bold text-primary mb-1">
+                  Đun nhỏ lửa
+                </h4>
+                <p className="text-xs text-on-surface-variant leading-relaxed">
+                  Đun sôi, hạ nhỏ lửa đun 30–45 phút.
+                </p>
+              </div>
+
+              {/* Bước 4 */}
+              <div className="bg-surface-container-lowest rounded-xl p-4 sm:p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
+                <div className="flex items-center justify-between mb-2.5">
+                  <span className="font-serif text-xl font-bold text-tertiary">04</span>
+                  <div className="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                    <span className="material-symbols-outlined text-[1.125rem]">filter_alt</span>
+                  </div>
+                </div>
+                <h4 className="font-serif text-sm font-bold text-primary mb-1">
+                  Lọc nước cốt
+                </h4>
+                <p className="text-xs text-on-surface-variant leading-relaxed">
+                  Lọc lấy nước cốt, pha thêm nước sạch vừa đủ.
+                </p>
+              </div>
+
+              {/* Bước 5 */}
+              <div className="bg-surface-container-lowest rounded-xl p-4 sm:p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
+                <div className="flex items-center justify-between mb-2.5">
+                  <span className="font-serif text-xl font-bold text-tertiary">05</span>
+                  <div className="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                    <span className="material-symbols-outlined text-[1.125rem]">thermostat</span>
+                  </div>
+                </div>
+                <h4 className="font-serif text-sm font-bold text-primary mb-1">
+                  Kiểm tra nhiệt độ
+                </h4>
+                <p className="text-xs text-on-surface-variant leading-relaxed">
+                  Sử dụng khi nước còn ấm (khoảng 38°C – 40°C).
+                </p>
+              </div>
             </div>
 
-            <div className="bg-surface p-6 rounded border border-border-herbal flex flex-col gap-3">
-              <span className="text-2xl font-serif font-bold text-tertiary">02</span>
-              <h3 className="font-serif text-base font-bold text-primary">Sục ozone khử khuẩn</h3>
-              <p className="text-xs text-on-surface-variant leading-relaxed">
-                Rửa sạch bằng nước nguồn tự nhiên qua hệ thống sục ozone loại bỏ hoàn toàn bụi bẩn và nấm mốc tự nhiên.
-              </p>
+            {/* Chú thích & Nút hành động ngắn */}
+            <div className="mt-6 pt-5 border-t border-border-herbal/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-on-surface-variant">
+              <div className="flex items-center gap-2 text-center sm:text-left">
+                <span className="material-symbols-outlined text-secondary text-[1.125rem] shrink-0">spa</span>
+                <span><strong>Mẹo nhỏ:</strong> Tắm phòng kín gió, lau khô người ngay sau khi tắm.</span>
+              </div>
+              <Link
+                to="/san-pham/bai-thuoc-xong-tam-tong-hop-7-vi-thao-duoc"
+                className="px-4 py-2 bg-primary hover:bg-primary-container text-on-primary font-semibold rounded transition-colors text-xs shrink-0"
+              >
+                Mua Bài Thuốc 7 Vị (50k)
+              </Link>
             </div>
-
-            <div className="bg-surface p-6 rounded border border-border-herbal flex flex-col gap-3">
-              <span className="text-2xl font-serif font-bold text-tertiary">03</span>
-              <h3 className="font-serif text-base font-bold text-primary">Sấy lạnh đối lưu 35°C</h3>
-              <p className="text-xs text-on-surface-variant leading-relaxed">
-                Phương pháp sấy nhiệt độ thấp độc quyền giúp thảo mộc giữ nguyên màu xanh tươi và không làm bay hơi tinh dầu quý.
-              </p>
-            </div>
-
-            <div className="bg-surface p-6 rounded border border-border-herbal flex flex-col gap-3">
-              <span className="text-2xl font-serif font-bold text-tertiary">04</span>
-              <h3 className="font-serif text-base font-bold text-primary">Đóng gói màng kraft zip</h3>
-              <p className="text-xs text-on-surface-variant leading-relaxed">
-                Bảo quản trong túi giấy kraft tráng màng nhôm thực phẩm, chống ẩm mốc tự nhiên và thân thiện với môi trường.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. 3 BƯỚC CHUẨN BỊ MỘC MẠC */}
-      <section id="huong-dan" className="scroll-mt-24 py-20 px-4 sm:px-8 lg:px-12 xl:px-16 max-w-[1536px] mx-auto w-full">
-        <div className="text-center max-w-xl mx-auto mb-16">
-          <span className="text-[0.6875rem] font-semibold text-secondary uppercase tracking-widest">
-            Cách Dùng Đơn Giản
-          </span>
-          <h2 className="font-serif text-2xl lg:text-3xl text-primary font-bold mt-2">
-            3 Bước Chuẩn Bị Mộc Mạc
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="flex flex-col items-center text-center p-6 bg-surface-container-low rounded border border-border-herbal">
-            <div className="w-14 h-14 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center mb-4">
-              <span className="material-symbols-outlined text-[1.75rem]">skillet</span>
-            </div>
-            <h3 className="font-serif text-lg font-bold text-primary">1. Ủ Túi Thảo Mộc</h3>
-            <p className="text-body-sm text-on-surface-variant mt-2 leading-relaxed">
-              Cho 1 túi lọc vào 2-3 lít nước sôi 100°C. Đậy nắp ủ trong 10-15 phút để thảo mộc nở đều và chiết xuất dưỡng chất.
-            </p>
-          </div>
-
-          <div className="flex flex-col items-center text-center p-6 bg-surface-container-low rounded border border-border-herbal">
-            <div className="w-14 h-14 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center mb-4">
-              <span className="material-symbols-outlined text-[1.75rem]">soap</span>
-            </div>
-            <h3 className="font-serif text-lg font-bold text-primary">2. Chiết Xuất Tinh Chất</h3>
-            <p className="text-body-sm text-on-surface-variant mt-2 leading-relaxed">
-              Dùng đũa hoặc tay sạch bóp nhẹ túi lọc nhiều lần để tinh dầu trong lá trầu không, gừng gió hòa tan vào nước.
-            </p>
-          </div>
-
-          <div className="flex flex-col items-center text-center p-6 bg-surface-container-low rounded border border-border-herbal">
-            <div className="w-14 h-14 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center mb-4">
-              <span className="material-symbols-outlined text-[1.75rem]">self_improvement</span>
-            </div>
-            <h3 className="font-serif text-lg font-bold text-primary">3. Pha Ấm & Tận Hưởng</h3>
-            <p className="text-body-sm text-on-surface-variant mt-2 leading-relaxed">
-              Pha thêm nước ấm vừa đủ nhiệt độ cơ thể (khoảng 40°C). Bắt đầu xông hơi, tắm dội thư giãn hoặc ngâm chân trước khi ngủ.
-            </p>
           </div>
         </div>
       </section>

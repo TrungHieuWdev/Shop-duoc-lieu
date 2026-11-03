@@ -2,103 +2,103 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ProductCard } from '@/features/products/components/ProductCard';
 
-// Dữ liệu mẫu ban đầu khớp với seed database
+// Danh sách các sản phẩm thực tế: Bài thuốc 7 vị và 7 nguyên liệu lẻ 100% phơi khô
 const ALL_PRODUCTS = [
   {
     id: 1,
-    category_slug: 'thao-moc-xong-tam',
-    category_name: 'Thảo Mộc Xông Tắm',
-    name: 'Túi Thảo Mộc Tắm Sau Sinh Cổ Truyền (10 túi lọc)',
-    slug: 'tui-thao-moc-tam-sau-sinh-co-truyen-10-tui-loc',
-    unit: 'Hộp 10 túi lọc',
-    price: 185000,
-    original_price: 220000,
+    category_slug: 'bai-thuoc-xong-tam',
+    category_name: 'Bài Thuốc Xông Tắm',
+    name: 'Bài Thuốc Xông Tắm Tổng Hợp 7 Vị Thảo Dược (Phơi Khô)',
+    slug: 'bai-thuoc-xong-tam-tong-hop-7-vi-thao-duoc',
+    unit: 'Gói 1 nồi xông (150g)',
+    price: 50000,
+    original_price: 65000,
     is_featured: true,
-    thumbnail_url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCq1sMtLK0ySLwW4N6VGPDz2QXIhEGK9eauIEVne7CI4wigWTOllcM5pG7PJDmY3czSpZp9-cG6c84E9Pkdu_TVFi-fLWqmzcLJuZWdwoYUX7GrXu3VjRFeYQE12sQtIiY5TqcmFU0eKM-nd27jskX7bhGZ5KNWY5XkwCQDCZZzq7Wyl6lcxqn5J2tXI5Q5FO9_omT_XOHPxWXFjUUiOTFIEFlgdqMf07j4czAuP_Nh',
+    thumbnail_url: '/images/products/bai-thuoc-7-vi.jpg',
   },
   {
     id: 2,
-    category_slug: 'thao-moc-xong-tam',
-    category_name: 'Thảo Mộc Xông Tắm',
-    name: 'Lá Xông Hơi Giải Cảm Thư Giãn Dân Gian (5 gói)',
-    slug: 'la-xong-hoi-giai-cam-thu-gian-dan-gian-5-goi',
-    unit: 'Gói 5 túi',
-    price: 95000,
-    original_price: 115000,
+    category_slug: 'duoc-lieu-le',
+    category_name: 'Dược Liệu Lẻ',
+    name: 'Lá Đinh Lăng Phơi Khô',
+    slug: 'la-dinh-lang-phoi-kho-200g',
+    unit: 'Túi zip 200g',
+    price: 50000,
+    original_price: 65000,
     is_featured: true,
-    thumbnail_url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDCogreer1-cEtRhQXeDCZLyNwFt7bWX1QbFrbPpr7GpZvql_ohYiXMkDicQwZCcsUUuGSgP75RkizDXqMb6mVxoJIo8M8mPsHMCqwctTBvVdFxbtQHKk_xlEjTDZxBDaAJnhFRR2WHnWMv8l74JXEUFU3bcZ7N4lSupp9IOiEiKYvIH-6vcPP1fl47sOkcWU0Jqwe_YFP1nWB9vj6lSmKviVRNJWsc0mhUkBeyOBDa',
+    thumbnail_url: '/images/herbs/dinh-lang.jpg',
   },
   {
     id: 3,
-    category_slug: 'muoi-ngam-chan-duoc-lieu',
-    category_name: 'Muối Ngâm Chân',
-    name: 'Muối Khoáng Ngâm Chân Thảo Mộc Hoa Hồi & Quế Chi (500g)',
-    slug: 'muoi-khoang-ngam-chan-thao-moc-hoa-hoi-que-chi-500g',
-    unit: 'Hũ thủy tinh 500g',
-    price: 120000,
-    original_price: 140000,
+    category_slug: 'duoc-lieu-le',
+    category_name: 'Dược Liệu Lẻ',
+    name: 'Gừng Phơi Khô (Gừng Sẻ Thái Lát)',
+    slug: 'gung-se-phoi-kho-thai-lat-200g',
+    unit: 'Túi zip 200g',
+    price: 40000,
+    original_price: 50000,
     is_featured: true,
-    thumbnail_url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBa0Jt1aOkLc_k79PSaLoTtd4sgsSrzTWsJKqYsAUFGd0iPiVA2LzzjIOgyBlYTdFvPMdMxdOA2xX9gwhzIe4wftlB38IagisD-QcduNRdpmlrdZybuCTITyntP5xpIanXU_mFfY4cvOOnvrTFecssu5LEKUERyFElsb6s6bCUXQAt48MW-8BSqeVGXYyyfYBN3kE91_vTxkD6OqBYb6bUg5Wgy2ejBFSZAYK1EfWIb',
+    thumbnail_url: '/images/herbs/gung-kho.jpg',
   },
   {
     id: 4,
-    category_slug: 'muoi-ngam-chan-duoc-lieu',
-    category_name: 'Muối Ngâm Chân',
-    name: 'Muối Ngâm Chân Thảo Dược Gừng Gió & Ngải Cứu (500g)',
-    slug: 'muoi-ngam-chan-thao-duoc-gung-gio-ngai-cuu-500g',
-    unit: 'Hũ thủy tinh 500g',
-    price: 125000,
-    original_price: 150000,
-    is_featured: false,
-    thumbnail_url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAFt51Z7eIYVvR9JtXpW19mXZznbPvG007nSX8aIYDBQ6LEyq7BNwAvyDSNfOBKKVR5NB9Ql0FfWTxHVr1mzY_S6uYpU6GmwVvHICrYKjB7BLkdal30oIBgbm5fWvJYvyhV3CF1bxKxiX04iSXlqYMJaC0MeNcZCvceK_EBD8AC5fda_IaDNH-jqOqiM4HipgGPs5LTQrtlxwC9BmPRVmB4w4kQdhq15BmxiwWiShKR',
+    category_slug: 'duoc-lieu-le',
+    category_name: 'Dược Liệu Lẻ',
+    name: 'Lá Sả Phơi Khô (Cắt Khúc)',
+    slug: 'la-sa-phoi-kho-thai-khuc-200g',
+    unit: 'Túi zip 200g',
+    price: 30000,
+    original_price: 40000,
+    is_featured: true,
+    thumbnail_url: '/images/herbs/sa-chanh.jpg',
   },
   {
     id: 5,
-    category_slug: 'cham-soc-toc-tu-nhien',
-    category_name: 'Chăm Sóc Tóc',
-    name: 'Cao Bồ Kết & Hương Nhu Rừng Cô Đặc (300ml)',
-    slug: 'cao-bo-ket-co-dac-goi-dau-co-nho-noi-vo-buoi-300ml',
-    unit: 'Chai vòi nhấn 300ml',
-    price: 190000,
-    original_price: 225000,
+    category_slug: 'duoc-lieu-le',
+    category_name: 'Dược Liệu Lẻ',
+    name: 'Lá Trầu Không Phơi Khô',
+    slug: 'la-trau-khong-phoi-kho-150g',
+    unit: 'Túi zip 150g',
+    price: 45000,
+    original_price: 55000,
     is_featured: true,
-    thumbnail_url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBg1tWFyC5_Y5npw1UxMl9abFxhEnSAyopTGUU4uxUPtAxhZNongE4jBeB80V6DGEI4p3qrQIR05uK33JRl-8mwGJVIb8DE4ZSOJYJGvt3LQ8ngq7mH-_CbuYs1l-EFhxDri2e3zUNmW6ZlawptZMU0x_oNN2c8M6dhZ0-4wUbcaYXidtypXk9LM5nxLAAK0xx1ZefSQMIRa41y03tEA5EAQBBxF528DO7hJ39a-GVp',
+    thumbnail_url: '/images/herbs/la-trau-khong.jpg',
   },
   {
     id: 6,
-    category_slug: 'cham-soc-toc-tu-nhien',
-    category_name: 'Chăm Sóc Tóc',
-    name: 'Xịt Dưỡng Tóc Tinh Chất Vỏ Bưởi & Hoa Nhài (150ml)',
-    slug: 'xit-duong-toc-tinh-chat-vo-buoi-hoa-nhai-150ml',
-    unit: 'Chai xịt 150ml',
-    price: 135000,
-    original_price: 160000,
-    is_featured: false,
-    thumbnail_url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAHfFwia3XDlTQf7wLbjHsli91WNjFKcGImwhxfD_n_RwVKbQfKE4LRGdAUcTCnjyL4QD7XyW54bOpBKBR3Zlhz8Pf8bzi7nmXrU1VH_q6tDCzgk033ROx6HmXeBMLQjDNeuItKDIc6lH9j1VCRmsYY0d-mONbkp3uyA9pA_-U5JViKGArU0zsY8F90Zre_w4mFDn2jo8cnRznlleqlRiiuzuTnBafK4h7hPADR1Qm',
+    category_slug: 'duoc-lieu-le',
+    category_name: 'Dược Liệu Lẻ',
+    name: 'Lá Ngải Cứu Nếp Phơi Khô',
+    slug: 'la-ngai-cuu-nep-phoi-kho-200g',
+    unit: 'Túi zip 200g',
+    price: 35000,
+    original_price: 45000,
+    is_featured: true,
+    thumbnail_url: '/images/herbs/ngai-cuu.jpg',
   },
   {
     id: 7,
-    category_slug: 'xa-bong-sinh-duoc',
-    category_name: 'Xà Bông Sinh Dược',
-    name: 'Xà Bông Thảo Dược Nghệ Mật Ong Rừng (100g)',
-    slug: 'xa-bong-thao-duoc-nghe-mat-ong-rung-100g',
-    unit: 'Bánh 100g',
-    price: 65000,
-    original_price: 80000,
+    category_slug: 'duoc-lieu-le',
+    category_name: 'Dược Liệu Lẻ',
+    name: 'Lá Bưởi Phơi Khô',
+    slug: 'la-buoi-phoi-kho-thom-150g',
+    unit: 'Túi zip 150g',
+    price: 35000,
+    original_price: 45000,
     is_featured: true,
-    thumbnail_url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCNyVlRHU96SFxzv3eDAmOhHPvUSS7nKx3cgUygbNnbFzWavwQQdJPG2tHsxtXyOFNgIodnr9_5C9iRxFrdxXAIBlWZ7yT6eSUmz8rrOmFUhhsmx9b7KPa7Fr3MiJSocffLBC-zj9zuhUIKmbXiSFU0yGktlFnQk2a_Ak2z1PR1eCayRV6QEFyao-HPNY0UuyXRsUjsHAw4ZZ-cbJHTfRd1M71QC8J87N7JGWkh81AL',
+    thumbnail_url: '/images/herbs/la-buoi.jpg',
   },
   {
     id: 8,
-    category_slug: 'xa-bong-sinh-duoc',
-    category_name: 'Xà Bông Sinh Dược',
-    name: 'Xà Bông Mướp Đắng & Tràm Trà Kháng Khuẩn (100g)',
-    slug: 'xa-bong-muop-dang-tram-tra-100g',
-    unit: 'Bánh 100g',
-    price: 70000,
-    original_price: 85000,
-    is_featured: false,
-    thumbnail_url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCNyVlRHU96SFxzv3eDAmOhHPvUSS7nKx3cgUygbNnbFzWavwQQdJPG2tHsxtXyOFNgIodnr9_5C9iRxFrdxXAIBlWZ7yT6eSUmz8rrOmFUhhsmx9b7KPa7Fr3MiJSocffLBC-zj9zuhUIKmbXiSFU0yGktlFnQk2a_Ak2z1PR1eCayRV6QEFyao-HPNY0UuyXRsUjsHAw4ZZ-cbJHTfRd1M71QC8J87N7JGWkh81AL',
+    category_slug: 'duoc-lieu-le',
+    category_name: 'Dược Liệu Lẻ',
+    name: 'Hoa Hồng Phơi Khô (Nụ & Cánh)',
+    slug: 'hoa-hong-phoi-kho-100g',
+    unit: 'Túi zip 100g',
+    price: 55000,
+    original_price: 70000,
+    is_featured: true,
+    thumbnail_url: '/images/herbs/hoa-hong.jpg',
   },
 ];
 
@@ -147,9 +147,9 @@ export const ProductsPage = () => {
         <span className="text-[0.6875rem] font-semibold text-secondary uppercase tracking-widest block mb-1">
           Dược Thảo Bản Địa Việt Nam
         </span>
-        <h1 className="font-serif text-3xl font-bold text-primary">Danh Mục Sản Phẩm</h1>
+        <h1 className="font-serif text-3xl font-bold text-primary">Danh Mục Sản Phẩm Thảo Mộc Phơi Khô</h1>
         <p className="text-body-sm text-on-surface-variant mt-2 max-w-xl">
-          Tất cả sản phẩm đều được sản xuất từ nguyên liệu cỏ cây sấy lạnh đối lưu 35°C, không pha trộn hương liệu công nghiệp.
+          100% thảo mộc tự nhiên phơi khô cẩn thận, gồm bài thuốc xông tắm tổng hợp 7 vị và các loại thảo dược nguyên liệu bán lẻ.
         </p>
       </div>
 
@@ -158,11 +158,9 @@ export const ProductsPage = () => {
         {/* Category Tabs */}
         <div className="flex flex-wrap gap-2">
           {[
-            { label: 'Tất Cả', slug: 'all' },
-            { label: 'Thảo Mộc Nấu Tắm', slug: 'thao-moc-xong-tam' },
-            { label: 'Muối Ngâm Chân', slug: 'muoi-ngam-chan-duoc-lieu' },
-            { label: 'Chăm Sóc Tóc', slug: 'cham-soc-toc-tu-nhien' },
-            { label: 'Xà Bông Sinh Dược', slug: 'xa-bong-sinh-duoc' },
+            { label: 'Tất Cả Thảo Dược', slug: 'all' },
+            { label: 'Bài Thuốc Xông Tắm (7 Vị)', slug: 'bai-thuoc-xong-tam' },
+            { label: 'Dược Liệu Lẻ Phơi Khô', slug: 'duoc-lieu-le' },
           ].map((cat) => (
             <button
               key={cat.slug}
@@ -220,3 +218,4 @@ export const ProductsPage = () => {
   );
 };
 
+export default ProductsPage;

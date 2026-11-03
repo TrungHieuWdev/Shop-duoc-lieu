@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCartStore } from '@/store/useCartStore';
+import { BrandLogoIcon } from '@/components/common/BrandLogoIcon';
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -13,12 +14,12 @@ export const Header = () => {
   // Tự động nhận diện tab active dựa theo URL và đóng mobile menu khi chuyển trang
   useEffect(() => {
     setMobileMenuOpen(false);
-    if (location.pathname.startsWith('/san-pham')) {
+    if (location.pathname === '/san-pham') {
       setActiveNav('san-pham');
     } else if (location.pathname === '/') {
-      if (location.hash === '#quy-trinh') {
-        setActiveNav('quy-trinh');
-      } else if (location.hash === '#huong-dan') {
+      if (location.hash === '#san-pham') {
+        setActiveNav('san-pham');
+      } else if (location.hash === '#quy-trinh' || location.hash === '#huong-dan') {
         setActiveNav('huong-dan');
       } else {
         setActiveNav('home');
@@ -90,11 +91,9 @@ export const Header = () => {
         <Link
           to="/"
           onClick={handleHomeClick}
-          className="flex items-center gap-2.5 sm:gap-3 shrink-0"
+          className="flex items-center gap-2.5 sm:gap-3 shrink-0 group"
         >
-          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-primary-container flex items-center justify-center text-primary-fixed shadow-sm shrink-0">
-            <span className="material-symbols-outlined text-[1.375rem] sm:text-[1.5rem]">spa</span>
-          </div>
+          <BrandLogoIcon className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 text-[#5c5d53] group-hover:text-primary transition-all shrink-0" />
           <div className="flex flex-col whitespace-nowrap">
             <span className="font-serif text-base sm:text-lg md:text-xl font-bold text-primary tracking-tight">
               NgânHàshop
@@ -114,26 +113,19 @@ export const Header = () => {
           >
             Trang chủ
           </Link>
-          <Link
-            to="/san-pham"
-            onClick={handleProductsClick}
+          <a
+            href="/#san-pham"
+            onClick={(e) => handleNavAnchor(e, 'san-pham')}
             className={getLinkClasses(activeNav === 'san-pham')}
           >
             Sản phẩm
-          </Link>
-          <a
-            href="/#quy-trinh"
-            onClick={(e) => handleNavAnchor(e, 'quy-trinh')}
-            className={getLinkClasses(activeNav === 'quy-trinh')}
-          >
-            Quy trình sấy lạnh
           </a>
           <a
             href="/#huong-dan"
             onClick={(e) => handleNavAnchor(e, 'huong-dan')}
             className={getLinkClasses(activeNav === 'huong-dan')}
           >
-            Cách nấu xông tắm
+            Hướng dẫn sử dụng
           </a>
         </nav>
 
@@ -223,9 +215,9 @@ export const Header = () => {
               <span>Trang chủ</span>
               {activeNav === 'home' && <span className="material-symbols-outlined text-sm">check</span>}
             </Link>
-            <Link
-              to="/san-pham"
-              onClick={(e) => { handleProductsClick(e); setMobileMenuOpen(false); }}
+            <a
+              href="/#san-pham"
+              onClick={(e) => { handleNavAnchor(e, 'san-pham'); setMobileMenuOpen(false); }}
               className={`px-3 py-2.5 rounded font-medium text-body-sm transition-colors flex items-center justify-between ${
                 activeNav === 'san-pham'
                   ? 'bg-primary-container text-primary font-bold'
@@ -234,18 +226,6 @@ export const Header = () => {
             >
               <span>Sản phẩm</span>
               {activeNav === 'san-pham' && <span className="material-symbols-outlined text-sm">check</span>}
-            </Link>
-            <a
-              href="/#quy-trinh"
-              onClick={(e) => { handleNavAnchor(e, 'quy-trinh'); setMobileMenuOpen(false); }}
-              className={`px-3 py-2.5 rounded font-medium text-body-sm transition-colors flex items-center justify-between ${
-                activeNav === 'quy-trinh'
-                  ? 'bg-primary-container text-primary font-bold'
-                  : 'text-on-surface hover:bg-surface-container'
-              }`}
-            >
-              <span>Quy trình sấy lạnh</span>
-              {activeNav === 'quy-trinh' && <span className="material-symbols-outlined text-sm">check</span>}
             </a>
             <a
               href="/#huong-dan"
@@ -256,7 +236,7 @@ export const Header = () => {
                   : 'text-on-surface hover:bg-surface-container'
               }`}
             >
-              <span>Cách nấu xông tắm</span>
+              <span>Hướng dẫn sử dụng</span>
               {activeNav === 'huong-dan' && <span className="material-symbols-outlined text-sm">check</span>}
             </a>
           </nav>

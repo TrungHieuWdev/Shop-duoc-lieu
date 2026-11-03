@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { BrandLogoIcon } from '@/components/common/BrandLogoIcon';
 
 export const Footer = () => {
   return (
@@ -8,11 +9,14 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
           {/* Cột 1: Thông điệp thương hiệu */}
           <div className="flex flex-col gap-4">
-            <div className="flex flex-col">
-              <span className="font-serif text-xl font-bold text-primary">MỘC NHIÊN THẢO</span>
-              <span className="text-[0.6875rem] font-semibold text-secondary tracking-widest uppercase">
-                Thảo Mộc Bản Địa Việt
-              </span>
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              <BrandLogoIcon className="w-8 h-8 sm:w-9 sm:h-9 text-[#5c5d53] shrink-0" />
+              <div className="flex flex-col">
+                <span className="font-serif text-lg font-bold text-primary">NgânHàshop</span>
+                <span className="text-[0.625rem] font-semibold text-secondary tracking-widest uppercase">
+                  Đơn giản, tinh tế, an lành
+                </span>
+              </div>
             </div>
             <p className="text-body-sm text-on-surface-variant leading-relaxed">
               Giữ vẹn nguyên hồn thảo mộc bản địa Việt Nam. Thuần khiết, mộc mạc và an tâm cho sức khỏe gia đình bạn.
