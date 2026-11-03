@@ -43,6 +43,7 @@ export const ProductCard = ({ product, onAddToCartSuccess }) => {
           alt={product.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           loading="lazy"
+          decoding="async"
         />
         {product.is_featured && (
           <span className="absolute top-3 left-3 bg-tertiary-container text-on-tertiary text-[0.6875rem] font-semibold tracking-wider uppercase px-2.5 py-1 rounded shadow-sm">

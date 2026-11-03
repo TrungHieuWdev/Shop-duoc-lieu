@@ -1,18 +1,22 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { MainLayout } from '@/layouts/MainLayout';
+// 4 trang chính trên thanh điều hướng tải trực tiếp để chuyển trang tức thì, tự nhiên, không bị giật layout
 import { HomePage } from '@/pages/HomePage';
 import { ProductsPage } from '@/pages/ProductsPage';
-import { ProductDetailPage } from '@/pages/ProductDetailPage';
 import { HerbsAboutPage } from '@/pages/HerbsAboutPage';
 import { UsageGuidePage } from '@/pages/UsageGuidePage';
-import { CartPage } from '@/pages/CartPage';
-import { CheckoutPage } from '@/pages/CheckoutPage';
-import { PaymentPage } from '@/pages/PaymentPage';
-import { OrderSuccessPage } from '@/pages/OrderSuccessPage';
-import { NotFoundPage } from '@/pages/NotFoundPage';
 import { OfflineScreen } from '@/components/common/OfflineScreen';
 import { LoadingScreen } from '@/components/common/LoadingScreen';
+
+// Các trang nhánh mua hàng & thanh toán được tải theo nhu cầu (On-Demand)
+const ProductDetailPage = lazy(() => import('@/pages/ProductDetailPage').then(m => ({ default: m.ProductDetailPage })));
+const CartPage = lazy(() => import('@/pages/CartPage').then(m => ({ default: m.CartPage })));
+const CheckoutPage = lazy(() => import('@/pages/CheckoutPage').then(m => ({ default: m.CheckoutPage })));
+const PaymentPage = lazy(() => import('@/pages/PaymentPage').then(m => ({ default: m.PaymentPage })));
+const OrderSuccessPage = lazy(() => import('@/pages/OrderSuccessPage').then(m => ({ default: m.OrderSuccessPage })));
+const AdminDashboardPage = lazy(() => import('@/pages/AdminDashboardPage').then(m => ({ default: m.AdminDashboardPage })));
+const NotFoundPage = lazy(() => import('@/pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
 
 export const AppRoutes = () => {
   return (
@@ -29,6 +33,7 @@ export const AppRoutes = () => {
         <Route path="dat-hang" element={<CheckoutPage />} />
         <Route path="thanh-toan/:orderCode" element={<PaymentPage />} />
         <Route path="dat-hang-thanh-cong/:orderCode" element={<OrderSuccessPage />} />
+        <Route path="admin" element={<AdminDashboardPage />} />
 
         {/* Tuyến đường trực quan để kiểm tra màn hình Offline & Loading */}
         <Route path="mat-ket-noi" element={<OfflineScreen />} />

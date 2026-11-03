@@ -9,21 +9,21 @@ export const UsageGuidePage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] items-stretch">
           {/* Cột chữ bên trái */}
           <div className="flex flex-col justify-center p-8 sm:p-12 lg:p-14">
-            <span className="text-[0.6875rem] sm:text-xs font-semibold text-secondary uppercase tracking-[0.25em] mb-2 flex items-center gap-1.5">
+            <span className="eco-rise text-[0.6875rem] sm:text-xs font-semibold text-secondary uppercase tracking-[0.25em] mb-2 flex items-center gap-1.5">
               <span className="material-symbols-outlined text-[1rem] text-[#8a7258]">menu_book</span>
               CẨM NANG DÂN GIAN • HƯỚNG DẪN CHI TIẾT
             </span>
-            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary tracking-tight leading-tight mb-3">
+            <h1 className="eco-rise-1 font-serif text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary tracking-tight leading-tight mb-3">
               Cách Dùng Thảo Mộc
             </h1>
-            <p className="font-serif text-base sm:text-lg text-[#8a7258] font-medium mb-3">
+            <p className="eco-rise-2 font-serif text-base sm:text-lg text-[#8a7258] font-medium mb-3">
               Phương pháp nấu nước xông tắm, dưỡng sinh & phục hồi cơ thể tại nhà
             </p>
-            <p className="text-xs sm:text-sm text-on-surface-variant max-w-[52ch] leading-relaxed mb-6">
+            <p className="eco-rise-2 text-xs sm:text-sm text-on-surface-variant max-w-[52ch] leading-relaxed mb-6">
               Nấu nước tắm thảo mộc là nét văn hóa dưỡng sinh cổ truyền của người Việt. Chỉ cần vài bước đơn giản, bạn có thể tự tay chuẩn bị một nồi nước thơm ấm nồng, xua tan mệt mỏi và làm ấm kinh lạc cho cả gia đình.
             </p>
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="eco-rise-3 flex flex-wrap items-center gap-3">
               <Link
                 to="/san-pham/bai-thuoc-xong-tam-tong-hop-7-vi-thao-duoc"
                 className="px-5 py-2.5 bg-primary hover:bg-primary-container text-on-primary text-xs font-bold uppercase tracking-wider rounded shadow-xs transition-all"
@@ -40,10 +40,12 @@ export const UsageGuidePage = () => {
           </div>
 
           {/* Cột ảnh bên phải */}
-          <div className="relative min-h-[280px] sm:min-h-[340px] bg-surface-container overflow-hidden">
+          <div className="eco-image-rise relative min-h-[280px] sm:min-h-[340px] bg-surface-container overflow-hidden">
             <img
               src="/images/products/bai-thuoc-7-vi.jpg"
               alt="Chuẩn bị nấu nước tắm thảo mộc"
+              loading="lazy"
+              decoding="async"
               className="absolute inset-0 w-full h-full object-cover object-center"
             />
             <div className="absolute inset-y-0 left-0 hidden lg:block w-32 bg-gradient-to-r from-surface-container-low to-transparent"></div>
@@ -54,7 +56,7 @@ export const UsageGuidePage = () => {
 
       {/* 2. QUY TRÌNH 5 BƯỚC NẤU NƯỚC TẮM THẢO MỘC */}
       <section className="mb-14 sm:mb-20">
-        <div className="text-center max-w-xl mx-auto mb-8 sm:mb-12">
+        <div className="eco-rise-2 text-center max-w-xl mx-auto mb-8 sm:mb-12">
           <span className="text-[0.6875rem] sm:text-xs font-semibold text-secondary uppercase tracking-widest flex items-center justify-center gap-1.5 mb-1.5">
             <span className="material-symbols-outlined text-[1rem] text-[#8a7258]">bathtub</span>
             PHƯƠNG PHÁP NẤU NƯỚC TẮM DÂN GIAN
@@ -68,7 +70,7 @@ export const UsageGuidePage = () => {
         </div>
 
         {/* 5 Thẻ bước quy trình */}
-        <div className="bg-surface rounded-2xl border border-border-herbal p-6 sm:p-8 lg:p-10 shadow-xs mb-8">
+        <div className="eco-rise-3 bg-surface rounded-2xl border border-border-herbal p-6 sm:p-8 lg:p-10 shadow-xs mb-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-5">
             {/* Bước 1 */}
             <div className="bg-surface-container-lowest rounded-xl p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
@@ -154,7 +156,7 @@ export const UsageGuidePage = () => {
       </section>
 
       {/* 3. CÁC CÁCH ỨNG DỤNG KHÁC (XÔNG HƠI, TẮM SAU SINH, NGÂM CHÂN) */}
-      <section className="mb-14 sm:mb-20">
+      <section className="eco-rise-4 mb-14 sm:mb-20">
         <div className="text-center max-w-xl mx-auto mb-8 sm:mb-12">
           <span className="text-[0.6875rem] sm:text-xs font-semibold text-secondary uppercase tracking-widest flex items-center justify-center gap-1.5 mb-1.5">
             <span className="material-symbols-outlined text-[1rem] text-[#8a7258]">self_improvement</span>

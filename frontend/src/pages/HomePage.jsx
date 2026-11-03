@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ProductCard } from '@/features/products/components/ProductCard';
 import { BotanicalDivider } from '@/components/common/BotanicalDivider';
 import { BotanicalWatermark } from '@/components/common/BotanicalWatermark';
+import { useAdminStore } from '@/store/useAdminStore';
 
 // Dữ liệu mẫu đồng bộ với danh mục thảo mộc phơi khô thực tế của shop
 const FEATURED_PRODUCTS = [
@@ -97,6 +98,8 @@ const FEATURED_PRODUCTS = [
 ];
 
 export const HomePage = () => {
+  const storeProducts = useAdminStore((state) => state.products);
+  const featuredList = storeProducts && storeProducts.length > 0 ? storeProducts : FEATURED_PRODUCTS;
   const [toastMessage, setToastMessage] = useState(null);
 
   const handleAddToCartSuccess = (product) => {
@@ -117,6 +120,8 @@ export const HomePage = () => {
         <img
           src="/images/hero-cinematic-b-eco.jpg"
           alt="Ngân Hà Thảo Mộc - Gom hương thảo mộc, gói trọn an nhiên"
+          fetchPriority="high"
+          decoding="async"
           className="absolute inset-0 w-full h-full object-cover object-right sm:object-center opacity-95 transition-all duration-700 ease-out"
         />
 
@@ -133,23 +138,23 @@ export const HomePage = () => {
         {/* Khối Nội Dung Bên Trái (Đã tinh gọn chữ tối đa theo phong cách tối giản cao cấp B ECO) */}
         <div className="relative z-10 max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 w-full py-12 sm:py-20 flex flex-col justify-center items-start text-left">
           {/* Nhãn phụ tinh tế */}
-          <span className="text-[0.6875rem] sm:text-xs font-semibold text-[#cbb07c] uppercase tracking-[0.3em] mb-3 sm:mb-4 flex items-center gap-2 drop-shadow-sm">
+          <span className="eco-rise text-[0.6875rem] sm:text-xs font-semibold text-[#cbb07c] uppercase tracking-[0.3em] mb-3 sm:mb-4 flex items-center gap-2 drop-shadow-sm">
             <span className="material-symbols-outlined text-[1rem]">spa</span>
             TINH CHỌN THẢO DƯỢC • TRỌN VẸN HƯƠNG TỰ NHIÊN
           </span>
 
           {/* Tên thương hiệu lớn phong cách B ECO */}
-          <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold tracking-[0.2em] sm:tracking-[0.25em] text-[#fbf9f2] drop-shadow-lg leading-tight mb-3">
+          <h1 className="eco-rise-1 font-serif text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold tracking-[0.2em] sm:tracking-[0.25em] text-[#fbf9f2] drop-shadow-lg leading-tight mb-3">
             N G Â N &nbsp;H À
           </h1>
 
           {/* Slogan màu vàng rơm mộc mạc */}
-          <p className="font-serif text-lg sm:text-xl lg:text-2xl text-[#d8c9aa] font-medium tracking-wide mb-8 sm:mb-10 drop-shadow-sm">
+          <p className="eco-rise-2 font-serif text-lg sm:text-xl lg:text-2xl text-[#d8c9aa] font-medium tracking-wide mb-8 sm:mb-10 drop-shadow-sm">
             Gom hương thảo mộc – Gói trọn an nhiên
           </p>
 
           {/* Cặp Nút Hành Động (Dual CTA) chuẩn phong cách B ECO */}
-          <div className="flex flex-wrap items-center gap-3.5 sm:gap-4">
+          <div className="eco-rise-3 flex flex-wrap items-center gap-3.5 sm:gap-4">
             {/* Nút chính: Màu vàng rơm đất ấm */}
             <Link
               to="/san-pham"
@@ -173,7 +178,7 @@ export const HomePage = () => {
       </section>
 
       {/* 2. SẢN PHẨM NỔI BẬT */}
-      <section className="py-14 sm:py-20 px-4 sm:px-8 lg:px-12 xl:px-16 max-w-[1536px] mx-auto w-full">
+      <section className="eco-rise-3 py-14 sm:py-20 px-4 sm:px-8 lg:px-12 xl:px-16 max-w-[1536px] mx-auto w-full">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-12 gap-3">
           <div>
             <span className="text-[0.6875rem] sm:text-xs font-semibold text-secondary uppercase tracking-[0.2em] flex items-center gap-1.5 mb-1">
@@ -194,14 +199,14 @@ export const HomePage = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {FEATURED_PRODUCTS.map((prod) => (
+          {featuredList.slice(0, 8).map((prod) => (
             <ProductCard key={prod.id} product={prod} onAddToCartSuccess={handleAddToCartSuccess} />
           ))}
         </div>
       </section>
 
       {/* 3. KHÁM PHÁ VỀ THẢO DƯỢC & CÁCH DÙNG (CẦU NỐI SANG 2 TRANG CHUYÊN BIỆT) */}
-      <section className="bg-surface-container-low border-t border-border-herbal py-14 sm:py-20 px-4 sm:px-8 lg:px-12 xl:px-16">
+      <section className="eco-rise-4 bg-surface-container-low border-t border-border-herbal py-14 sm:py-20 px-4 sm:px-8 lg:px-12 xl:px-16">
         <div className="max-w-[1536px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
           {/* Card Về thảo dược */}
           <div className="bg-surface rounded-2xl border border-border-herbal/70 p-8 sm:p-10 flex flex-col justify-between hover:border-primary transition-all duration-300 shadow-xs group">

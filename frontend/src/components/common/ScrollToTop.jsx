@@ -11,28 +11,17 @@ export const ScrollToTop = () => {
   const isInitialLoad = useRef(true);
 
   useEffect(() => {
-    // 1. Khi F5 / reload lại trang: luôn cuộn về đầu Trang chủ
+    // 1. Khi F5 / reload lại trang: luôn đặt ngay về đầu Trang chủ, không tạo độ trễ cuộn
     if (isInitialLoad.current) {
       isInitialLoad.current = false;
       if (pathname === '/' && hash) {
         navigate('/', { replace: true });
       }
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: 'smooth',
-      });
-      const timer = setTimeout(() => {
-        window.scrollTo({
-          top: 0,
-          left: 0,
-          behavior: 'smooth',
-        });
-      }, 100);
-      return () => clearTimeout(timer);
+      window.scrollTo(0, 0);
+      return;
     }
 
-    // 2. Khi người dùng thao tác click vào các mục có hash (#san-pham, #quy-trinh, #huong-dan)
+    // 2. Khi người dùng thao tác click vào các mục có hash (#san-pham, #quy-trinh) trong cùng trang
     if (hash) {
       const targetId = hash.replace('#', '');
       let attempts = 0;
@@ -51,12 +40,8 @@ export const ScrollToTop = () => {
       const timer = setTimeout(scrollToTarget, 50);
       return () => clearTimeout(timer);
     } else {
-      // Khi chuyển trang bình thường (không có hash), cuộn mượt về đầu trang
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: 'smooth',
-      });
+      // Khi chuyển sang trang mới, đặt ngay đỉnh trang tức thì để trang mới hiển thị tự nhiên, không bị giật cuộn
+      window.scrollTo(0, 0);
     }
   }, [pathname, hash, navigate]);
 

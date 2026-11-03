@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ProductCard } from '@/features/products/components/ProductCard';
+import { useAdminStore } from '@/store/useAdminStore';
 
 // Danh sách các sản phẩm thực tế: Bài thuốc 7 vị và 7 nguyên liệu lẻ 100% phơi khô
 const ALL_PRODUCTS = [
@@ -103,6 +104,9 @@ const ALL_PRODUCTS = [
 ];
 
 export const ProductsPage = () => {
+  const storeProducts = useAdminStore((state) => state.products);
+  const productsList = storeProducts && storeProducts.length > 0 ? storeProducts : ALL_PRODUCTS;
+
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedCategory = searchParams.get('category') || 'all';
   const keyword = searchParams.get('keyword') || '';
@@ -110,7 +114,7 @@ export const ProductsPage = () => {
   const [toastMessage, setToastMessage] = useState(null);
 
   // Lọc sản phẩm
-  const filteredProducts = ALL_PRODUCTS.filter((prod) => {
+  const filteredProducts = productsList.filter((prod) => {
     const matchCategory = selectedCategory === 'all' || prod.category_slug === selectedCategory;
     const matchKeyword = !keyword || prod.name.toLowerCase().includes(keyword.toLowerCase());
     return matchCategory && matchKeyword;
@@ -147,23 +151,23 @@ export const ProductsPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] items-stretch">
           {/* Cột chữ bên trái */}
           <div className="flex flex-col justify-center p-8 sm:p-12 lg:p-14">
-            <span className="text-[0.6875rem] sm:text-xs font-semibold text-secondary uppercase tracking-[0.25em] mb-2 flex items-center gap-1.5">
+            <span className="eco-rise text-[0.6875rem] sm:text-xs font-semibold text-secondary uppercase tracking-[0.25em] mb-2 flex items-center gap-1.5">
               <span className="material-symbols-outlined text-[1rem] text-[#8a7258]">spa</span>
               DƯỢC LIỆU BẢN ĐỊA • PHƠI KHÔ TỰ NHIÊN
             </span>
-            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary tracking-tight leading-tight mb-3">
+            <h1 className="eco-rise-1 font-serif text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary tracking-tight leading-tight mb-3">
               Sản Phẩm Ngân Hà
             </h1>
-            <p className="font-serif text-base sm:text-lg text-[#8a7258] font-medium mb-3">
+            <p className="eco-rise-2 font-serif text-base sm:text-lg text-[#8a7258] font-medium mb-3">
               Gieo Mầm Lành — Từ từng chiếc lá nhỏ
             </p>
-            <p className="text-xs sm:text-sm text-on-surface-variant max-w-[50ch] leading-relaxed">
+            <p className="eco-rise-2 text-xs sm:text-sm text-on-surface-variant max-w-[50ch] leading-relaxed">
               Tuyển chọn bài thuốc xông tắm cổ truyền 7 vị dân gian và các loại thảo dược đơn vị phơi khô giữ trọn tinh dầu bản địa.
             </p>
           </div>
 
           {/* Cột ảnh bên phải với lớp hòa màu mộc mạc sang trái */}
-          <div className="relative min-h-[260px] sm:min-h-[320px] bg-surface-container overflow-hidden">
+          <div className="eco-image-rise relative min-h-[260px] sm:min-h-[320px] bg-surface-container overflow-hidden">
             <img
               src="/images/products/bai-thuoc-7-vi.jpg"
               alt="7 Nia Thảo Mộc Phơi Khô Ngân Hà"
@@ -178,7 +182,7 @@ export const ProductsPage = () => {
       </section>
 
       {/* 2. THANH CÔNG CỤ LỌC STICKY (CHUẨN UX B-ECO: GHIM ĐẦU TRANG KHI CUỘN) */}
-      <div className="sticky top-16 md:top-20 z-30 -mx-4 sm:-mx-8 lg:-mx-12 xl:-mx-16 px-4 sm:px-8 lg:px-12 xl:px-16 py-3.5 bg-surface/95 backdrop-blur-md border-y border-border-herbal mb-8 shadow-2xs">
+      <div className="eco-rise-2 sticky top-16 md:top-20 z-30 -mx-4 sm:-mx-8 lg:-mx-12 xl:-mx-16 px-4 sm:px-8 lg:px-12 xl:px-16 py-3.5 bg-surface/95 backdrop-blur-md border-y border-border-herbal mb-8 shadow-2xs">
         <div className="max-w-[1536px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
           {/* Nhóm Tabs danh mục */}
           <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
@@ -229,7 +233,7 @@ export const ProductsPage = () => {
           <p className="text-on-surface-variant">Không tìm thấy sản phẩm nào phù hợp với tìm kiếm của bạn.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="eco-rise-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {filteredProducts.map((prod) => (
             <ProductCard key={prod.id} product={prod} onAddToCartSuccess={handleAddToCartSuccess} />
           ))}
