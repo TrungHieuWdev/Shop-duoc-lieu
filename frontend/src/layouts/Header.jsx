@@ -37,38 +37,41 @@ export const Header = () => {
 
   const handleHomeClick = (e) => {
     setActiveNav('home');
-    if (location.pathname === '/' && !location.hash) {
+    if (location.pathname === '/') {
+      // Đang ở trang chủ (ở trên đầu hay ở các mục phía dưới như quy trình, hướng dẫn)
       if (e) e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      if (e) e.preventDefault();
-      navigate('/');
+      if (location.hash) {
+        navigate('/', { replace: true });
+      }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+    // Nếu đang ở trang khác (vd: /san-pham, /gio-hang), không gọi e.preventDefault()
+    // để React Router <Link to="/"> tự động chuyển trang một cách chuẩn xác
   };
 
   const handleProductsClick = (e) => {
     setActiveNav('san-pham');
     if (location.pathname === '/san-pham') {
+      // Đang ở trang sản phẩm mà đã cuộn xuống dưới -> cuộn mượt lên đầu
       if (e) e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      if (e) e.preventDefault();
-      navigate('/san-pham');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+    // Nếu đang ở trang khác (trang chủ, các mục dưới trang chủ...), không gọi e.preventDefault()
+    // để React Router <Link to="/san-pham"> tự động chuyển trang một cách chuẩn xác
   };
 
   const handleNavAnchor = (e, targetId) => {
     if (e) e.preventDefault();
     setActiveNav(targetId);
     if (location.pathname === '/') {
-      window.history.pushState(null, '', `/#${targetId}`);
+      // Đang ở trang chủ -> cuộn mượt tới phần tử đó và cập nhật hash sạch qua React Router
+      navigate(`/#${targetId}`, { replace: true });
       const el = document.getElementById(targetId);
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' });
       }
     } else {
+      // Đang ở trang khác -> điều hướng về trang chủ kèm hash
       navigate(`/#${targetId}`);
     }
   };
