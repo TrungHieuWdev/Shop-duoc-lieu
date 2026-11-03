@@ -65,13 +65,13 @@ export const HomePage = () => {
 
   return (
     <div className="flex flex-col">
-      {/* 1. HERO SECTION */}
-      <section className="relative px-4 sm:px-8 lg:px-12 xl:px-16 py-12 md:py-20 max-w-[1536px] mx-auto w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+      {/* 1. HERO SECTION - Tối ưu khoảng cách và responsive trên PC, Mobile, iPad */}
+      <section className="relative px-4 sm:px-8 lg:px-12 xl:px-16 pt-3 sm:pt-5 lg:pt-7 pb-10 sm:pb-14 lg:pb-16 max-w-[1536px] mx-auto w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Cột Nội Dung Bên Trái: Căn trái đồng nhất trên cùng một trục */}
           <div className="lg:col-span-7 flex flex-col items-start text-left">
             {/* Badge Tự Nhiên */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 rounded bg-secondary-container text-on-secondary-container w-fit">
+            <div className="inline-flex items-center gap-2 px-3 py-1 mb-3 sm:mb-4 rounded bg-secondary-container text-on-secondary-container w-fit">
               <span className="material-symbols-outlined text-[1rem]">eco</span>
               <span className="text-[0.6875rem] font-semibold tracking-widest uppercase">
                 100% Dược Liệu Tự Nhiên
@@ -79,52 +79,53 @@ export const HomePage = () => {
             </div>
 
             {/* Tiêu đề H1: 48-56px trên desktop, leading ~1.1, max-w 750-800px, ngắt sau "dịu lành", giữ "thảo mộc" không gãy dòng */}
-            <h1 className="font-serif text-3xl sm:text-4xl md:text-[2.75rem] lg:text-[3.25rem] text-primary font-bold leading-[1.15] lg:leading-[1.1] tracking-tight max-w-[780px] mb-5">
+            <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-[3.25rem] text-primary font-bold leading-[1.2] sm:leading-[1.15] lg:leading-[1.1] tracking-tight max-w-[780px] mb-3 sm:mb-4 lg:mb-5">
               Chăm sóc cơ thể dịu lành{' '}
               <br className="hidden sm:inline" />
               từ <span className="whitespace-nowrap">thảo mộc</span> thiên nhiên
             </h1>
 
-            {/* Đoạn mô tả: max-w 650-700px, font 18-19px, line-height 1.65, tránh từ mồ côi dòng cuối */}
-            <p className="text-base sm:text-[1.125rem] lg:text-[1.1875rem] leading-[1.65] text-on-surface-variant max-w-[680px] mb-8 [text-wrap:balance]">
+            {/* Đoạn mô tả: max-w 650-700px, font 18-19px desktop, line-height 1.65, tránh từ mồ côi dòng cuối */}
+            <p className="text-sm sm:text-base lg:text-[1.1875rem] leading-[1.65] text-on-surface-variant max-w-[680px] mb-6 sm:mb-8 [text-wrap:balance]">
               Tuyển chọn các loại thảo mộc tắm gội truyền thống, được thu hái và chế biến cẩn thận, mang đến giải pháp chăm sóc cơ thể gần gũi với thiên nhiên.
             </p>
 
             {/* Nút Kêu Gọi Hành Động (CTA) */}
-            <div className="flex flex-wrap items-center gap-4 mb-8">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
               <Link
                 to="/san-pham"
-                className="px-6 py-3.5 bg-primary hover:bg-primary-container text-on-primary font-medium rounded shadow-sm hover:shadow transition-all flex items-center gap-2"
+                className="px-5 py-3 sm:px-6 sm:py-3.5 bg-primary hover:bg-primary-container text-on-primary font-medium rounded text-sm sm:text-base shadow-sm hover:shadow transition-all flex items-center gap-2"
               >
                 <span>Khám Phá Dược Thảo</span>
                 <span className="material-symbols-outlined text-[1.125rem]">arrow_forward</span>
               </Link>
               <a
                 href="#quy-trinh"
-                className="px-6 py-3.5 bg-surface-container border border-border-herbal hover:bg-surface-container-high text-primary font-medium rounded transition-colors"
+                className="px-5 py-3 sm:px-6 sm:py-3.5 bg-surface-container border border-border-herbal hover:bg-surface-container-high text-primary font-medium rounded text-sm sm:text-base transition-colors"
               >
                 Tìm hiểu quy trình
               </a>
             </div>
 
             {/* Thống kê 3 cột */}
-            <div className="w-full max-w-[680px] grid grid-cols-3 gap-4 pt-6 border-t border-border-herbal">
+            <div className="w-full max-w-[680px] grid grid-cols-3 gap-2 sm:gap-4 pt-4 sm:pt-6 border-t border-border-herbal">
               <div className="flex flex-col">
-                <span className="font-serif text-xl sm:text-2xl font-bold text-primary">35°C</span>
-                <span className="text-xs text-on-surface-variant">Sấy lạnh giữ tinh dầu</span>
+                <span className="font-serif text-lg sm:text-xl lg:text-2xl font-bold text-primary">35°C</span>
+                <span className="text-[0.6875rem] sm:text-xs text-on-surface-variant leading-tight">Sấy lạnh giữ tinh dầu</span>
               </div>
               <div className="flex flex-col">
-                <span className="font-serif text-xl sm:text-2xl font-bold text-primary">0%</span>
-                <span className="text-xs text-on-surface-variant">Không chất bảo quản</span>
+                <span className="font-serif text-lg sm:text-xl lg:text-2xl font-bold text-primary">0%</span>
+                <span className="text-[0.6875rem] sm:text-xs text-on-surface-variant leading-tight">Không chất bảo quản</span>
               </div>
               <div className="flex flex-col">
-                <span className="font-serif text-xl sm:text-2xl font-bold text-primary">100%</span>
-                <span className="text-xs text-on-surface-variant">Thảo mộc thu hái sạch</span>
+                <span className="font-serif text-lg sm:text-xl lg:text-2xl font-bold text-primary">100%</span>
+                <span className="text-[0.6875rem] sm:text-xs text-on-surface-variant leading-tight">Thảo mộc thu hái sạch</span>
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-5 relative">
+          {/* Cột Hình Ảnh Bên Phải: Tối ưu tỷ lệ và kích thước chuẩn cho mobile & iPad */}
+          <div className="lg:col-span-5 relative w-full max-w-sm sm:max-w-md lg:max-w-none mx-auto mt-4 lg:mt-0">
             <div className="relative aspect-[4/5] rounded overflow-hidden shadow-md border border-border-herbal">
               <img
                 src="/images/hero-herbs.jpg"
@@ -132,11 +133,11 @@ export const HomePage = () => {
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-primary/30 to-transparent"></div>
-              <div className="absolute bottom-4 left-4 right-4 bg-surface/90 backdrop-blur-sm p-4 rounded border border-border-herbal">
-                <span className="text-[0.6875rem] font-semibold text-secondary uppercase tracking-widest block">
+              <div className="absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 bg-surface/90 backdrop-blur-sm p-3 sm:p-4 rounded border border-border-herbal">
+                <span className="text-[0.625rem] sm:text-[0.6875rem] font-semibold text-secondary uppercase tracking-widest block">
                   Dược liệu sấy lạnh đối lưu
                 </span>
-                <span className="font-serif text-sm font-bold text-primary">
+                <span className="font-serif text-xs sm:text-sm font-bold text-primary">
                   Gừng sẻ, lá trầu, sả chanh & ngải cứu bản địa
                 </span>
               </div>

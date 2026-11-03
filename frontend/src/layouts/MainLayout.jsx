@@ -7,7 +7,7 @@ export const MainLayout = () => {
   return (
     <div className="min-h-screen flex flex-col bg-surface text-on-surface">
       <Header />
-      <main className="flex-1 pt-20">
+      <main className="flex-1 pt-16 md:pt-20">
         <Outlet />
       </main>
       <Footer />
