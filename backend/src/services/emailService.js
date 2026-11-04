@@ -83,7 +83,7 @@ export const buildOrderHtmlTemplate = (order) => {
         <tr>
           <td style="background-color: #1d3527; padding: 24px 24px 20px; text-align: center; border-bottom: 3px solid #d4b986;">
             <div style="font-size: 20px; font-weight: bold; color: #d4b986; letter-spacing: 1px; text-transform: uppercase;">
-              🌿 TIỆM THẢO MỘC NGÂN HÀ
+              🌿 TIỆM THẢO DƯỢC NGÂN HÀ
             </div>
             <div style="font-size: 12px; color: #d6dfd3; margin-top: 4px; letter-spacing: 0.5px;">
               Đơn giản • Tinh tế • An lành
@@ -158,7 +158,7 @@ export const buildOrderHtmlTemplate = (order) => {
         <tr>
           <td style="padding: 0 24px 16px;">
             <div style="font-size: 13px; font-weight: bold; color: #1d3527; text-transform: uppercase; border-bottom: 2px solid #1d3527; padding-bottom: 6px; margin-bottom: 10px;">
-              📦 2. Danh Sách Dược Liệu Cần Soạn Đi Đơn (${order.items?.length || 0} món)
+              📦 2. Danh Sách Thảo Dược Cần Soạn Đi Đơn (${order.items?.length || 0} món)
             </div>
             <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
               <thead>
@@ -224,7 +224,7 @@ export const sendOrderEmailViaGoogleSmtp = async ({ order, recipientEmail, subje
   const transporter = getGoogleTransporter();
 
   const targetEmail =
-    recipientEmail || process.env.STORE_OWNER_EMAIL || 'tiemthaomocnganha@gmail.com';
+    recipientEmail || process.env.STORE_OWNER_EMAIL || process.env.SMTP_USER || 'tiemthaomocnganha@gmail.com';
 
   const safeSubject = String(
     subject || `[ĐƠN HÀNG MỚI #${order?.order_code || ''}] Tiếp nhận đơn hàng mới`
