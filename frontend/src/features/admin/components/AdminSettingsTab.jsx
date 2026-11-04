@@ -252,7 +252,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
                     value={formData.admin_email}
                     onChange={(e) => setFormData({ ...formData, admin_email: e.target.value })}
                     placeholder="VD: trunghieudev88@gmail.com..."
-                    className="w-full pl-8 pr-3 py-2 bg-[#faf8f3] border border-border-herbal rounded-none text-xs font-semibold text-primary focus:outline-none focus:border-primary"
+                    className="w-full pl-8 pr-3 py-2 bg-[#faf8f3] border border-border-herbal rounded-xl text-xs font-semibold text-primary focus:outline-none focus:border-primary"
                   />
                   <span className="material-symbols-outlined text-outline text-sm absolute left-2.5 top-2.5">
                     alternate_email
@@ -263,13 +263,27 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
                 </p>
               </div>
 
+              {/* Hướng dẫn cấu hình Google SMTP */}
+              <div className="p-3 bg-[#faf8f5] border border-[#e2dbce] rounded-xl text-xs space-y-2">
+                <div className="font-bold flex items-center gap-1.5 text-primary">
+                  <span className="material-symbols-outlined text-sm text-[#8a7258]">settings_suggest</span>
+                  <span>Thiết Lập Google SMTP (Gmail Cá Nhân):</span>
+                </div>
+                <div className="text-[11px] text-on-surface-variant leading-relaxed space-y-1">
+                  <p>1. Truy cập tài khoản Google của bạn tại <strong className="text-primary font-mono">myaccount.google.com</strong> &gt; mục <strong>Bảo mật</strong>.</p>
+                  <p>2. Đảm bảo đã bật <strong>Xác minh 2 bước</strong>, sau đó chọn <strong>Mật khẩu ứng dụng (App Passwords)</strong>.</p>
+                  <p>3. Đặt tên <em>"Tiệm Thảo Mộc Ngân Hà"</em> để nhận <strong>mật khẩu 16 chữ cái</strong>.</p>
+                  <p>4. Điền địa chỉ Gmail vào <code className="bg-white px-1 border border-border-herbal font-mono text-primary font-bold">SMTP_USER</code> và 16 ký tự vào <code className="bg-white px-1 border border-border-herbal font-mono text-primary font-bold">SMTP_PASS</code> trong file <code className="bg-white px-1 border border-border-herbal font-mono text-primary font-bold">backend/.env</code>.</p>
+                </div>
+              </div>
+
               {/* Nút gửi thử email kiểm tra kết nối */}
               <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-border-herbal/50">
                 <button
                   type="button"
                   disabled={testingEmail || !formData.admin_email}
                   onClick={handleSendTestEmail}
-                  className="px-3 py-1.5 bg-[#14261a] hover:bg-[#233f2c] text-[#cbb07c] font-bold text-xs uppercase tracking-wider rounded-none flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50 shadow-xs"
+                  className="px-3 py-1.5 bg-[#1d3527] hover:bg-[#284935] text-[#d4b986] font-bold text-xs uppercase tracking-wider rounded-xl flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50 shadow-xs"
                 >
                   <span className={`material-symbols-outlined text-sm ${testingEmail ? 'animate-spin' : ''}`}>
                     {testingEmail ? 'progress_activity' : 'send'}
@@ -285,7 +299,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-3 py-1.5 bg-surface hover:bg-surface-container border border-border-herbal text-primary font-semibold text-xs rounded-none flex items-center gap-1 transition-all cursor-pointer"
+                  className="px-3 py-1.5 bg-surface hover:bg-surface-container border border-border-herbal text-primary font-semibold text-xs rounded-xl flex items-center gap-1 transition-all cursor-pointer"
                 >
                   <span className="material-symbols-outlined text-sm">open_in_new</span>
                   <span>Mở Gmail Kiểm Tra</span>

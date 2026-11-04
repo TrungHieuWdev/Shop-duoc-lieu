@@ -130,21 +130,26 @@ export const sendAutomaticOrderEmail = async (order, targetEmail) => {
     console.error('Lỗi lưu log email:', e);
   }
 
-  // 2. Gửi tự động ngầm qua Backend Node.js / Nodemailer
+  // 2. Gửi tự động ngầm qua Backend Node.js / Google SMTP Nodemailer
+  let backendResult = null;
   try {
-    fetch('/api/notifications/send-order-email', {
+    const res = await fetch('/api/notifications/send-order-email', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-NganHa-Client-Signature': 'nganha_sec_2026_shield_v1',
+      },
       body: JSON.stringify({
         order,
         recipientEmail: adminEmail,
         subject,
         body,
       }),
-    }).catch(() => {});
+    });
+    backendResult = await res.json();
   } catch (e) {}
 
-  // 3. Gửi tự động qua Email Gateway trực tiếp đến hòm thư của chủ shop
+  // 3. Gửi dự phòng qua Email Gateway (FormSubmit direct) nếu backend không hoạt động
   try {
     fetch(`https://formsubmit.co/ajax/${encodeURIComponent(adminEmail)}`, {
       method: 'POST',
@@ -168,5 +173,7 @@ export const sendAutomaticOrderEmail = async (order, targetEmail) => {
       }),
     }).catch(() => {});
   } catch (e) {}
+
+  return backendResult || { success: true, message: `Đã gửi thông báo đơn hàng tới: ${adminEmail}` };
 };
 

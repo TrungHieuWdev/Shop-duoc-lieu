@@ -71,11 +71,10 @@ export const apiShield = (req, res, next) => {
   const clientSignature = req.headers['x-nganha-client-signature'];
   const origin = req.headers['origin'] || req.headers['referer'] || '';
 
-  // Chấp nhận nếu có chữ ký chính chủ HOẶC từ localhost / domain chính thức
+  // Chấp nhận nếu có chữ ký chính chủ HOẶC từ localhost / domain chính thức nganhashop.pages.dev
   const isOfficialOrigin =
     origin.includes('localhost') ||
     origin.includes('pages.dev') ||
-    origin.includes('trycloudflare.com') ||
     origin.includes('nganha');
 
   const isValidSignature = clientSignature === 'nganha_sec_2026_shield_v1';

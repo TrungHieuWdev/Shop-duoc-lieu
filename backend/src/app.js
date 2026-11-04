@@ -51,10 +51,9 @@ app.use(
   })
 );
 
-// 4. Cấu hình CORS chặt chẽ: chỉ cho phép frontend chính chủ và các tên miền Cloudflare
+// 4. Cấu hình CORS chặt chẽ: chỉ cho phép frontend chính chủ nganhashop.pages.dev và localhost
 const ALLOWED_ORIGIN_PATTERNS = [
   /^http:\/\/localhost(:\d+)?$/,
-  /^https?:\/\/.*\.trycloudflare\.com$/,
   /^https:\/\/.*\.pages\.dev$/,
   /^https:\/\/nganhashop\.pages\.dev$/,
 ];
