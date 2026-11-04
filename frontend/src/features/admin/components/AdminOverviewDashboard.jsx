@@ -68,7 +68,7 @@ export const AdminOverviewDashboard = ({ orders, products, onNavigateTab }) => {
   return (
     <div className="space-y-4 w-full">
       {/* 1. Header Bảng Điều Khiển & Bộ Chuyển Đổi Dữ Liệu */}
-      <div className="bg-white border border-border-herbal p-3 sm:p-4 shadow-xs rounded-none flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="bg-white border border-border-herbal p-3 sm:p-4 shadow-xs rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-primary text-xl">analytics</span>
@@ -86,9 +86,9 @@ export const AdminOverviewDashboard = ({ orders, products, onNavigateTab }) => {
           <button
             type="button"
             onClick={() => setViewMode('real')}
-            className={`px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-none border transition-all cursor-pointer ${
+            className={`px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-lg border transition-all cursor-pointer ${
               viewMode === 'real'
-                ? 'bg-[#14261a] text-[#cbb07c] border-[#14261a]'
+                ? 'bg-[#1d3527] text-[#d4b986] border-[#1d3527]'
                 : 'bg-white text-on-surface-variant hover:bg-surface-container border-border-herbal'
             }`}
           >
@@ -97,9 +97,9 @@ export const AdminOverviewDashboard = ({ orders, products, onNavigateTab }) => {
           <button
             type="button"
             onClick={() => setViewMode('projected')}
-            className={`px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-none border transition-all cursor-pointer ${
+            className={`px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-lg border transition-all cursor-pointer ${
               viewMode === 'projected'
-                ? 'bg-[#14261a] text-[#cbb07c] border-[#14261a]'
+                ? 'bg-[#1d3527] text-[#d4b986] border-[#1d3527]'
                 : 'bg-white text-on-surface-variant hover:bg-surface-container border-border-herbal'
             }`}
           >
@@ -108,10 +108,10 @@ export const AdminOverviewDashboard = ({ orders, products, onNavigateTab }) => {
         </div>
       </div>
 
-      {/* 2. 4 THẺ CHỈ SỐ KPI CHUẨN 2026 (ROUNDED-NONE) */}
+      {/* 2. 4 THẺ CHỈ SỐ KPI CHUẨN 2026 */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {/* KPI 1: Đơn Hàng Mới */}
-        <div className="bg-white border border-border-herbal p-3.5 shadow-xs rounded-none space-y-1">
+        <div className="bg-white border border-border-herbal p-3.5 shadow-xs rounded-xl space-y-1">
           <div className="flex items-center justify-between">
             <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-secondary">
               Số Đơn Hàng Mới
@@ -132,7 +132,7 @@ export const AdminOverviewDashboard = ({ orders, products, onNavigateTab }) => {
         </div>
 
         {/* KPI 2: Tổng Doanh Thu */}
-        <div className="bg-white border border-border-herbal p-3.5 shadow-xs rounded-none space-y-1">
+        <div className="bg-white border border-border-herbal p-3.5 shadow-xs rounded-xl space-y-1">
           <div className="flex items-center justify-between">
             <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-secondary">
               Tổng Doanh Thu
@@ -148,18 +148,18 @@ export const AdminOverviewDashboard = ({ orders, products, onNavigateTab }) => {
         </div>
 
         {/* KPI 3: Lợi Nhuận Thuần (Pure Net Profit) - TÂM ĐIỂM YÊU CẦU */}
-        <div className="bg-[#faf8f3] border-2 border-[#cbb07c] p-3.5 shadow-xs rounded-none space-y-1">
+        <div className="bg-[#faf8f5] border-2 border-[#d4b986] p-3.5 shadow-xs rounded-xl space-y-1">
           <div className="flex items-center justify-between">
             <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#8a7258]">
               Lợi Nhuận Thuần (Net Profit)
             </span>
-            <span className="material-symbols-outlined text-[#cbb07c] text-lg">savings</span>
+            <span className="material-symbols-outlined text-[#8a7258] text-lg">savings</span>
           </div>
           <div className="font-serif text-xl sm:text-2xl font-extrabold text-green-800 truncate">
             {formatCurrency(totalProfit)}
           </div>
           <div className="flex items-center gap-1.5 text-[11px]">
-            <span className="px-1.5 py-0.2 bg-green-100 text-green-800 font-bold font-mono">
+            <span className="px-1.5 py-0.2 bg-green-100 text-green-800 font-bold font-mono rounded-md">
               Biên lãi {netMargin}%
             </span>
             <span className="text-on-surface-variant text-[10px]">thực nhận về túi</span>
@@ -167,7 +167,7 @@ export const AdminOverviewDashboard = ({ orders, products, onNavigateTab }) => {
         </div>
 
         {/* KPI 4: Giá Trị Đơn Trung Bình (AOV) */}
-        <div className="bg-white border border-border-herbal p-3.5 shadow-xs rounded-none space-y-1">
+        <div className="bg-white border border-border-herbal p-3.5 shadow-xs rounded-xl space-y-1">
           <div className="flex items-center justify-between">
             <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-secondary">
               Giá Trị Đơn TB (AOV)
@@ -183,8 +183,8 @@ export const AdminOverviewDashboard = ({ orders, products, onNavigateTab }) => {
         </div>
       </div>
 
-      {/* 3. BIỂU ĐỒ LỢI NHUẬN THUẦN & ĐƠN HÀNG MỚI CHUẨN 2026 (INTERACTIVE SVG DUAL-CHART) */}
-      <div className="bg-white border border-border-herbal p-3.5 sm:p-5 shadow-xs rounded-none space-y-3">
+      {/* 3. BIỂU ĐỒ LỢI NHUẬN THUẦN & ĐƠN HÀNG MỚI CHUẨN 2026 */}
+      <div className="bg-white border border-border-herbal p-3.5 sm:p-5 shadow-xs rounded-xl space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border-herbal pb-3">
           <div>
             <h3 className="font-serif text-base font-bold text-primary flex items-center gap-2">
@@ -326,7 +326,7 @@ export const AdminOverviewDashboard = ({ orders, products, onNavigateTab }) => {
       {/* 4. PHÂN TÍCH CƠ CẤU LỢI NHUẬN & TOP DƯỢC LIỆU SINH LỜI CAO NHẤT */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
         {/* Khối Trái: Cơ Cấu Chi Phí & Lợi Nhuận Thuần */}
-        <div className="lg:col-span-5 bg-white border border-border-herbal p-4 shadow-xs rounded-none space-y-3">
+        <div className="lg:col-span-5 bg-white border border-border-herbal p-4 shadow-xs rounded-xl space-y-3">
           <div className="flex items-center justify-between border-b border-border-herbal pb-2">
             <h4 className="font-serif text-sm font-bold text-primary uppercase tracking-wider">
               Phân Rã Cơ Cấu Lợi Nhuận Thuần
@@ -340,7 +340,7 @@ export const AdminOverviewDashboard = ({ orders, products, onNavigateTab }) => {
                 <span>1. Doanh thu gộp bán lẻ:</span>
                 <span className="font-bold">{formatCurrency(totalRevenue)} (100%)</span>
               </div>
-              <div className="w-full h-2 bg-[#14261a] rounded-none"></div>
+              <div className="w-full h-2 bg-[#1d3527] rounded-full"></div>
             </div>
 
             <div>
@@ -348,7 +348,7 @@ export const AdminOverviewDashboard = ({ orders, products, onNavigateTab }) => {
                 <span>2. Giá vốn dược liệu (COGS):</span>
                 <span className="font-mono text-red-700">-{formatCurrency(totalCogs)} (~45%)</span>
               </div>
-              <div className="w-full h-2 bg-red-200 rounded-none"></div>
+              <div className="w-full h-2 bg-red-200 rounded-full"></div>
             </div>
 
             <div>
@@ -356,7 +356,7 @@ export const AdminOverviewDashboard = ({ orders, products, onNavigateTab }) => {
                 <span>3. Chi phí bao bì túi zip &amp; tem nhãn:</span>
                 <span className="font-mono text-amber-700">-{formatCurrency(Math.round(totalRevenue * 0.05))} (~5%)</span>
               </div>
-              <div className="w-full h-2 bg-amber-200 rounded-none"></div>
+              <div className="w-full h-2 bg-amber-200 rounded-full"></div>
             </div>
 
             <div className="pt-2 border-t border-border-herbal/70 flex justify-between items-center text-sm font-bold text-primary">
@@ -367,7 +367,7 @@ export const AdminOverviewDashboard = ({ orders, products, onNavigateTab }) => {
         </div>
 
         {/* Khối Phải: Top Dược Liệu Sinh Lời Cao Nhất */}
-        <div className="lg:col-span-7 bg-white border border-border-herbal p-4 shadow-xs rounded-none space-y-3">
+        <div className="lg:col-span-7 bg-white border border-border-herbal p-4 shadow-xs rounded-xl space-y-3">
           <div className="flex items-center justify-between border-b border-border-herbal pb-2">
             <h4 className="font-serif text-sm font-bold text-primary uppercase tracking-wider">
               Top Dược Liệu Sinh Lời Cao Nhất Tiệm Ngân Hà

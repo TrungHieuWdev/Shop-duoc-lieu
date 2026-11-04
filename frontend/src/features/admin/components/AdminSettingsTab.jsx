@@ -141,7 +141,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
   return (
     <div className="space-y-4 w-full">
       {/* 1. Header Cài Đặt */}
-      <div className="bg-white border border-border-herbal p-3.5 sm:p-4 shadow-xs rounded-none flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="bg-white border border-border-herbal p-3.5 sm:p-4 shadow-xs rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-primary text-xl">settings</span>
@@ -155,7 +155,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
         </div>
 
         {isSaved && (
-          <div className="px-3 py-1.5 bg-green-100 border border-green-300 text-green-800 text-xs font-bold flex items-center gap-1.5 animate-fadeIn">
+          <div className="px-3 py-1.5 bg-green-100 border border-green-300 text-green-800 text-xs font-bold rounded-lg flex items-center gap-1.5 animate-fadeIn">
             <span className="material-symbols-outlined text-sm">check_circle</span>
             <span>Đã lưu cài đặt thành công!</span>
           </div>
@@ -167,7 +167,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
         {/* CỘT TRÁI: CẤU HÌNH NGÂN HÀNG, PHÍ SHIP & GMAIL */}
         <div className="lg:col-span-7 space-y-4">
           {/* Card 1: Cấu hình Tài khoản Ngân Hàng VietQR */}
-          <div className="bg-white border border-border-herbal p-4 shadow-xs rounded-none space-y-3">
+          <div className="bg-white border border-border-herbal p-4 shadow-xs rounded-xl space-y-3">
             <div className="border-b border-border-herbal pb-2 flex items-center gap-2">
               <span className="material-symbols-outlined text-primary text-base">account_balance</span>
               <h3 className="font-serif text-sm font-bold text-primary uppercase tracking-wider">
@@ -227,7 +227,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
           </div>
 
           {/* Card 2: Cấu hình Gmail Chủ Shop Nhận Thông Báo Đơn Hàng Để Đi Đơn */}
-          <div className="bg-white border border-border-herbal p-4 shadow-xs rounded-none space-y-3">
+          <div className="bg-white border border-border-herbal p-4 shadow-xs rounded-xl space-y-3">
             <div className="border-b border-border-herbal pb-2 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary text-base">mail</span>
@@ -358,7 +358,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
           </div>
 
           {/* Card 3: Cấu hình Tiền Phí Vận Chuyển (Shipping Fee) */}
-          <div className="bg-white border border-border-herbal p-4 shadow-xs rounded-none space-y-3">
+          <div className="bg-white border border-border-herbal p-4 shadow-xs rounded-xl space-y-3">
             <div className="border-b border-border-herbal pb-2 flex items-center gap-2">
               <span className="material-symbols-outlined text-primary text-base">local_shipping</span>
               <h3 className="font-serif text-sm font-bold text-primary uppercase tracking-wider">
@@ -378,7 +378,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
                   required
                   value={formData.default_shipping_fee}
                   onChange={(e) => setFormData({ ...formData, default_shipping_fee: Number(e.target.value) })}
-                  className="w-full px-3 py-2 bg-[#faf8f3] border border-border-herbal rounded-none text-xs font-bold text-primary focus:outline-none focus:border-primary"
+                  className="w-full px-3 py-2 bg-[#faf8f3] border border-border-herbal rounded-xl text-xs font-bold text-primary focus:outline-none focus:border-primary"
                 />
                 <span className="text-[10px] text-on-surface-variant mt-0.5 block">
                   Hiện hành: {formatCurrency(formData.default_shipping_fee)}
@@ -396,7 +396,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
                   required
                   value={formData.free_shipping_threshold}
                   onChange={(e) => setFormData({ ...formData, free_shipping_threshold: Number(e.target.value) })}
-                  className="w-full px-3 py-2 bg-[#faf8f3] border border-border-herbal rounded-none text-xs font-bold text-primary focus:outline-none focus:border-primary"
+                  className="w-full px-3 py-2 bg-[#faf8f3] border border-border-herbal rounded-xl text-xs font-bold text-primary focus:outline-none focus:border-primary"
                 />
                 <span className="text-[10px] text-on-surface-variant mt-0.5 block">
                   Đơn từ {formatCurrency(formData.free_shipping_threshold)} được Freeship
@@ -409,7 +409,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
           <div className="pt-1">
             <button
               type="submit"
-              className="w-full py-2.5 bg-[#2d7d46] hover:bg-[#25693a] text-white font-bold text-xs uppercase tracking-wider rounded-none shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-2.5 bg-[#2d7d46] hover:bg-[#25693a] text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <span className="material-symbols-outlined text-base">save</span>
               <span>Lưu Cài Đặt Ngân Hàng, Gmail &amp; Phí Ship</span>
@@ -417,7 +417,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
           </div>
 
           {/* Card 4: An Ninh & Đổi Mật Khẩu Quản Trị Viên (Chuẩn 2026) */}
-          <div className="bg-white border border-border-herbal p-4 shadow-xs rounded-none space-y-3 mt-4">
+          <div className="bg-white border border-border-herbal p-4 shadow-xs rounded-xl space-y-3 mt-4">
             <div className="border-b border-border-herbal pb-2 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-primary text-base">security</span>
@@ -524,7 +524,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
                     },
                   });
                 }}
-                className="w-full py-2 bg-[#14261a] hover:bg-[#233f2c] text-[#cbb07c] font-bold text-xs uppercase tracking-wider rounded-none flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-xs mt-1"
+                className="w-full py-2 bg-[#1d3527] hover:bg-[#284935] text-[#d4b986] font-bold text-xs uppercase tracking-wider rounded-xl flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-xs mt-1"
               >
                 <span className="material-symbols-outlined text-sm">lock_reset</span>
                 <span>Cập Nhật Mật Khẩu Bảo Mật Mới</span>
@@ -534,7 +534,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
         </div>
 
         {/* CỘT PHẢI: XEM TRƯỚC VÀ QUÉT THỬ MÃ VIETQR HOẠT ĐỘNG THẬT */}
-        <div className="lg:col-span-5 bg-white border border-border-herbal p-4 shadow-xs rounded-none space-y-3">
+        <div className="lg:col-span-5 bg-white border border-border-herbal p-4 shadow-xs rounded-xl space-y-3">
           <div className="border-b border-border-herbal pb-2 flex items-center justify-between">
             <div className="flex items-center gap-1.5">
               <span className="material-symbols-outlined text-primary text-base">qr_code_scanner</span>
