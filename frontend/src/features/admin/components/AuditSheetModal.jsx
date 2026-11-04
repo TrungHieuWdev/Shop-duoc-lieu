@@ -111,17 +111,17 @@ export const AuditSheetModal = ({ isOpen, onClose, products, onSaveAudit, reques
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-      <div className="bg-surface rounded-none max-w-4xl w-full border border-border-herbal shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
+      <div className="bg-surface rounded-2xl max-w-4xl w-full border border-border-herbal shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
         {/* Modal Header */}
-        <div className="p-3.5 sm:p-4 border-b border-border-herbal bg-[#14261a] text-white flex items-center justify-between">
+        <div className="p-3.5 sm:p-4 border-b border-border-herbal bg-[#1d3527] text-white flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-none bg-[#cbb07c] text-[#14261a] flex items-center justify-center shadow-xs">
+            <div className="w-8 h-8 rounded-xl bg-[#d4b986] text-[#1d3527] flex items-center justify-center shadow-xs">
               <span className="material-symbols-outlined text-lg">fact_check</span>
             </div>
             <div>
               <h3 className="font-serif text-base font-bold text-white flex items-center gap-2">
                 Tạo Phiếu Kiểm Kho Mới
-                <span className="text-[10px] font-sans font-bold uppercase tracking-wider bg-[#cbb07c]/20 text-[#e0cfab] px-1.5 py-0.2 rounded-none border border-[#cbb07c]/40">
+                <span className="text-[10px] font-sans font-bold uppercase tracking-wider bg-[#d4b986]/20 text-[#e0cfab] px-1.5 py-0.2 rounded-full border border-[#d4b986]/40">
                   Chuẩn KiotViet
                 </span>
               </h3>
@@ -133,7 +133,7 @@ export const AuditSheetModal = ({ isOpen, onClose, products, onSaveAudit, reques
           <button
             type="button"
             onClick={onClose}
-            className="w-8 h-8 rounded-none hover:bg-white/10 text-white/80 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+            className="w-8 h-8 rounded-lg hover:bg-white/10 text-white/80 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
           >
             <span className="material-symbols-outlined text-lg">close</span>
           </button>
@@ -297,13 +297,13 @@ export const AuditSheetModal = ({ isOpen, onClose, products, onSaveAudit, reques
               <button
                 type="button"
                 onClick={onClose}
-                className="px-3.5 py-1.5 border border-border-herbal text-on-surface hover:bg-surface-container rounded-none text-xs font-semibold transition-colors cursor-pointer"
+                className="px-3.5 py-1.5 border border-border-herbal text-on-surface hover:bg-surface-container rounded-xl text-xs font-semibold transition-colors cursor-pointer"
               >
                 Hủy bỏ
               </button>
               <button
                 type="submit"
-                className="px-4 py-1.5 bg-[#14261a] hover:bg-[#1e3926] text-[#cbb07c] font-bold text-xs uppercase tracking-wider rounded-none shadow-xs transition-all flex items-center gap-1 cursor-pointer"
+                className="px-4 py-1.5 bg-[#1d3527] hover:bg-[#284935] text-[#d4b986] font-bold text-xs uppercase tracking-wider rounded-xl shadow-xs transition-all flex items-center gap-1 cursor-pointer"
               >
                 <span className="material-symbols-outlined text-sm">check_circle</span>
                 <span>{saveMode === 'balanced' ? 'Hoàn Tất & Cân Bằng' : 'Lưu Phiếu Tạm'}</span>

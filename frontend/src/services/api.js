@@ -5,7 +5,16 @@ const api = axios.create({
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
+    'X-NganHa-Client-Signature': 'nganha_sec_2026_shield_v1',
   },
+});
+
+api.interceptors.request.use((config) => {
+  // Đính kèm chữ ký bảo vệ chống bot gọi trực tiếp API
+  config.headers['X-NganHa-Client-Signature'] = 'nganha_sec_2026_shield_v1';
+  config.headers['X-Requested-With'] = 'XMLHttpRequest';
+  return config;
 });
 
 api.interceptors.response.use(

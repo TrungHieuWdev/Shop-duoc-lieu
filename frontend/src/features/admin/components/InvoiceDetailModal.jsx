@@ -102,14 +102,14 @@ export const InvoiceDetailModal = ({
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-2xl bg-[#fbf9f2] rounded-none border border-border-herbal shadow-2xl p-4 sm:p-6 text-on-surface max-h-[92vh] overflow-y-auto print:p-0 print:border-none print:shadow-none"
+        className="relative w-full max-w-2xl bg-[#faf8f5] rounded-2xl border border-border-herbal shadow-2xl p-4 sm:p-6 text-on-surface max-h-[92vh] overflow-y-auto print:p-0 print:border-none print:shadow-none"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Nút đóng */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-3 right-3 p-1.5 text-outline hover:text-primary rounded-none hover:bg-surface-container transition-colors print:hidden"
+          className="absolute top-3 right-3 p-1.5 text-outline hover:text-primary rounded-lg hover:bg-surface-container transition-colors print:hidden"
           aria-label="Đóng"
         >
           <span className="material-symbols-outlined text-[1.25rem]">close</span>
@@ -257,7 +257,7 @@ export const InvoiceDetailModal = ({
         </div>
 
         {/* 5. Tổng kết tài chính */}
-        <div className="p-3 rounded-none bg-surface-container-low border border-border-herbal flex flex-col gap-1.5 text-xs mb-4">
+        <div className="p-3.5 rounded-xl bg-surface-container-low border border-border-herbal flex flex-col gap-1.5 text-xs mb-4">
           <div className="flex justify-between text-on-surface-variant">
             <span>Tiền hàng (tạm tính):</span>
             <span className="font-medium text-primary">{formatCurrency(order.subtotal || 0)}</span>
@@ -278,7 +278,7 @@ export const InvoiceDetailModal = ({
           <button
             type="button"
             onClick={onClose}
-            className="px-5 py-2 bg-primary hover:bg-primary-container text-on-primary font-bold text-xs uppercase tracking-wider rounded-none transition-all cursor-pointer"
+            className="px-5 py-2 bg-primary hover:bg-primary-container text-on-primary font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer"
           >
             Đóng Hóa Đơn
           </button>

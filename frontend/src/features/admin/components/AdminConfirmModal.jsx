@@ -68,23 +68,23 @@ export const AdminConfirmModal = ({
       onClick={onClose}
     >
       <div
-        className={`relative w-full max-w-md bg-[#faf8f3] rounded-none border border-[#ded7ca] shadow-2xl overflow-hidden ${colorStyles.accentBorder} animate-scaleUp`}
+        className={`relative w-full max-w-md bg-[#faf8f5] rounded-2xl border border-[#ded7ca] shadow-2xl overflow-hidden ${colorStyles.accentBorder} animate-scaleUp`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Thanh tiêu đề Top Bar */}
-        <div className="bg-[#14261a] text-white px-4 py-3 flex items-center justify-between border-b border-[#28402f]">
+        <div className="bg-[#1d3527] text-white px-4 py-3 flex items-center justify-between border-b border-[#2a4d38]">
           <div className="flex items-center gap-2">
             <span className={`material-symbols-outlined text-lg ${colorStyles.iconColor}`}>
               {icon}
             </span>
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#cbb07c]">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#d4b986]">
               {subtitle}
             </span>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="text-white/60 hover:text-white p-1 rounded-none hover:bg-white/10 transition-colors cursor-pointer"
+            className="text-white/60 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
             title="Đóng hộp thoại"
           >
             <span className="material-symbols-outlined text-base">close</span>
@@ -93,11 +93,11 @@ export const AdminConfirmModal = ({
 
         {/* Nội dung thông báo xác nhận */}
         <div className="p-4 sm:p-5 space-y-3">
-          <h3 className="font-serif text-base sm:text-lg font-bold text-[#14261a] leading-snug">
+          <h3 className="font-serif text-base sm:text-lg font-bold text-[#1d3527] leading-snug">
             {title}
           </h3>
 
-          <div className="text-xs text-[#4a584d] leading-relaxed bg-white border border-[#e8e2d5] p-3 rounded-none">
+          <div className="text-xs text-[#4a584d] leading-relaxed bg-white border border-[#e8e2d5] p-3 rounded-xl shadow-2xs">
             {typeof message === 'string' ? (
               <p className="whitespace-pre-line">{message}</p>
             ) : (
@@ -112,11 +112,11 @@ export const AdminConfirmModal = ({
         </div>
 
         {/* Nút thao tác xác nhận / hủy bỏ */}
-        <div className="bg-[#f0ece1] border-t border-[#ded7ca] px-4 py-3 flex items-center justify-end gap-2.5">
+        <div className="bg-[#f5f1e8] border-t border-[#ded7ca] px-4 py-3 flex items-center justify-end gap-2.5">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 bg-white hover:bg-gray-100 text-[#14261a] border border-[#ded7ca] font-semibold text-xs uppercase tracking-wider rounded-none transition-colors cursor-pointer"
+            className="px-4 py-2 bg-white hover:bg-gray-100 text-[#1d3527] border border-[#ded7ca] font-semibold text-xs uppercase tracking-wider rounded-xl transition-colors cursor-pointer"
           >
             {cancelText}
           </button>
@@ -126,7 +126,7 @@ export const AdminConfirmModal = ({
               onConfirm();
               onClose();
             }}
-            className={`px-4 py-2 font-bold text-xs uppercase tracking-wider rounded-none shadow-xs transition-all flex items-center gap-1.5 cursor-pointer ${colorStyles.btn}`}
+            className={`px-4 py-2 font-bold text-xs uppercase tracking-wider rounded-xl shadow-xs transition-all flex items-center gap-1.5 cursor-pointer ${colorStyles.btn}`}
           >
             <span className="material-symbols-outlined text-sm">check</span>
             <span>{confirmText}</span>

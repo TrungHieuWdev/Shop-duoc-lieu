@@ -441,22 +441,22 @@ export const AdminDashboardPage = () => {
              - Đầy đủ 5 Tab: Tổng Quan 2026, Phiếu Kiểm Kho, Hàng Hóa, Hóa Đơn, Cài Đặt (VietQR & Ship)
              - Hoàn toàn Rounded-None, sắc nét chuẩn ERP
           ========================================================================= */}
-      <header className="bg-[#14261a] border-b border-[#28402f] text-white sticky top-16 md:top-20 z-40 shadow-sm rounded-none">
+      <header className="bg-[#1d3527] border-b border-[#2a4d38] text-white sticky top-16 md:top-20 z-40 shadow-sm">
         <div className="max-w-[1700px] mx-auto px-2 sm:px-6 flex items-center justify-between h-12 sm:h-13">
           {/* Navigation Tabs (5 Tabs chính) */}
-          <nav className="flex items-center gap-1 overflow-x-auto scrollbar-none flex-nowrap py-1">
+          <nav className="flex items-center gap-1.5 overflow-x-auto scrollbar-none flex-nowrap py-1">
             {/* Tab 1: Tổng Quan Dashboard 2026 */}
             <button
               type="button"
               onClick={() => setActiveTab('overview')}
-              className={`px-2.5 sm:px-3 py-1.5 text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer rounded-none ${
+              className={`px-3 py-1.5 text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer rounded-lg ${
                 activeTab === 'overview'
-                  ? 'bg-[#233f2c] text-[#cbb07c] border-b-2 border-[#cbb07c]'
-                  : 'text-[#d6dfd3] hover:bg-white/10 hover:text-white border-b-2 border-transparent'
+                  ? 'bg-[#2a4d38] text-[#d4b986] shadow-xs'
+                  : 'text-[#d6dfd3] hover:bg-white/10 hover:text-white'
               }`}
             >
               <span className="material-symbols-outlined text-base">analytics</span>
-              <span>Tổng Quan (Dashboard)</span>
+              <span>Tổng Quan</span>
             </button>
 
             {/* Tab 2: Phiếu Kiểm Kho */}
@@ -466,15 +466,15 @@ export const AdminDashboardPage = () => {
                 setActiveTab('audit');
                 setStatusFilter('all');
               }}
-              className={`px-2.5 sm:px-3 py-1.5 text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer rounded-none ${
+              className={`px-3 py-1.5 text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer rounded-lg ${
                 activeTab === 'audit'
-                  ? 'bg-[#233f2c] text-[#cbb07c] border-b-2 border-[#cbb07c]'
-                  : 'text-[#d6dfd3] hover:bg-white/10 hover:text-white border-b-2 border-transparent'
+                  ? 'bg-[#2a4d38] text-[#d4b986] shadow-xs'
+                  : 'text-[#d6dfd3] hover:bg-white/10 hover:text-white'
               }`}
             >
               <span className="material-symbols-outlined text-base">fact_check</span>
               <span>Phiếu Kiểm Kho</span>
-              <span className="text-[10px] px-1.5 py-0.2 bg-[#cbb07c]/20 text-[#e6d8b9] rounded-none border border-[#cbb07c]/30 font-mono">
+              <span className="text-[10px] px-1.5 py-0.2 bg-[#d4b986]/20 text-[#e6d8b9] rounded-full border border-[#d4b986]/30 font-mono">
                 {auditLogs.length}
               </span>
             </button>
@@ -486,15 +486,15 @@ export const AdminDashboardPage = () => {
                 setActiveTab('products');
                 setStatusFilter('all');
               }}
-              className={`px-2.5 sm:px-3 py-1.5 text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer rounded-none ${
+              className={`px-3 py-1.5 text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer rounded-lg ${
                 activeTab === 'products'
-                  ? 'bg-[#233f2c] text-[#cbb07c] border-b-2 border-[#cbb07c]'
-                  : 'text-[#d6dfd3] hover:bg-white/10 hover:text-white border-b-2 border-transparent'
+                  ? 'bg-[#2a4d38] text-[#d4b986] shadow-xs'
+                  : 'text-[#d6dfd3] hover:bg-white/10 hover:text-white'
               }`}
             >
               <span className="material-symbols-outlined text-base">inventory_2</span>
               <span>Hàng Hóa &amp; Tồn Kho</span>
-              <span className="text-[10px] px-1.5 py-0.2 bg-white/15 text-white rounded-none border border-white/20 font-mono">
+              <span className="text-[10px] px-1.5 py-0.2 bg-white/15 text-white rounded-full border border-white/20 font-mono">
                 {products.length}
               </span>
             </button>
@@ -506,16 +506,16 @@ export const AdminDashboardPage = () => {
                 setActiveTab('orders');
                 setOrderStatusFilter('all');
               }}
-              className={`px-2.5 sm:px-3 py-1.5 text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer rounded-none ${
+              className={`px-3 py-1.5 text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer rounded-lg ${
                 activeTab === 'orders'
-                  ? 'bg-[#233f2c] text-[#cbb07c] border-b-2 border-[#cbb07c]'
-                  : 'text-[#d6dfd3] hover:bg-white/10 hover:text-white border-b-2 border-transparent'
+                  ? 'bg-[#2a4d38] text-[#d4b986] shadow-xs'
+                  : 'text-[#d6dfd3] hover:bg-white/10 hover:text-white'
               }`}
             >
               <span className="material-symbols-outlined text-base">receipt_long</span>
               <span>Hóa Đơn &amp; Đơn Hàng</span>
               <span
-                className={`text-[10px] px-1.5 py-0.2 font-mono font-bold rounded-none ${
+                className={`text-[10px] px-1.5 py-0.2 font-mono font-bold rounded-full ${
                   pendingOrdersCount > 0
                     ? 'bg-amber-500 text-white animate-pulse'
                     : 'bg-white/15 text-white border border-white/20'
@@ -529,10 +529,10 @@ export const AdminDashboardPage = () => {
             <button
               type="button"
               onClick={() => setActiveTab('settings')}
-              className={`px-2.5 sm:px-3 py-1.5 text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer rounded-none ${
+              className={`px-3 py-1.5 text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer rounded-lg ${
                 activeTab === 'settings'
-                  ? 'bg-[#233f2c] text-[#cbb07c] border-b-2 border-[#cbb07c]'
-                  : 'text-[#d6dfd3] hover:bg-white/10 hover:text-white border-b-2 border-transparent'
+                  ? 'bg-[#2a4d38] text-[#d4b986] shadow-xs'
+                  : 'text-[#d6dfd3] hover:bg-white/10 hover:text-white'
               }`}
             >
               <span className="material-symbols-outlined text-base">settings</span>
@@ -541,13 +541,13 @@ export const AdminDashboardPage = () => {
           </nav>
 
           {/* Right User Actions & View Store button */}
-          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
             {/* Chuông Thông Báo Đơn Hàng Mới */}
             <div className="relative">
               <button
                 type="button"
                 onClick={() => setNotifDropdownOpen(!notifDropdownOpen)}
-                className="relative p-1.5 text-[#cbb07c] hover:bg-white/10 rounded-none transition-colors cursor-pointer flex items-center justify-center"
+                className="relative p-1.5 text-[#d4b986] hover:bg-white/10 rounded-lg transition-colors cursor-pointer flex items-center justify-center"
                 title="Thông báo đơn hàng mới"
               >
                 <span className="material-symbols-outlined text-xl">notifications</span>
@@ -561,20 +561,20 @@ export const AdminDashboardPage = () => {
               {/* Dropdown Danh Sách Thông Báo Đơn Hàng */}
               {notifDropdownOpen && (
                 <div
-                  className="absolute right-0 mt-2 w-80 sm:w-96 bg-white text-[#1c241e] border border-border-herbal shadow-2xl rounded-none z-50 animate-scaleUp overflow-hidden"
+                  className="absolute right-0 mt-2 w-80 sm:w-96 bg-white text-[#1c241e] border border-border-herbal shadow-2xl rounded-2xl z-50 animate-scaleUp overflow-hidden"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <div className="bg-[#14261a] text-white px-3.5 py-2.5 flex items-center justify-between border-b border-[#28402f]">
+                  <div className="bg-[#1d3527] text-white px-4 py-3 flex items-center justify-between border-b border-[#2a4d38]">
                     <div className="flex items-center gap-1.5">
-                      <span className="material-symbols-outlined text-[#cbb07c] text-base">notifications_active</span>
-                      <span className="font-serif font-bold text-xs uppercase tracking-wider text-[#cbb07c]">
+                      <span className="material-symbols-outlined text-[#d4b986] text-base">notifications_active</span>
+                      <span className="font-serif font-bold text-xs uppercase tracking-wider text-[#d4b986]">
                         Thông Báo Đơn Hàng ({orders.length})
                       </span>
                     </div>
                     <button
                       type="button"
                       onClick={() => setNotifDropdownOpen(false)}
-                      className="text-white/60 hover:text-white p-0.5 cursor-pointer"
+                      className="text-white/60 hover:text-white p-0.5 cursor-pointer rounded-md hover:bg-white/10"
                     >
                       <span className="material-symbols-outlined text-sm">close</span>
                     </button>
@@ -618,7 +618,7 @@ export const AdminDashboardPage = () => {
                   </div>
 
                   {orders.length > 0 && (
-                    <div className="p-2 bg-[#f4f1ea] border-t border-border-herbal text-center">
+                    <div className="p-2.5 bg-[#f8f6f0] border-t border-border-herbal text-center">
                       <button
                         type="button"
                         onClick={() => {
@@ -637,7 +637,7 @@ export const AdminDashboardPage = () => {
 
             <Link
               to="/"
-              className="px-2.5 sm:px-3 py-1 bg-[#20402b] hover:bg-[#2b5439] text-[#cbb07c] border border-[#cbb07c]/40 font-bold text-xs rounded-none transition-all flex items-center gap-1 shadow-xs"
+              className="px-3 py-1.5 bg-[#2a4d38] hover:bg-[#345e45] text-[#d4b986] border border-[#d4b986]/40 font-bold text-xs rounded-lg transition-all flex items-center gap-1.5 shadow-xs"
               title="Mở giao diện khách hàng mua sắm"
             >
               <span className="material-symbols-outlined text-sm">storefront</span>
@@ -645,7 +645,7 @@ export const AdminDashboardPage = () => {
             </Link>
 
             <div className="hidden md:flex items-center gap-2 pl-2 border-l border-white/20">
-              <div className="w-6 h-6 bg-[#cbb07c]/30 text-[#e6d8b9] flex items-center justify-center font-bold text-xs rounded-none">
+              <div className="w-6 h-6 bg-[#d4b986]/30 text-[#f5eedd] flex items-center justify-center font-bold text-xs rounded-full">
                 A
               </div>
               <span className="text-xs font-semibold text-white/90 truncate max-w-[140px]">
@@ -656,7 +656,7 @@ export const AdminDashboardPage = () => {
             <button
               type="button"
               onClick={handleLogout}
-              className="p-1.5 text-white/70 hover:text-red-300 hover:bg-white/10 rounded-none transition-colors cursor-pointer"
+              className="p-1.5 text-white/70 hover:text-red-300 hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
               title="Đăng xuất khỏi hệ thống"
             >
               <span className="material-symbols-outlined text-lg">logout</span>
@@ -725,8 +725,8 @@ export const AdminDashboardPage = () => {
               }`}
             >
               {/* Card 1: Ô Tìm Kiếm */}
-              <div className="bg-white border border-border-herbal shadow-xs rounded-none overflow-hidden">
-                <div className="bg-[#14261a] text-[#cbb07c] px-3.5 py-2 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+              <div className="bg-white border border-border-herbal shadow-xs rounded-xl overflow-hidden">
+                <div className="bg-[#1d3527] text-[#d4b986] px-3.5 py-2 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
                   <span className="material-symbols-outlined text-sm">search</span>
                   <span>Tìm kiếm</span>
                 </div>
@@ -751,7 +751,7 @@ export const AdminDashboardPage = () => {
                             ? 'VD: #1, #2...'
                             : 'VD: NH-1234'
                         }
-                        className="w-full pl-8 pr-2.5 py-1.5 bg-[#faf8f3] border border-border-herbal rounded-none text-xs text-primary focus:outline-none focus:border-primary font-mono"
+                        className="w-full pl-8 pr-2.5 py-1.5 bg-[#faf8f3] border border-border-herbal rounded-xl text-xs text-primary focus:outline-none focus:border-[#1d3527] font-mono"
                       />
                       <span className="material-symbols-outlined text-outline text-sm absolute left-2 top-2">
                         tag
@@ -773,7 +773,7 @@ export const AdminDashboardPage = () => {
                         value={searchName}
                         onChange={(e) => setSearchName(e.target.value)}
                         placeholder="Nhập từ khóa tìm..."
-                        className="w-full pl-8 pr-2.5 py-1.5 bg-[#faf8f3] border border-border-herbal rounded-none text-xs text-primary focus:outline-none focus:border-primary"
+                        className="w-full pl-8 pr-2.5 py-1.5 bg-[#faf8f3] border border-border-herbal rounded-xl text-xs text-primary focus:outline-none focus:border-[#1d3527]"
                       />
                       <span className="material-symbols-outlined text-outline text-sm absolute left-2 top-2">
                         manage_search
@@ -798,8 +798,8 @@ export const AdminDashboardPage = () => {
               </div>
 
               {/* Card 2: Trạng thái */}
-              <div className="bg-white border border-border-herbal shadow-xs rounded-none overflow-hidden">
-                <div className="bg-[#14261a] text-[#cbb07c] px-3.5 py-2 text-xs font-bold uppercase tracking-wider flex items-center justify-between">
+              <div className="bg-white border border-border-herbal shadow-xs rounded-xl overflow-hidden">
+                <div className="bg-[#1d3527] text-[#d4b986] px-3.5 py-2 text-xs font-bold uppercase tracking-wider flex items-center justify-between">
                   <span className="flex items-center gap-1.5">
                     <span className="material-symbols-outlined text-sm">filter_alt</span>
                     <span>Trạng thái</span>
@@ -913,8 +913,8 @@ export const AdminDashboardPage = () => {
 
               {/* Card 3: Nhóm hàng / Danh mục */}
               {activeTab === 'products' && (
-                <div className="bg-white border border-border-herbal shadow-xs rounded-none overflow-hidden">
-                  <div className="bg-[#14261a] text-[#cbb07c] px-3.5 py-2 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+                <div className="bg-white border border-border-herbal shadow-xs rounded-xl overflow-hidden">
+                  <div className="bg-[#1d3527] text-[#d4b986] px-3.5 py-2 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
                     <span className="material-symbols-outlined text-sm">category</span>
                     <span>Nhóm dược liệu</span>
                   </div>
@@ -925,7 +925,7 @@ export const AdminDashboardPage = () => {
                         name="catFilter"
                         checked={categoryFilter === 'all'}
                         onChange={() => setCategoryFilter('all')}
-                        className="accent-[#14261a]"
+                        className="accent-[#1d3527]"
                       />
                       <span>Tất cả nhóm</span>
                     </label>
@@ -935,7 +935,7 @@ export const AdminDashboardPage = () => {
                         name="catFilter"
                         checked={categoryFilter === 'bai-thuoc-xong-tam'}
                         onChange={() => setCategoryFilter('bai-thuoc-xong-tam')}
-                        className="accent-[#14261a]"
+                        className="accent-[#1d3527]"
                       />
                       <span>Bài Thuốc Xông Tắm</span>
                     </label>
@@ -945,7 +945,7 @@ export const AdminDashboardPage = () => {
                         name="catFilter"
                         checked={categoryFilter === 'duoc-lieu-le'}
                         onChange={() => setCategoryFilter('duoc-lieu-le')}
-                        className="accent-[#14261a]"
+                        className="accent-[#1d3527]"
                       />
                       <span>Dược Liệu Lẻ Đơn Vị</span>
                     </label>
@@ -954,9 +954,9 @@ export const AdminDashboardPage = () => {
               )}
 
               {/* Card 4: Thống Kê Nhanh Kho Hàng */}
-              <div className="bg-white border border-border-herbal p-3 shadow-xs rounded-none space-y-2 text-xs">
+              <div className="bg-white border border-border-herbal p-3 shadow-xs rounded-xl space-y-2 text-xs">
                 <span className="text-[10px] font-bold text-[#8a7258] uppercase tracking-wider block">
-                  Tổng quan tồn kho Ngân Hà
+                  Tổng quan tồn kho
                 </span>
                 <div className="flex justify-between items-center py-1 border-b border-border-herbal/50">
                   <span className="text-on-surface-variant">Tổng vị dược liệu:</span>
@@ -976,7 +976,7 @@ export const AdminDashboardPage = () => {
             {/* CỘT PHẢI: BẢNG DỮ LIỆU CHÍNH */}
             <main className="flex-1 w-full min-w-0 flex flex-col gap-3">
               {/* Top Action Bar */}
-              <div className="bg-white border border-border-herbal p-3 sm:p-4 shadow-xs rounded-none flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="bg-white border border-border-herbal p-3 sm:p-4 shadow-xs rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <h1 className="font-serif text-lg sm:text-xl font-bold text-primary flex items-center gap-2">
                     {activeTab === 'audit' && (
@@ -1011,7 +1011,7 @@ export const AdminDashboardPage = () => {
                     <button
                       type="button"
                       onClick={() => setAuditModalOpen(true)}
-                      className="px-3.5 py-1.5 bg-[#2d7d46] hover:bg-[#25693a] text-white text-xs font-bold uppercase tracking-wider rounded-none shadow-xs hover:shadow transition-all flex items-center gap-1.5 cursor-pointer"
+                      className="px-3.5 py-1.5 bg-[#2d7d46] hover:bg-[#25693a] text-white text-xs font-bold uppercase tracking-wider rounded-xl shadow-xs hover:shadow transition-all flex items-center gap-1.5 cursor-pointer"
                     >
                       <span className="material-symbols-outlined text-base">add</span>
                       <span>+ Kiểm kho</span>
@@ -1025,7 +1025,7 @@ export const AdminDashboardPage = () => {
                         setProductToEdit(null);
                         setProductModalOpen(true);
                       }}
-                      className="px-3.5 py-1.5 bg-[#2d7d46] hover:bg-[#25693a] text-white text-xs font-bold uppercase tracking-wider rounded-none shadow-xs hover:shadow transition-all flex items-center gap-1.5 cursor-pointer"
+                      className="px-3.5 py-1.5 bg-[#2d7d46] hover:bg-[#25693a] text-white text-xs font-bold uppercase tracking-wider rounded-xl shadow-xs hover:shadow transition-all flex items-center gap-1.5 cursor-pointer"
                     >
                       <span className="material-symbols-outlined text-base">add</span>
                       <span>+ Thêm dược liệu</span>
@@ -1035,7 +1035,7 @@ export const AdminDashboardPage = () => {
                   <button
                     type="button"
                     onClick={handleExportCsv}
-                    className="px-3.5 py-1.5 bg-[#2d7d46] hover:bg-[#25693a] text-white text-xs font-bold uppercase tracking-wider rounded-none shadow-xs hover:shadow transition-all flex items-center gap-1.5 cursor-pointer"
+                    className="px-3.5 py-1.5 bg-[#2d7d46] hover:bg-[#25693a] text-white text-xs font-bold uppercase tracking-wider rounded-xl shadow-xs hover:shadow transition-all flex items-center gap-1.5 cursor-pointer"
                     title="Tải bảng dữ liệu dạng file CSV (mở được bằng Excel)"
                   >
                     <span className="material-symbols-outlined text-base">file_download</span>
@@ -1046,7 +1046,7 @@ export const AdminDashboardPage = () => {
 
               {/* View 1: Tab Phiếu Kiểm Kho */}
               {activeTab === 'audit' && (
-                <div className="bg-white border border-border-herbal shadow-xs rounded-none overflow-hidden">
+                <div className="bg-white border border-border-herbal shadow-xs rounded-xl overflow-hidden">
                   {filteredAuditLogs.length === 0 ? (
                     <div className="py-16 text-center text-xs text-on-surface-variant flex flex-col items-center">
                       <span className="material-symbols-outlined text-4xl text-outline mb-2">fact_check</span>
@@ -1475,7 +1475,7 @@ export const AdminDashboardPage = () => {
 
               {/* View 2: Tab Hàng Hóa & Tồn Kho */}
               {activeTab === 'products' && (
-                <div className="bg-white border border-border-herbal shadow-xs rounded-none overflow-hidden">
+                <div className="bg-white border border-border-herbal shadow-xs rounded-xl overflow-hidden">
                   <div className="p-3 border-b border-border-herbal flex items-center justify-between bg-[#14261a]/5">
                     <span className="text-xs font-bold text-primary uppercase tracking-wider">
                       Danh mục dược liệu ({filteredProducts.length} vị)
@@ -1755,7 +1755,7 @@ export const AdminDashboardPage = () => {
 
               {/* View 3: Tab Hóa Đơn & Đơn Hàng */}
               {activeTab === 'orders' && (
-                <div className="bg-white border border-border-herbal shadow-xs rounded-none overflow-hidden">
+                <div className="bg-white border border-border-herbal shadow-xs rounded-xl overflow-hidden">
                   <div className="p-3 border-b border-border-herbal flex items-center justify-between bg-[#14261a]/5">
                     <span className="text-xs font-bold text-primary uppercase tracking-wider">
                       Danh sách hóa đơn bán lẻ ({filteredOrders.length} đơn)

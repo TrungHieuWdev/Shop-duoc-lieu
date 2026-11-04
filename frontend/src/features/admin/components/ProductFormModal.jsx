@@ -121,14 +121,14 @@ export const ProductFormModal = ({ isOpen, onClose, productToEdit, onSave, reque
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-lg bg-[#fbf9f2] rounded-none border border-border-herbal shadow-2xl p-4 sm:p-6 text-on-surface max-h-[92vh] overflow-y-auto"
+        className="relative w-full max-w-lg bg-[#faf8f5] rounded-2xl border border-border-herbal shadow-2xl p-4 sm:p-6 text-on-surface max-h-[92vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Nút đóng */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-3 right-3 p-1.5 text-outline hover:text-primary rounded-none hover:bg-surface-container transition-colors"
+          className="absolute top-3 right-3 p-1.5 text-outline hover:text-primary rounded-lg hover:bg-surface-container transition-colors"
           aria-label="Đóng"
         >
           <span className="material-symbols-outlined text-[1.25rem]">close</span>
@@ -288,13 +288,13 @@ export const ProductFormModal = ({ isOpen, onClose, productToEdit, onSave, reque
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-none border border-border-herbal bg-surface hover:bg-surface-container text-xs font-semibold text-on-surface transition-colors cursor-pointer"
+              className="px-4 py-2 rounded-xl border border-border-herbal bg-surface hover:bg-surface-container text-xs font-semibold text-on-surface transition-colors cursor-pointer"
             >
               Hủy Bỏ
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-none bg-[#cbb07c] hover:bg-[#dfc492] text-[#14261a] text-xs font-bold uppercase tracking-wider shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
+              className="px-5 py-2 rounded-xl bg-[#cbb07c] hover:bg-[#dfc492] text-[#14261a] text-xs font-bold uppercase tracking-wider shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <span className="material-symbols-outlined text-base">save</span>
               <span>{productToEdit ? 'Lưu Thay Đổi' : 'Thêm Dược Liệu'}</span>

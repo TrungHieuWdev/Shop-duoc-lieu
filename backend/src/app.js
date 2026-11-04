@@ -3,14 +3,21 @@ import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
 import { apiLimiter } from './middlewares/rateLimiter.js';
+import { apiShield } from './middlewares/apiShield.js';
 import apiRouter from './routes/index.js';
 
 dotenv.config();
 
 const app = express();
 
+// Ẩn hoàn toàn chữ ký Express (Chống hacker nhận diện công nghệ backend)
+app.disable('x-powered-by');
+
 // 1. Cho phép nhận diện đúng IP qua reverse proxy (Cloudflare, Nginx, Railway...)
 app.set('trust proxy', 1);
+
+// Lớp lá chắn chống hacker dò quét API (API Shield 2026)
+app.use(apiShield);
 
 // 2. Chống Slowloris Attack: Hủy socket nếu client giữ kết nối quá 15 giây mà không hoàn tất
 app.use((req, res, next) => {

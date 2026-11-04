@@ -25,6 +25,7 @@ export default defineConfig({
   },
   build: {
     target: 'es2020',
+    sourcemap: false, // Ngăn chặn hacker mở F12 xem cấu trúc mã nguồn gốc và đường dẫn API
     cssCodeSplit: true,
     chunkSizeWarningLimit: 600,
     rollupOptions: {

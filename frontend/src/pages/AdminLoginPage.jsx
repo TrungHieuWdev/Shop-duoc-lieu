@@ -128,24 +128,13 @@ export const AdminLoginPage = () => {
     <div className="flex-1 flex flex-col justify-center items-center py-8 sm:py-16 px-3.5 sm:px-6 lg:px-8 bg-[#f7f5ee]/70">
       <div className="w-full max-w-md">
         {/* Khối bảo mật nội bộ */}
-        <div className="bg-[#faf8f3] rounded-none border border-[#ded7ca] shadow-2xl p-4 sm:p-9 text-on-surface eco-rise-1 relative overflow-hidden">
+        <div className="bg-[#faf8f5] rounded-2xl border border-[#e8e2d8] shadow-lg p-5 sm:p-9 text-on-surface eco-rise-1 relative overflow-hidden">
           {/* Vạch nhận diện nội bộ trên cùng */}
-          <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-[#14261a] via-[#8a7258] to-[#cbb07c]" />
-
-          {/* Huy hiệu Cổng Nội Bộ Bảo Mật 2026 */}
-          <div className="flex items-center justify-between gap-2 mb-5 sm:mb-6 pb-3 sm:pb-4 border-b border-[#eae4d9]">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-none bg-[#14261a]/8 text-[#14261a] text-[10px] sm:text-[11px] font-bold uppercase tracking-wider">
-              <span className="material-symbols-outlined text-[13px] text-[#2d7d46]">verified_user</span>
-              <span>Bảo Mật Nội Bộ Chuẩn 2026</span>
-            </div>
-            <span className="text-[10px] font-semibold text-[#8a7258] bg-[#f0ece2] px-2 py-0.5 rounded-none font-mono">
-              IP Monitored
-            </span>
-          </div>
+          <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-[#1d3527] via-[#8a7258] to-[#d4b986]" />
 
           {/* Header trung tâm */}
-          <div className="text-center mb-6 sm:mb-7 eco-rise-2">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto rounded-none bg-[#14261a] text-[#cbb07c] flex items-center justify-center mb-2.5 sm:mb-3 shadow-md border border-[#cbb07c]/40">
+          <div className="text-center mb-6 sm:mb-7 eco-rise-2 pt-2">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto rounded-2xl bg-[#1d3527] text-[#d4b986] flex items-center justify-center mb-2.5 sm:mb-3 shadow-sm border border-[#d4b986]/30">
               <span className="material-symbols-outlined text-[1.625rem] sm:text-[1.875rem]">security</span>
             </div>
             <span className="text-[9px] sm:text-[10px] font-bold text-[#8a7258] uppercase tracking-[0.2em] sm:tracking-[0.22em] block mb-1">
@@ -159,21 +148,11 @@ export const AdminLoginPage = () => {
             </p>
           </div>
 
-          {/* Banner Cảnh Báo An Ninh */}
-          <div className="mb-5 sm:mb-6 p-2.5 sm:p-3 rounded-none bg-[#f4efe4] border border-[#e2dacf] text-[#554d42] text-[10px] sm:text-[11px] leading-relaxed flex items-start gap-2">
-            <span className="material-symbols-outlined text-[#8a7258] text-[15px] sm:text-[16px] shrink-0 mt-0.5">
-              shield_locked
-            </span>
-            <span>
-              <strong>Cơ chế phòng thủ chủ động:</strong> Hệ thống kích hoạt tường lửa giám sát hành vi, tự động khóa sau {MAX_FAILED_ATTEMPTS} lần đăng nhập sai và ghi nhận IP truy vết.
-            </span>
-          </div>
-
           {isAuthenticated ? (
             /* TRẠNG THÁI: ĐÃ ĐĂNG NHẬP */
             <div className="space-y-4 sm:space-y-5 text-center eco-rise-3">
-              <div className="p-3.5 sm:p-4 rounded-none bg-green-50/80 border border-green-200 text-green-900">
-                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-none bg-green-100 mx-auto flex items-center justify-center text-green-700 mb-1.5 sm:mb-2">
+              <div className="p-3.5 sm:p-4 rounded-xl bg-green-50/80 border border-green-200 text-green-900">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-green-100 mx-auto flex items-center justify-center text-green-700 mb-1.5 sm:mb-2">
                   <span className="material-symbols-outlined text-lg sm:text-xl">check_circle</span>
                 </div>
                 <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-green-800 mb-0.5">
@@ -186,7 +165,7 @@ export const AdminLoginPage = () => {
               <div className="flex flex-col gap-2.5">
                 <Link
                   to="/admin"
-                  className="w-full py-2.5 px-4 bg-primary hover:bg-primary-container text-on-primary font-bold text-xs uppercase tracking-wider rounded-none shadow-xs transition-all flex items-center justify-center gap-1.5"
+                  className="w-full py-2.5 px-4 bg-[#1d3527] hover:bg-[#274835] text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5"
                 >
                   <span className="material-symbols-outlined text-base">dashboard</span>
                   <span>Vào Bảng Điều Khiển Quản Trị</span>
@@ -194,7 +173,7 @@ export const AdminLoginPage = () => {
                 <button
                   type="button"
                   onClick={logout}
-                  className="w-full py-2 px-4 bg-surface hover:bg-surface-container border border-border-herbal text-on-surface font-semibold text-xs rounded-none transition-colors"
+                  className="w-full py-2 px-4 bg-surface hover:bg-surface-container border border-border-herbal text-on-surface font-semibold text-xs rounded-xl transition-colors cursor-pointer"
                 >
                   Đăng Xuất Phiên Hiện Tại
                 </button>
@@ -204,7 +183,7 @@ export const AdminLoginPage = () => {
             /* FORM ĐĂNG NHẬP BẢO MẬT */
             <div className="eco-rise-3">
               {errorMsg && (
-                <div className="mb-4 sm:mb-5 p-3 rounded-none bg-red-50 border border-red-300 text-red-900 text-xs flex items-start gap-2 animate-shake">
+                <div className="mb-4 sm:mb-5 p-3 rounded-xl bg-red-50 border border-red-300 text-red-900 text-xs flex items-start gap-2 animate-shake">
                   <span className="material-symbols-outlined text-red-600 text-[18px] shrink-0 mt-0.5">
                     gpp_bad
                   </span>
@@ -248,7 +227,7 @@ export const AdminLoginPage = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Nhập email quản trị viên..."
-                      className="w-full pl-9 pr-3.5 py-2.5 bg-surface-container-low border border-border-herbal rounded-none text-base sm:text-xs text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all disabled:opacity-50 font-medium"
+                      className="w-full pl-9 pr-3.5 py-2.5 bg-[#f7f5ef] border border-[#ded7ca] rounded-xl text-base sm:text-xs text-on-surface focus:outline-none focus:border-[#1d3527] focus:ring-1 focus:ring-[#1d3527] transition-all disabled:opacity-50 font-medium"
                     />
                   </div>
                 </div>
@@ -269,7 +248,7 @@ export const AdminLoginPage = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full pl-9 pr-10 py-2.5 bg-surface-container-low border border-border-herbal rounded-none text-base sm:text-xs text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all disabled:opacity-50"
+                      className="w-full pl-9 pr-10 py-2.5 bg-[#f7f5ef] border border-[#ded7ca] rounded-xl text-base sm:text-xs text-on-surface focus:outline-none focus:border-[#1d3527] focus:ring-1 focus:ring-[#1d3527] transition-all disabled:opacity-50"
                     />
                     <button
                       type="button"
@@ -288,7 +267,7 @@ export const AdminLoginPage = () => {
                 <button
                   type="submit"
                   disabled={isLoading || isLocked}
-                  className="w-full py-3 bg-[#cbb07c] hover:bg-[#dfc492] text-[#14261a] font-bold text-xs uppercase tracking-widest rounded-none shadow-xs hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 mt-2 active:scale-98"
+                  className="w-full py-3 bg-[#cbb07c] hover:bg-[#dfc492] text-[#14261a] font-bold text-xs uppercase tracking-widest rounded-xl shadow-xs hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 mt-2 active:scale-98"
                 >
                   {isLoading ? (
                     <>

@@ -119,9 +119,15 @@ export const ProductsPage = () => {
     const matchKeyword = !keyword || prod.name.toLowerCase().includes(keyword.toLowerCase());
     return matchCategory && matchKeyword;
   }).sort((a, b) => {
+    // Luôn ưu tiên hiển thị Bài thuốc 7 vị lên trên đầu trang
+    const isHeroA = a.id === 1 || (a.slug && a.slug.includes('bai-thuoc'));
+    const isHeroB = b.id === 1 || (b.slug && b.slug.includes('bai-thuoc'));
+    if (isHeroA && !isHeroB) return -1;
+    if (!isHeroA && isHeroB) return 1;
+
     if (sortBy === 'price_asc') return a.price - b.price;
     if (sortBy === 'price_desc') return b.price - a.price;
-    return b.id - a.id;
+    return a.id - b.id;
   });
 
   const handleCategoryChange = (slug) => {
@@ -156,7 +162,7 @@ export const ProductsPage = () => {
               DƯỢC LIỆU BẢN ĐỊA • PHƠI KHÔ TỰ NHIÊN
             </span>
             <h1 className="eco-rise-1 font-serif text-2xl sm:text-4xl lg:text-5xl font-extrabold text-primary tracking-tight leading-tight mb-2 sm:mb-3">
-              Sản Phẩm Ngân Hà
+              Sản Phẩm Thảo Dược
             </h1>
             <p className="eco-rise-2 font-serif text-sm sm:text-lg text-[#8a7258] font-medium mb-2 sm:mb-3">
               Gieo Mầm Lành — Từ từng chiếc lá nhỏ
@@ -170,7 +176,7 @@ export const ProductsPage = () => {
           <div className="eco-image-rise relative min-h-[200px] sm:min-h-[300px] bg-surface-container overflow-hidden">
             <img
               src="/images/products/bai-thuoc-7-vi.jpg"
-              alt="7 Nia Thảo Mộc Phơi Khô Ngân Hà"
+              alt="7 Nia Thảo Mộc Phơi Khô"
               className="absolute inset-0 w-full h-full object-cover object-center"
             />
             {/* Lớp gradient hòa tan ảnh vào khối chữ bên trái */}

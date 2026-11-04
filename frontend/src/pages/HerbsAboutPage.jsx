@@ -15,13 +15,13 @@ export const HerbsAboutPage = () => {
               NGUỒN DƯỢC LIỆU BẢN ĐỊA • AN TOÀN LÀNH TÍNH
             </span>
             <h1 className="eco-rise-1 font-serif text-2xl sm:text-4xl lg:text-5xl font-extrabold text-primary tracking-tight leading-tight mb-2 sm:mb-3">
-              Về Thảo Dược Ngân Hà
+              Về Thảo Dược
             </h1>
             <p className="eco-rise-2 font-serif text-sm sm:text-lg text-[#8a7258] font-medium mb-2 sm:mb-3">
               Tinh hoa cỏ cây thuần Việt — Phơi khô giữ trọn tinh dầu
             </p>
             <p className="eco-rise-2 text-xs sm:text-sm text-on-surface-variant max-w-[52ch] leading-relaxed mb-5 sm:mb-6">
-              Ngân Hà tuyển chọn 7 vị thảo mộc xông tắm dân gian từ các vùng đất lành Việt Nam: Đinh lăng, Gừng sẻ, Lá trầu không, Ngải cứu, Sả chanh, Lá bưởi và Hoa hồng. Toàn bộ được phơi khô mộc mạc theo phương pháp thủ công, không hóa chất bảo quản, giữ trọn vẹn dược tính tự nhiên.
+              Tuyển chọn 7 vị thảo mộc xông tắm dân gian từ các vùng đất lành Việt Nam: Đinh lăng, Gừng sẻ, Lá trầu không, Ngải cứu, Sả chanh, Lá bưởi và Hoa hồng. Toàn bộ được phơi khô mộc mạc theo phương pháp thủ công, không hóa chất bảo quản, giữ trọn vẹn dược tính tự nhiên.
             </p>
 
             <div className="eco-rise-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3">
@@ -44,7 +44,7 @@ export const HerbsAboutPage = () => {
           <div className="eco-image-rise relative min-h-[220px] sm:min-h-[340px] bg-surface-container overflow-hidden">
             <img
               src="/images/products/bai-thuoc-7-vi.jpg"
-              alt="7 Nia Thảo Mộc Phơi Khô Ngân Hà"
+              alt="7 Nia Thảo Mộc Phơi Khô"
               className="absolute inset-0 w-full h-full object-cover object-center"
             />
             <div className="absolute inset-y-0 left-0 hidden lg:block w-32 bg-gradient-to-r from-surface-container-low to-transparent"></div>

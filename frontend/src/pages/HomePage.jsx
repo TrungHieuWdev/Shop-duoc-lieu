@@ -150,7 +150,7 @@ export const HomePage = () => {
 
           {/* Slogan màu vàng rơm mộc mạc */}
           <p className="eco-rise-2 font-serif text-sm sm:text-xl lg:text-2xl text-[#d8c9aa] font-medium tracking-wide mb-6 sm:mb-10 drop-shadow-sm">
-            Gom hương thảo mộc – Gói trọn an nhiên
+            Gom hương thảo dược – Gói trọn an nhiên
           </p>
 
           {/* Cặp Nút Hành Động (Dual CTA) chuẩn phong cách B ECO */}
