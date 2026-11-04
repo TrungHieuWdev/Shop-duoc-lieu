@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCartStore } from '@/store/useCartStore';
 import { useAuthStore } from '@/store/useAuthStore';
-import { AdminAuthModal } from '@/components/common/AdminAuthModal';
 import { BrandLogoIcon } from '@/components/common/BrandLogoIcon';
 
 export const Header = () => {
@@ -15,7 +14,6 @@ export const Header = () => {
   const [activeNav, setActiveNav] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isCartBouncing, setIsCartBouncing] = useState(false);
-  const [authModalOpen, setAuthModalOpen] = useState(false);
 
   // Hiệu ứng giỏ hàng rung lên 1 nhịp khi có món hàng rơi vào giỏ
   useEffect(() => {
@@ -136,13 +134,12 @@ export const Header = () => {
             />
           </form>
 
-          {/* Account / Admin Login Icon (Phong cách B-ECO) */}
-          <button
-            type="button"
-            onClick={() => setAuthModalOpen(true)}
-            aria-label="Tài khoản quản trị"
+          {/* Cổng Quản Trị Nội Bộ (Trang riêng biệt, không dùng popup che màn hình) */}
+          <Link
+            to={isAuthenticated ? '/admin' : '/admin/login'}
+            aria-label="Cổng quản trị nội bộ"
             className="relative p-2 rounded hover:bg-surface-container-low transition-colors text-primary shrink-0 group cursor-pointer"
-            title={isAuthenticated ? `Quản trị viên: ${user?.name || user?.email}` : 'Đăng nhập Quản trị viên'}
+            title={isAuthenticated ? `Quản trị viên: ${user?.name || user?.email}` : 'Cổng Đăng Nhập Quản Trị Nội Bộ'}
           >
             <span className="material-symbols-outlined text-[1.625rem] sm:text-[1.75rem] group-hover:text-[#8a7258] transition-colors">
               {isAuthenticated ? 'admin_panel_settings' : 'person'}
@@ -150,7 +147,7 @@ export const Header = () => {
             {isAuthenticated && (
               <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-green-600 rounded-full ring-2 ring-surface shadow-xs" />
             )}
-          </button>
+          </Link>
 
           {/* Cart Icon with Dynamic Badge & Shake Animation */}
           <Link
@@ -267,33 +264,31 @@ export const Header = () => {
               {activeNav === 'cach-dung' && <span className="material-symbols-outlined text-sm">check</span>}
             </Link>
 
-            {/* Mục tài khoản quản trị trong Drawer Mobile */}
-            <button
-              type="button"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                setAuthModalOpen(true);
-              }}
-              className="mt-2 pt-3 border-t border-border-herbal px-3 py-2.5 rounded font-medium text-body-sm transition-colors flex items-center justify-between text-on-surface hover:bg-surface-container text-left w-full cursor-pointer"
+            {/* Mục tài khoản quản trị trong Drawer Mobile - dẫn đến trang riêng */}
+            <Link
+              to={isAuthenticated ? '/admin' : '/admin/login'}
+              onClick={() => setMobileMenuOpen(false)}
+              className="mt-2 pt-3 border-t border-border-herbal px-3 py-2.5 rounded font-medium text-body-sm transition-colors flex items-center justify-between text-on-surface hover:bg-surface-container w-full"
             >
               <div className="flex items-center gap-2.5">
                 <span className="material-symbols-outlined text-[1.25rem] text-[#8a7258]">
-                  {isAuthenticated ? 'admin_panel_settings' : 'person'}
+                  {isAuthenticated ? 'admin_panel_settings' : 'lock_person'}
                 </span>
-                <span>{isAuthenticated ? 'Tài khoản Quản trị' : 'Đăng nhập Quản trị'}</span>
+                <span>{isAuthenticated ? 'Bảng Điều Khiển Quản Trị' : 'Cổng Quản Trị Nội Bộ'}</span>
               </div>
-              {isAuthenticated && (
+              {isAuthenticated ? (
                 <span className="text-[10px] bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded-full">
                   Admin
                 </span>
+              ) : (
+                <span className="text-[10px] bg-amber-100 text-amber-800 font-semibold px-2 py-0.5 rounded-full">
+                  Nội bộ
+                </span>
               )}
-            </button>
+            </Link>
           </nav>
         </div>
       )}
-
-      {/* Modal Đăng nhập & Quản lý phiên Quản Trị Viên */}
-      <AdminAuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} />
     </header>
   );
 };

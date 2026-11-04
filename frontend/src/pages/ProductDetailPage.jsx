@@ -143,20 +143,20 @@ export const ProductDetailPage = () => {
   };
 
   return (
-    <div className="max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 py-12">
-      {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-xs text-on-surface-variant mb-8">
-        <Link to="/" className="hover:text-primary">Trang chủ</Link>
-        <span>/</span>
-        <Link to="/san-pham" className="hover:text-primary">Sản phẩm</Link>
-        <span>/</span>
-        <span className="text-primary font-medium">{product.name}</span>
+    <div className="max-w-[1536px] mx-auto px-3.5 sm:px-8 lg:px-12 xl:px-16 py-6 sm:py-12">
+      {/* Breadcrumb - cuộn ngang mượt mà trên điện thoại */}
+      <nav className="flex items-center gap-2 text-xs text-on-surface-variant mb-6 sm:mb-8 overflow-x-auto whitespace-nowrap scrollbar-none py-1">
+        <Link to="/" className="hover:text-primary shrink-0">Trang chủ</Link>
+        <span className="shrink-0">/</span>
+        <Link to="/san-pham" className="hover:text-primary shrink-0">Sản phẩm</Link>
+        <span className="shrink-0">/</span>
+        <span className="text-primary font-medium shrink-0">{product.name}</span>
       </nav>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10 lg:gap-12 items-start">
         {/* Hình ảnh sản phẩm */}
-        <div className="lg:col-span-6 bg-surface-container-lowest rounded-xl p-4 border border-border-herbal shadow-sm">
-          <div className="aspect-square rounded-lg overflow-hidden bg-surface-container">
+        <div className="lg:col-span-6 bg-surface-container-lowest rounded-2xl p-2.5 sm:p-4 border border-border-herbal shadow-xs">
+          <div className="aspect-square rounded-xl overflow-hidden bg-surface-container">
             <img
               ref={imgRef}
               src={product.image_url}
@@ -167,83 +167,85 @@ export const ProductDetailPage = () => {
         </div>
 
         {/* Thông tin chi tiết & Mua hàng */}
-        <div className="lg:col-span-6 flex flex-col gap-6">
+        <div className="lg:col-span-6 flex flex-col gap-4 sm:gap-6">
           <div>
-            <span className="text-xs font-semibold text-secondary uppercase tracking-widest block mb-2">
+            <span className="text-[10px] sm:text-xs font-semibold text-secondary uppercase tracking-widest block mb-1.5 sm:mb-2">
               {product.category_name}
             </span>
-            <h1 className="font-serif text-2xl lg:text-3xl font-bold text-primary">
+            <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-primary leading-tight">
               {product.name}
             </h1>
-            <span className="text-body-sm text-on-surface-variant block mt-1">{product.unit}</span>
+            <span className="text-xs sm:text-body-sm text-on-surface-variant block mt-1">{product.unit}</span>
           </div>
 
           {/* Giá tiền */}
-          <div className="flex items-baseline gap-3 p-4 bg-surface-container-low rounded border border-border-herbal/60">
-            <span className="font-serif text-3xl font-bold text-primary">
+          <div className="flex flex-wrap items-baseline gap-2.5 sm:gap-3 p-3.5 sm:p-4 bg-surface-container-low rounded-xl border border-border-herbal/70">
+            <span className="font-serif text-2xl sm:text-3xl font-bold text-primary">
               {formatCurrency(product.price)}
             </span>
             {product.original_price && (
-              <span className="text-base text-outline line-through">
+              <span className="text-sm sm:text-base text-outline line-through">
                 {formatCurrency(product.original_price)}
               </span>
             )}
-            <span className="ml-auto text-xs font-semibold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
+            <span className="ml-auto text-[10px] sm:text-xs font-semibold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">
               Còn hàng trong kho
             </span>
           </div>
 
-          <p className="text-body-sm text-on-surface-variant leading-relaxed">
+          <p className="text-xs sm:text-body-sm text-on-surface-variant leading-relaxed">
             {product.summary}
           </p>
 
           {/* Chọn số lượng */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
             <span className="text-xs font-semibold text-primary">Số lượng:</span>
-            <div className="flex items-center border border-border-herbal rounded bg-surface">
+            <div className="flex items-center border border-border-herbal rounded-lg bg-surface">
               <button
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="w-10 h-10 flex items-center justify-center text-on-surface hover:bg-surface-container"
+                className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-on-surface hover:bg-surface-container text-base cursor-pointer"
+                aria-label="Giảm số lượng"
               >
                 -
               </button>
-              <span className="w-10 text-center font-medium text-sm">{quantity}</span>
+              <span className="w-10 text-center font-medium text-xs sm:text-sm">{quantity}</span>
               <button
                 onClick={() => setQuantity((q) => q + 1)}
-                className="w-10 h-10 flex items-center justify-center text-on-surface hover:bg-surface-container"
+                className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-on-surface hover:bg-surface-container text-base cursor-pointer"
+                aria-label="Tăng số lượng"
               >
                 +
               </button>
             </div>
           </div>
 
-          {/* Nút thao tác */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+          {/* Nút thao tác (Dễ bấm bằng một tay trên điện thoại) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pt-1 sm:pt-2">
             <button
               onClick={handleAddToCart}
-              className="py-3.5 px-4 bg-surface-container-lowest border-2 border-primary text-primary hover:bg-surface-container font-semibold rounded flex items-center justify-center gap-2 transition-colors shadow-sm"
+              className="py-3 sm:py-3.5 px-4 bg-surface-container-lowest border-2 border-primary text-primary hover:bg-surface-container font-semibold text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 transition-all shadow-xs active:scale-95 cursor-pointer"
             >
-              <span className="material-symbols-outlined text-[1.25rem]">shopping_bag</span>
+              <span className="material-symbols-outlined text-[1.125rem] sm:text-[1.25rem]">shopping_bag</span>
               <span>+ Thêm Vào Giỏ</span>
             </button>
             <button
               onClick={handleBuyNow}
-              className="py-3.5 px-4 bg-tertiary-container hover:bg-tertiary text-on-tertiary font-semibold rounded flex items-center justify-center gap-2 transition-colors shadow-sm"
+              className="py-3 sm:py-3.5 px-4 bg-tertiary-container hover:bg-tertiary text-on-tertiary font-semibold text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 transition-all shadow-xs active:scale-95 cursor-pointer"
             >
               <span>Mua Ngay</span>
-              <span className="material-symbols-outlined text-[1.25rem]">bolt</span>
+              <span className="material-symbols-outlined text-[1.125rem] sm:text-[1.25rem]">bolt</span>
             </button>
           </div>
 
           {/* Thành phần & Cách dùng */}
-          <div className="border-t border-border-herbal pt-6 flex flex-col gap-4 text-body-sm">
+          <div className="border-t border-border-herbal pt-5 sm:pt-6 flex flex-col gap-3.5 sm:gap-4 text-xs sm:text-body-sm">
             <div>
               <h3 className="font-serif font-bold text-primary mb-1">🌿 Thành Phần Thảo Mộc:</h3>
-              <p className="text-on-surface-variant">{product.ingredients}</p>
+              <p className="text-on-surface-variant leading-relaxed">{product.ingredients}</p>
             </div>
             <div>
-              <h3 className="font-serif font-bold text-primary mb-1">🍵 Hướng Dẫn Nấu & Sử Dụng:</h3>
-              <p className="text-on-surface-variant">{product.usage}</p>
+              <h3 className="font-serif font-bold text-primary mb-1">🍵 Hướng Dẫn Nấu &amp; Sử Dụng:</h3>
+              <p className="text-on-surface-variant leading-relaxed">{product.usage}</p>
             </div>
           </div>
         </div>
@@ -251,11 +253,11 @@ export const ProductDetailPage = () => {
 
       {/* Toast Notification */}
       {toastVisible && (
-        <div className="fixed bottom-6 right-6 z-50 bg-primary text-on-primary px-5 py-3.5 rounded shadow-lg border border-primary-container flex items-center gap-3 animate-bounce">
-          <span className="material-symbols-outlined text-secondary-fixed text-[1.5rem]">check_circle</span>
-          <div>
-            <span className="font-serif font-bold text-sm block">Đã thêm vào giỏ hàng</span>
-            <span className="text-xs text-primary-fixed-dim">{product.name} (SL: {quantity})</span>
+        <div className="fixed bottom-4 inset-x-4 sm:bottom-6 sm:right-6 sm:inset-x-auto sm:max-w-md z-50 bg-primary text-on-primary px-4 sm:px-5 py-3 sm:py-3.5 rounded-xl sm:rounded shadow-lg border border-primary-container flex items-center gap-3 animate-bounce">
+          <span className="material-symbols-outlined text-secondary-fixed text-[1.375rem] sm:text-[1.5rem] shrink-0">check_circle</span>
+          <div className="min-w-0">
+            <span className="font-serif font-bold text-xs sm:text-sm block">Đã thêm vào giỏ hàng</span>
+            <span className="text-[11px] sm:text-xs text-primary-fixed-dim truncate block">{product.name} (SL: {quantity})</span>
           </div>
         </div>
       )}

@@ -34,10 +34,10 @@ export const ProductCard = ({ product, onAddToCartSuccess }) => {
   return (
     <div
       ref={cardRef}
-      className="group relative flex flex-col bg-surface-container-lowest rounded p-4 border border-border-herbal/60 shadow-sm hover:shadow-md transition-all duration-300"
+      className="group relative flex flex-col bg-surface-container-lowest rounded-xl p-2.5 sm:p-4 border border-border-herbal/70 shadow-xs hover:shadow-md transition-all duration-300"
     >
       {/* Product Image */}
-      <Link to={`/san-pham/${product.slug}`} className="relative w-full aspect-square bg-surface-container rounded overflow-hidden block">
+      <Link to={`/san-pham/${product.slug}`} className="relative w-full aspect-square bg-surface-container rounded-lg overflow-hidden block">
         <img
           src={product.thumbnail_url || product.image_url}
           alt={product.name}
@@ -46,33 +46,33 @@ export const ProductCard = ({ product, onAddToCartSuccess }) => {
           decoding="async"
         />
         {product.is_featured && (
-          <span className="absolute top-3 left-3 bg-tertiary-container text-on-tertiary text-[0.6875rem] font-semibold tracking-wider uppercase px-2.5 py-1 rounded shadow-sm">
+          <span className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-tertiary-container text-on-tertiary text-[10px] sm:text-[0.6875rem] font-semibold tracking-wider uppercase px-2 py-0.5 sm:px-2.5 sm:py-1 rounded shadow-xs">
             Bán chạy
           </span>
         )}
       </Link>
 
       {/* Product Info */}
-      <div className="pt-4 flex flex-col flex-1">
-        <span className="text-[0.6875rem] font-semibold text-secondary uppercase tracking-widest">
+      <div className="pt-2.5 sm:pt-4 flex flex-col flex-1">
+        <span className="text-[10px] sm:text-[0.6875rem] font-semibold text-secondary uppercase tracking-widest line-clamp-1">
           {product.category_name || product.unit || 'Thảo Mộc Bản Địa'}
         </span>
         <Link to={`/san-pham/${product.slug}`}>
-          <h3 className="font-serif text-base font-bold text-primary mt-1 group-hover:text-secondary transition-colors line-clamp-1">
+          <h3 className="font-serif text-xs sm:text-base font-bold text-primary mt-1 group-hover:text-secondary transition-colors line-clamp-2 min-h-[2rem] sm:min-h-[2.75rem] leading-tight">
             {product.name}
           </h3>
         </Link>
-        <span className="text-body-sm text-on-surface-variant mt-1">
+        <span className="text-[11px] sm:text-body-sm text-on-surface-variant mt-0.5 sm:mt-1 line-clamp-1">
           {product.unit || 'Quy cách chuẩn'}
         </span>
 
         {/* Price Display */}
-        <div className="mt-4 flex items-baseline gap-2">
-          <span className="font-serif text-lg font-bold text-primary">
+        <div className="mt-2 sm:mt-3 flex flex-wrap items-baseline gap-1 sm:gap-2">
+          <span className="font-serif text-sm sm:text-lg font-bold text-primary">
             {formatCurrency(product.price)}
           </span>
           {product.original_price && Number(product.original_price) > Number(product.price) && (
-            <span className="text-body-sm text-outline line-through">
+            <span className="text-[10px] sm:text-body-sm text-outline line-through">
               {formatCurrency(product.original_price)}
             </span>
           )}
@@ -81,9 +81,9 @@ export const ProductCard = ({ product, onAddToCartSuccess }) => {
         {/* Add to Cart Button */}
         <button
           onClick={handleAddToCart}
-          className="mt-4 w-full py-2.5 px-4 bg-tertiary-container hover:bg-tertiary text-on-tertiary text-xs font-semibold rounded flex items-center justify-center gap-2 transition-colors duration-200 shadow-sm active:scale-95"
+          className="mt-2.5 sm:mt-4 w-full py-2 sm:py-2.5 px-2 sm:px-4 bg-tertiary-container hover:bg-tertiary text-on-tertiary text-[11px] sm:text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 sm:gap-2 transition-all duration-200 shadow-xs active:scale-95 cursor-pointer"
         >
-          <span className="material-symbols-outlined text-base">shopping_bag</span>
+          <span className="material-symbols-outlined text-[15px] sm:text-base">shopping_bag</span>
           <span>+ Giỏ Hàng</span>
         </button>
       </div>

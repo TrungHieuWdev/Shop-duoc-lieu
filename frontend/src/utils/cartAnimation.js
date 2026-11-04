@@ -44,9 +44,9 @@ export const flyItemToCart = ({ sourceElement, imageUrl, onComplete }) => {
   const targetX = targetRect.left + targetRect.width / 2;
   const targetY = targetRect.top + targetRect.height / 2;
 
-  // 3. Tạo thẻ bay (Flyer Node)
+  // 3. Tạo thẻ bay (Flyer Node) - tự động co gọn trên điện thoại
   const flyer = document.createElement('div');
-  const flyerSize = 68; // Kích thước bong bóng xem trước (px)
+  const flyerSize = window.innerWidth < 640 ? 48 : 68; // Kích thước bong bóng xem trước (px)
 
   flyer.style.position = 'fixed';
   flyer.style.left = `${startX}px`;

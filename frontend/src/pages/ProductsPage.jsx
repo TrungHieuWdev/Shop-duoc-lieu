@@ -145,20 +145,20 @@ export const ProductsPage = () => {
   };
 
   return (
-    <div className="max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 py-8 sm:py-12">
+    <div className="max-w-[1536px] mx-auto px-3.5 sm:px-8 lg:px-12 xl:px-16 py-6 sm:py-12">
       {/* 1. HERO BANNER TRANG SẢN PHẨM (THEO BỐ CỤC KHUNG THẺ 2 CỘT CỦA B-ECO) */}
-      <section className="mb-10 overflow-hidden rounded-2xl border border-border-herbal/70 bg-surface-container-low shadow-sm">
+      <section className="mb-8 sm:mb-10 overflow-hidden rounded-2xl border border-border-herbal/70 bg-surface-container-low shadow-sm">
         <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] items-stretch">
           {/* Cột chữ bên trái */}
-          <div className="flex flex-col justify-center p-8 sm:p-12 lg:p-14">
-            <span className="eco-rise text-[0.6875rem] sm:text-xs font-semibold text-secondary uppercase tracking-[0.25em] mb-2 flex items-center gap-1.5">
-              <span className="material-symbols-outlined text-[1rem] text-[#8a7258]">spa</span>
+          <div className="flex flex-col justify-center p-5 sm:p-10 lg:p-14">
+            <span className="eco-rise text-[0.625rem] sm:text-xs font-semibold text-secondary uppercase tracking-[0.2em] sm:tracking-[0.25em] mb-1.5 sm:mb-2 flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-[0.875rem] sm:text-[1rem] text-[#8a7258]">spa</span>
               DƯỢC LIỆU BẢN ĐỊA • PHƠI KHÔ TỰ NHIÊN
             </span>
-            <h1 className="eco-rise-1 font-serif text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary tracking-tight leading-tight mb-3">
+            <h1 className="eco-rise-1 font-serif text-2xl sm:text-4xl lg:text-5xl font-extrabold text-primary tracking-tight leading-tight mb-2 sm:mb-3">
               Sản Phẩm Ngân Hà
             </h1>
-            <p className="eco-rise-2 font-serif text-base sm:text-lg text-[#8a7258] font-medium mb-3">
+            <p className="eco-rise-2 font-serif text-sm sm:text-lg text-[#8a7258] font-medium mb-2 sm:mb-3">
               Gieo Mầm Lành — Từ từng chiếc lá nhỏ
             </p>
             <p className="eco-rise-2 text-xs sm:text-sm text-on-surface-variant max-w-[50ch] leading-relaxed">
@@ -167,7 +167,7 @@ export const ProductsPage = () => {
           </div>
 
           {/* Cột ảnh bên phải với lớp hòa màu mộc mạc sang trái */}
-          <div className="eco-image-rise relative min-h-[260px] sm:min-h-[320px] bg-surface-container overflow-hidden">
+          <div className="eco-image-rise relative min-h-[200px] sm:min-h-[300px] bg-surface-container overflow-hidden">
             <img
               src="/images/products/bai-thuoc-7-vi.jpg"
               alt="7 Nia Thảo Mộc Phơi Khô Ngân Hà"
@@ -182,10 +182,10 @@ export const ProductsPage = () => {
       </section>
 
       {/* 2. THANH CÔNG CỤ LỌC STICKY (CHUẨN UX B-ECO: GHIM ĐẦU TRANG KHI CUỘN) */}
-      <div className="eco-rise-2 sticky top-16 md:top-20 z-30 -mx-4 sm:-mx-8 lg:-mx-12 xl:-mx-16 px-4 sm:px-8 lg:px-12 xl:px-16 py-3.5 bg-surface/95 backdrop-blur-md border-y border-border-herbal mb-8 shadow-2xs">
-        <div className="max-w-[1536px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
+      <div className="eco-rise-2 sticky top-16 md:top-20 z-30 -mx-3.5 sm:-mx-8 lg:-mx-12 xl:-mx-16 px-3.5 sm:px-8 lg:px-12 xl:px-16 py-2.5 sm:py-3.5 bg-surface/95 backdrop-blur-md border-y border-border-herbal mb-6 sm:mb-8 shadow-2xs">
+        <div className="max-w-[1536px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-2.5 sm:gap-4">
           {/* Nhóm Tabs danh mục */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
+          <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
             {[
               { label: 'Tất Cả', slug: 'all' },
               { label: 'Bài Thuốc 7 Vị', slug: 'bai-thuoc-xong-tam' },
@@ -194,7 +194,7 @@ export const ProductsPage = () => {
               <button
                 key={cat.slug}
                 onClick={() => handleCategoryChange(cat.slug)}
-                className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                   selectedCategory === cat.slug
                     ? 'bg-primary text-on-primary shadow-xs'
                     : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container border border-border-herbal/60'
@@ -206,17 +206,17 @@ export const ProductsPage = () => {
           </div>
 
           {/* Ô tìm kiếm & Sắp xếp */}
-          <div className="flex items-center gap-2.5 sm:gap-3">
-            <span className="text-xs text-on-surface-variant hidden sm:inline whitespace-nowrap">
+          <div className="flex items-center justify-between sm:justify-end gap-2 sm:gap-3">
+            <span className="text-[11px] sm:text-xs text-on-surface-variant whitespace-nowrap">
               <strong>{filteredProducts.length}</strong> sản phẩm
             </span>
 
-            <div className="flex items-center gap-1.5 bg-surface-container-low border border-border-herbal/70 rounded-full px-3 py-1.5 text-xs text-on-surface">
-              <span className="material-symbols-outlined text-[1rem] text-[#8a7258]">sort</span>
+            <div className="flex items-center gap-1 bg-surface-container-low border border-border-herbal/70 rounded-full px-2.5 py-1 text-xs text-on-surface">
+              <span className="material-symbols-outlined text-[0.875rem] sm:text-[1rem] text-[#8a7258]">sort</span>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="bg-transparent text-xs text-on-surface focus:outline-none cursor-pointer"
+                className="bg-transparent text-[11px] sm:text-xs text-on-surface focus:outline-none cursor-pointer"
               >
                 <option value="newest">Phổ biến nhất</option>
                 <option value="price_asc">Giá: Thấp đến cao</option>
@@ -227,13 +227,13 @@ export const ProductsPage = () => {
         </div>
       </div>
 
-      {/* Lưới sản phẩm */}
+      {/* Lưới sản phẩm: 2 cột trên điện thoại, 4 cột trên máy tính */}
       {filteredProducts.length === 0 ? (
         <div className="py-20 text-center">
-          <p className="text-on-surface-variant">Không tìm thấy sản phẩm nào phù hợp với tìm kiếm của bạn.</p>
+          <p className="text-on-surface-variant text-xs sm:text-sm">Không tìm thấy sản phẩm nào phù hợp với tìm kiếm của bạn.</p>
         </div>
       ) : (
-        <div className="eco-rise-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="eco-rise-3 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           {filteredProducts.map((prod) => (
             <ProductCard key={prod.id} product={prod} onAddToCartSuccess={handleAddToCartSuccess} />
           ))}
@@ -242,11 +242,11 @@ export const ProductsPage = () => {
 
       {/* Toast Popup */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-primary text-on-primary px-5 py-3.5 rounded shadow-lg border border-primary-container flex items-center gap-3 animate-bounce">
-          <span className="material-symbols-outlined text-secondary-fixed text-[1.5rem]">check_circle</span>
-          <div className="flex flex-col">
-            <span className="font-serif font-bold text-sm">{toastMessage.title}</span>
-            <span className="text-xs text-primary-fixed-dim line-clamp-1">{toastMessage.desc}</span>
+        <div className="fixed bottom-4 inset-x-4 sm:bottom-6 sm:right-6 sm:inset-x-auto sm:max-w-md z-50 bg-primary text-on-primary px-4 sm:px-5 py-3 sm:py-3.5 rounded-xl sm:rounded shadow-lg border border-primary-container flex items-center gap-3 animate-bounce">
+          <span className="material-symbols-outlined text-secondary-fixed text-[1.375rem] sm:text-[1.5rem] shrink-0">check_circle</span>
+          <div className="flex flex-col min-w-0">
+            <span className="font-serif font-bold text-xs sm:text-sm">{toastMessage.title}</span>
+            <span className="text-[11px] sm:text-xs text-primary-fixed-dim truncate">{toastMessage.desc}</span>
           </div>
         </div>
       )}

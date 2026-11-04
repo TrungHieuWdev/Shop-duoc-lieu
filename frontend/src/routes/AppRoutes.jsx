@@ -16,6 +16,7 @@ const CheckoutPage = lazy(() => import('@/pages/CheckoutPage').then(m => ({ defa
 const PaymentPage = lazy(() => import('@/pages/PaymentPage').then(m => ({ default: m.PaymentPage })));
 const OrderSuccessPage = lazy(() => import('@/pages/OrderSuccessPage').then(m => ({ default: m.OrderSuccessPage })));
 const AdminDashboardPage = lazy(() => import('@/pages/AdminDashboardPage').then(m => ({ default: m.AdminDashboardPage })));
+const AdminLoginPage = lazy(() => import('@/pages/AdminLoginPage').then(m => ({ default: m.AdminLoginPage })));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
 
 export const AppRoutes = () => {
@@ -34,6 +35,9 @@ export const AppRoutes = () => {
         <Route path="thanh-toan/:orderCode" element={<PaymentPage />} />
         <Route path="dat-hang-thanh-cong/:orderCode" element={<OrderSuccessPage />} />
         <Route path="admin" element={<AdminDashboardPage />} />
+        <Route path="admin/login" element={<AdminLoginPage />} />
+        <Route path="admin/dang-nhap" element={<AdminLoginPage />} />
+        <Route path="quan-tri/dang-nhap" element={<AdminLoginPage />} />
 
         {/* Tuyến đường trực quan để kiểm tra màn hình Offline & Loading */}
         <Route path="mat-ket-noi" element={<OfflineScreen />} />

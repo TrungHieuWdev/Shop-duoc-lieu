@@ -4,36 +4,36 @@ import { NATURAL_HERBS } from '@/features/products/components/NaturalHerbsSlider
 
 export const HerbsAboutPage = () => {
   return (
-    <div className="max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 py-8 sm:py-12">
+    <div className="max-w-[1536px] mx-auto px-3.5 sm:px-8 lg:px-12 xl:px-16 py-6 sm:py-12">
       {/* 1. HERO BANNER TRANG VỀ THẢO DƯỢC (PHONG CÁCH EDITORIAL B-ECO) */}
-      <section className="mb-12 sm:mb-16 overflow-hidden rounded-2xl border border-border-herbal/70 bg-surface-container-low shadow-sm">
+      <section className="mb-8 sm:mb-16 overflow-hidden rounded-2xl border border-border-herbal/70 bg-surface-container-low shadow-sm">
         <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] items-stretch">
           {/* Cột chữ bên trái */}
-          <div className="flex flex-col justify-center p-8 sm:p-12 lg:p-14">
-            <span className="eco-rise text-[0.6875rem] sm:text-xs font-semibold text-secondary uppercase tracking-[0.25em] mb-2 flex items-center gap-1.5">
-              <span className="material-symbols-outlined text-[1rem] text-[#8a7258]">spa</span>
+          <div className="flex flex-col justify-center p-5 sm:p-10 lg:p-14">
+            <span className="eco-rise text-[0.625rem] sm:text-xs font-semibold text-secondary uppercase tracking-[0.2em] sm:tracking-[0.25em] mb-1.5 sm:mb-2 flex items-center gap-1.5">
+              <span className="material-symbols-outlined text-[0.875rem] sm:text-[1rem] text-[#8a7258]">spa</span>
               NGUỒN DƯỢC LIỆU BẢN ĐỊA • AN TOÀN LÀNH TÍNH
             </span>
-            <h1 className="eco-rise-1 font-serif text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary tracking-tight leading-tight mb-3">
+            <h1 className="eco-rise-1 font-serif text-2xl sm:text-4xl lg:text-5xl font-extrabold text-primary tracking-tight leading-tight mb-2 sm:mb-3">
               Về Thảo Dược Ngân Hà
             </h1>
-            <p className="eco-rise-2 font-serif text-base sm:text-lg text-[#8a7258] font-medium mb-3">
+            <p className="eco-rise-2 font-serif text-sm sm:text-lg text-[#8a7258] font-medium mb-2 sm:mb-3">
               Tinh hoa cỏ cây thuần Việt — Phơi khô giữ trọn tinh dầu
             </p>
-            <p className="eco-rise-2 text-xs sm:text-sm text-on-surface-variant max-w-[52ch] leading-relaxed mb-6">
+            <p className="eco-rise-2 text-xs sm:text-sm text-on-surface-variant max-w-[52ch] leading-relaxed mb-5 sm:mb-6">
               Ngân Hà tuyển chọn 7 vị thảo mộc xông tắm dân gian từ các vùng đất lành Việt Nam: Đinh lăng, Gừng sẻ, Lá trầu không, Ngải cứu, Sả chanh, Lá bưởi và Hoa hồng. Toàn bộ được phơi khô mộc mạc theo phương pháp thủ công, không hóa chất bảo quản, giữ trọn vẹn dược tính tự nhiên.
             </p>
 
-            <div className="eco-rise-3 flex flex-wrap items-center gap-3">
+            <div className="eco-rise-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3">
               <Link
                 to="/san-pham"
-                className="px-5 py-2.5 bg-primary hover:bg-primary-container text-on-primary text-xs font-bold uppercase tracking-wider rounded shadow-xs transition-all"
+                className="w-full sm:w-auto text-center justify-center px-5 py-2.5 bg-primary hover:bg-primary-container text-on-primary text-xs font-bold uppercase tracking-wider rounded-xl sm:rounded shadow-xs transition-all flex items-center"
               >
                 Xem Sản Phẩm
               </Link>
               <Link
                 to="/cach-dung"
-                className="px-5 py-2.5 bg-surface hover:bg-surface-container border border-border-herbal text-primary text-xs font-bold uppercase tracking-wider rounded transition-all"
+                className="w-full sm:w-auto text-center justify-center px-5 py-2.5 bg-surface hover:bg-surface-container border border-border-herbal text-primary text-xs font-bold uppercase tracking-wider rounded-xl sm:rounded transition-all flex items-center"
               >
                 Xem Cách Dùng
               </Link>
@@ -41,7 +41,7 @@ export const HerbsAboutPage = () => {
           </div>
 
           {/* Cột ảnh bên phải */}
-          <div className="eco-image-rise relative min-h-[280px] sm:min-h-[340px] bg-surface-container overflow-hidden">
+          <div className="eco-image-rise relative min-h-[220px] sm:min-h-[340px] bg-surface-container overflow-hidden">
             <img
               src="/images/products/bai-thuoc-7-vi.jpg"
               alt="7 Nia Thảo Mộc Phơi Khô Ngân Hà"

@@ -41,6 +41,15 @@
   background: #737973;
 }
 
+/* Ẩn thanh cuộn trên điện thoại cho các tab vuốt ngang */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 @keyframes loading-bar {
   0% {
     transform: translateX(-100%);

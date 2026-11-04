@@ -4,11 +4,11 @@ import { BrandLogoIcon } from '@/components/common/BrandLogoIcon';
 
 export const Footer = () => {
   return (
-    <footer className="w-full bg-surface-container-low border-t border-border-herbal mt-16 lg:mt-24">
-      <div className="max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
+    <footer className="w-full bg-surface-container-low border-t border-border-herbal mt-10 sm:mt-16 lg:mt-24">
+      <div className="max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 py-10 sm:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 lg:gap-8">
           {/* Cột 1: Thông điệp thương hiệu */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3.5 sm:gap-4">
             <div className="flex items-center gap-2.5 sm:gap-3">
               <BrandLogoIcon className="w-8 h-8 sm:w-9 sm:h-9 text-[#5c5d53] shrink-0" />
               <div className="flex flex-col">
@@ -18,23 +18,23 @@ export const Footer = () => {
                 </span>
               </div>
             </div>
-            <p className="text-body-sm text-on-surface-variant leading-relaxed">
+            <p className="text-xs sm:text-body-sm text-on-surface-variant leading-relaxed">
               Giữ vẹn nguyên hồn thảo mộc bản địa Việt Nam. Thuần khiết, mộc mạc và an tâm cho sức khỏe gia đình bạn.
             </p>
-            <div className="flex flex-col gap-1 pt-2">
-              <span className="text-[0.75rem] font-semibold text-tertiary uppercase tracking-wider">
+            <div className="flex flex-col gap-1 pt-1 sm:pt-2">
+              <span className="text-[0.6875rem] sm:text-[0.75rem] font-semibold text-tertiary uppercase tracking-wider">
                 Chứng Nhận Dược Liệu
               </span>
-              <p className="text-body-sm text-on-surface-variant">
+              <p className="text-xs sm:text-body-sm text-on-surface-variant">
                 Dược liệu phơi khô tự nhiên, kiểm định chất lượng an toàn, không pha trộn tạp chất.
               </p>
             </div>
           </div>
 
           {/* Cột 2: Cam kết tự nhiên */}
-          <div className="flex flex-col gap-4">
-            <h4 className="font-serif text-lg font-bold text-primary">Cam Kết Tự Nhiên</h4>
-            <ul className="flex flex-col gap-2.5 text-body-sm text-on-surface-variant">
+          <div className="flex flex-col gap-3 sm:gap-4">
+            <h4 className="font-serif text-base sm:text-lg font-bold text-primary">Cam Kết Tự Nhiên</h4>
+            <ul className="flex flex-col gap-2 sm:gap-2.5 text-xs sm:text-body-sm text-on-surface-variant">
               <li className="flex items-start gap-2">
                 <span className="material-symbols-outlined text-secondary text-[1rem] mt-0.5">eco</span>
                 <span>100% thảo mộc bản địa Việt Nam</span>
@@ -55,9 +55,9 @@ export const Footer = () => {
           </div>
 
           {/* Cột 3: Vùng dược liệu & Liên hệ */}
-          <div className="flex flex-col gap-4">
-            <h4 className="font-serif text-lg font-bold text-primary">Liên Hệ & Cửa Hàng</h4>
-            <ul className="flex flex-col gap-2.5 text-body-sm text-on-surface-variant">
+          <div className="flex flex-col gap-3 sm:gap-4">
+            <h4 className="font-serif text-base sm:text-lg font-bold text-primary">Liên Hệ & Cửa Hàng</h4>
+            <ul className="flex flex-col gap-2 sm:gap-2.5 text-xs sm:text-body-sm text-on-surface-variant">
               <li className="flex items-start gap-2">
                 <span className="material-symbols-outlined text-primary text-[1.125rem] mt-0.5">location_on</span>
                 <span>Dược liệu bản địa thu hái từ các vùng đất lành Việt Nam</span>
@@ -78,9 +78,9 @@ export const Footer = () => {
           </div>
 
           {/* Cột 4: Liên kết nhanh theo 4 trang điều hướng */}
-          <div className="flex flex-col gap-4">
-            <h4 className="font-serif text-lg font-bold text-primary">Liên Kết Nhanh</h4>
-            <ul className="flex flex-col gap-2 text-body-sm text-on-surface-variant">
+          <div className="flex flex-col gap-3 sm:gap-4">
+            <h4 className="font-serif text-base sm:text-lg font-bold text-primary">Liên Kết Nhanh</h4>
+            <ul className="flex flex-col gap-1.5 sm:gap-2 text-xs sm:text-body-sm text-on-surface-variant">
               <li>
                 <Link to="/" className="hover:text-primary transition-colors">
                   Trang chủ
@@ -111,11 +111,11 @@ export const Footer = () => {
         </div>
 
         {/* Chân trang bản quyền */}
-        <div className="border-t border-border-herbal mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-body-sm text-on-surface-variant text-center sm:text-left">
+        <div className="border-t border-border-herbal mt-8 sm:mt-12 pt-5 sm:pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
+          <p className="text-xs sm:text-body-sm text-on-surface-variant text-center sm:text-left">
             © 2026 Ngân Hà Thảo Mộc. Tinh hoa dược liệu bản địa phơi khô tự nhiên.
           </p>
-          <div className="flex items-center gap-6 text-[0.75rem] font-semibold text-secondary uppercase tracking-widest">
+          <div className="flex items-center flex-wrap justify-center gap-3 sm:gap-6 text-[0.6875rem] sm:text-[0.75rem] font-semibold text-secondary uppercase tracking-wider sm:tracking-widest">
             <span>Thuần Lành</span>
             <span>•</span>
             <span>Tâm An</span>

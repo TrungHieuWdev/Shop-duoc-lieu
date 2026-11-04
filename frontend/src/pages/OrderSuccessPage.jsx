@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
+import { useAdminStore } from '@/store/useAdminStore';
 import { formatCurrency } from '@/utils/formatCurrency';
+import { notifyAdminNewOrder } from '@/utils/orderNotification';
 import api from '@/services/api';
 
 export const OrderSuccessPage = () => {
@@ -8,8 +10,26 @@ export const OrderSuccessPage = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
 
+  const { orders, settings } = useAdminStore();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  // Tìm đơn hàng từ store phòng trường hợp backend offline hoặc mock
+  const fallbackOrder = orders.find((o) => o.order_code === orderCode);
+  const displayOrder = order || fallbackOrder;
+
+  const adminEmail = settings?.admin_email || 'tiemthaomocnganha@gmail.com';
+  const gmailDispatch = notifyAdminNewOrder(
+    displayOrder || {
+      order_code: orderCode,
+      customer_name: 'Quý Khách',
+      customer_phone: '',
+      customer_address: '',
+      total: 0,
+      payment_status: 'PAID',
+    },
+    adminEmail
+  );
 
   useEffect(() => {
     let isMounted = true;
@@ -29,7 +49,7 @@ export const OrderSuccessPage = () => {
       }
     };
 
-    if (orderCode && token) {
+    if (orderCode && token && token !== 'success') {
       fetchOrder();
     } else {
       setLoading(false);
@@ -49,26 +69,58 @@ export const OrderSuccessPage = () => {
     );
   }
 
+  const items = displayOrder?.items || [];
+  const totalAmount = displayOrder?.total ?? displayOrder?.total_amount ?? 0;
+
   return (
-    <div className="max-w-3xl mx-auto px-6 lg:px-12 py-16">
-      <div className="bg-surface-container-lowest rounded-xl p-8 lg:p-12 border border-border-herbal shadow-sm text-center">
+    <div className="max-w-3xl mx-auto px-3.5 sm:px-6 lg:px-12 py-8 sm:py-16">
+      <div className="bg-surface-container-lowest rounded-2xl p-5 sm:p-8 lg:p-12 border border-border-herbal shadow-xs text-center">
         {/* Success Icon */}
-        <div className="w-20 h-20 rounded-full bg-secondary-container text-on-secondary-container mx-auto flex items-center justify-center mb-6 shadow-sm">
-          <span className="material-symbols-outlined text-[3rem]">check_circle</span>
+        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-secondary-container text-on-secondary-container mx-auto flex items-center justify-center mb-4 sm:mb-6 shadow-xs">
+          <span className="material-symbols-outlined text-[2.5rem] sm:text-[3rem]">check_circle</span>
         </div>
 
-        <span className="text-xs font-semibold text-secondary uppercase tracking-widest block mb-2">
+        <span className="text-[10px] sm:text-xs font-semibold text-secondary uppercase tracking-widest block mb-1.5 sm:mb-2">
           Giao Dịch Đã Xác Nhận Tự Động
         </span>
-        <h1 className="font-serif text-2xl lg:text-3xl font-bold text-primary mb-3">
-          Đặt Hàng & Thanh Toán Thành Công!
+        <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-primary mb-2.5 sm:mb-3">
+          Đặt Hàng &amp; Thanh Toán Thành Công!
         </h1>
-        <p className="text-body-sm text-on-surface-variant max-w-lg mx-auto mb-8 leading-relaxed">
-          Cảm ơn bạn đã tin chọn các sản phẩm thảo mộc tự nhiên. Đơn hàng của bạn đã được chuyển đến chủ cửa hàng để chuẩn bị đóng gói và gửi hàng sớm nhất.
+        <p className="text-xs sm:text-body-sm text-on-surface-variant max-w-lg mx-auto mb-6 sm:mb-8 leading-relaxed">
+          Cảm ơn bạn đã tin chọn các sản phẩm thảo mộc tự nhiên. Đơn hàng của bạn đã được tiếp nhận và thông báo trực tiếp đến chủ tiệm để sẵn sàng đóng gói và đi đơn sớm nhất.
         </p>
 
+        {/* Hộp Thông Báo Gửi Đơn Về Gmail Chủ Shop Nhận Để Đi Đơn */}
+        <div className="bg-emerald-50 border border-emerald-200 p-4 sm:p-5 rounded-xl text-left mb-6 sm:mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3">
+            <span className="material-symbols-outlined text-emerald-700 text-2xl shrink-0 mt-0.5">
+              mark_email_read
+            </span>
+            <div>
+              <h4 className="font-serif font-bold text-emerald-950 text-sm sm:text-base">
+                Thông Tin Đơn Hàng Đã Gửi Về Gmail Chủ Tiệm
+              </h4>
+              <p className="text-xs text-emerald-800 mt-1 leading-relaxed">
+                Chi tiết đơn hàng #{orderCode} đã được gửi trực tiếp đến Gmail:{' '}
+                <strong className="font-semibold text-emerald-900 underline">{adminEmail}</strong>{' '}
+                để shop chuẩn bị đóng gói và đi đơn.
+              </p>
+            </div>
+          </div>
+
+          <a
+            href={gmailDispatch.gmailComposeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full sm:w-auto px-4 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs uppercase tracking-wider rounded transition-colors shrink-0 flex items-center justify-center gap-1.5 shadow-xs"
+          >
+            <span className="material-symbols-outlined text-base">forward_to_inbox</span>
+            <span>Mở Gmail Đi Đơn</span>
+          </a>
+        </div>
+
         {/* Thông tin đơn hàng */}
-        <div className="bg-surface-container-low rounded-lg p-6 border border-border-herbal/70 text-left mb-8">
+        <div className="bg-surface-container-low rounded-xl p-4 sm:p-6 border border-border-herbal/70 text-left mb-6 sm:mb-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-4 border-b border-border-herbal text-body-sm">
             <div>
               <span className="text-xs text-on-surface-variant block">Mã đơn hàng:</span>
@@ -81,43 +133,47 @@ export const OrderSuccessPage = () => {
                 <span>ĐÃ THANH TOÁN (PAID)</span>
               </span>
             </div>
-            {order?.customer_name && (
+            {displayOrder?.customer_name && (
               <div>
                 <span className="text-xs text-on-surface-variant block">Người nhận:</span>
-                <span className="font-semibold text-primary">{order.customer_name}</span>
+                <span className="font-semibold text-primary">{displayOrder.customer_name}</span>
               </div>
             )}
-            {order?.customer_phone && (
+            {displayOrder?.customer_phone && (
               <div>
                 <span className="text-xs text-on-surface-variant block">Số điện thoại:</span>
-                <span className="font-semibold text-primary">{order.customer_phone}</span>
+                <span className="font-semibold text-primary">{displayOrder.customer_phone}</span>
               </div>
             )}
-            {order?.customer_address && (
+            {displayOrder?.customer_address && (
               <div className="sm:col-span-2">
                 <span className="text-xs text-on-surface-variant block">Địa chỉ nhận hàng:</span>
-                <span className="text-on-surface">{order.customer_address}</span>
+                <span className="text-on-surface">{displayOrder.customer_address}</span>
               </div>
             )}
           </div>
 
           {/* Danh sách mặt hàng nếu có */}
-          {order?.items && order.items.length > 0 && (
+          {items.length > 0 && (
             <div className="pt-4 divide-y divide-border-herbal/50">
               <span className="text-xs font-semibold text-secondary uppercase tracking-widest block mb-2">
                 Sản phẩm trong đơn:
               </span>
-              {order.items.map((item, idx) => (
-                <div key={idx} className="py-2 flex justify-between text-body-sm">
-                  <span>
-                    {item.product_name} <span className="text-xs text-on-surface-variant">x {item.quantity}</span>
-                  </span>
-                  <span className="font-semibold text-primary">{formatCurrency(item.line_total)}</span>
-                </div>
-              ))}
+              {items.map((item, idx) => {
+                const itemName = item.name || item.product_name;
+                const lineTotal = item.line_total || item.price * item.quantity;
+                return (
+                  <div key={idx} className="py-2 flex justify-between text-body-sm">
+                    <span>
+                      {itemName} <span className="text-xs text-on-surface-variant">x {item.quantity}</span>
+                    </span>
+                    <span className="font-semibold text-primary">{formatCurrency(lineTotal)}</span>
+                  </div>
+                );
+              })}
               <div className="pt-3 flex justify-between items-baseline font-bold border-t border-border-herbal mt-2">
                 <span className="font-serif text-primary">Tổng tiền thanh toán:</span>
-                <span className="font-serif text-lg text-tertiary">{formatCurrency(order.total_amount)}</span>
+                <span className="font-serif text-lg text-tertiary">{formatCurrency(totalAmount)}</span>
               </div>
             </div>
           )}
@@ -135,4 +191,3 @@ export const OrderSuccessPage = () => {
     </div>
   );
 };
-

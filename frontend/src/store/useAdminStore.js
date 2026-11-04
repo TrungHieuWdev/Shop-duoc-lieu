@@ -125,6 +125,66 @@ const getSavedOrders = () => {
   }
 };
 
+// Danh sách phiếu kiểm kho ban đầu
+const DEFAULT_AUDIT_LOGS = [
+  {
+    code: 'KK000001',
+    created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
+    balanced_at: new Date(Date.now() - 86400000 * 2).toISOString(),
+    creator: 'Quản Trị Viên Ngân Hà',
+    balancer: 'Quản Trị Viên Ngân Hà',
+    status: 'Đã cân bằng kho',
+    total_diff: 0,
+    total_diff_value: 0,
+    total_increase: 0,
+    total_decrease: 0,
+    note: 'Phiếu kiểm kho định kỳ đầu kỳ - Cân bằng 8 vị dược liệu bản địa',
+    items: [
+      { product_id: 1, name: 'Bài Thuốc Xông Tắm Tổng Hợp 7 Vị', unit: 'Gói 150g', system_stock: 120, actual_stock: 120, diff: 0, price: 50000 },
+      { product_id: 2, name: 'Lá Đinh Lăng Phơi Khô', unit: 'Túi 200g', system_stock: 45, actual_stock: 45, diff: 0, price: 50000 },
+      { product_id: 3, name: 'Gừng Phơi Khô (Gừng Sẻ Thái Lát)', unit: 'Túi 200g', system_stock: 60, actual_stock: 60, diff: 0, price: 40000 },
+      { product_id: 4, name: 'Lá Sả Phơi Khô (Cắt Khúc)', unit: 'Túi 200g', system_stock: 85, actual_stock: 85, diff: 0, price: 30000 },
+      { product_id: 5, name: 'Lá Trầu Không Phơi Khô', unit: 'Túi 150g', system_stock: 32, actual_stock: 32, diff: 0, price: 45000 },
+      { product_id: 6, name: 'Lá Ngải Cứu Nếp Phơi Khô', unit: 'Túi 200g', system_stock: 70, actual_stock: 70, diff: 0, price: 35000 },
+      { product_id: 7, name: 'Lá Bưởi Phơi Khô', unit: 'Túi 150g', system_stock: 28, actual_stock: 28, diff: 0, price: 35000 },
+      { product_id: 8, name: 'Hoa Hồng Phơi Khô (Nụ & Cánh)', unit: 'Túi 100g', system_stock: 15, actual_stock: 15, diff: 0, price: 55000 },
+    ],
+  },
+];
+
+const getSavedAuditLogs = () => {
+  try {
+    const raw = localStorage.getItem('nganha_admin_audit_logs');
+    if (!raw) return DEFAULT_AUDIT_LOGS;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : DEFAULT_AUDIT_LOGS;
+  } catch (e) {
+    return DEFAULT_AUDIT_LOGS;
+  }
+};
+
+// Cài đặt mặc định của hệ thống
+const DEFAULT_SETTINGS = {
+  bank_id: 'MB', // Mã ngân hàng VietQR (e.g. MB, VCB, TCB, ACB, BIDV, ICB, VPB, TPB, STB, VIB)
+  bank_name: 'MBBank (Quân Đội)',
+  bank_account: '0983124567', // Số tài khoản ngân hàng
+  account_name: 'TIỆM THẢO MỘC NGÂN HÀ', // Tên chủ tài khoản
+  admin_email: 'tiemthaomocnganha@gmail.com', // Gmail chủ tiệm để nhận thông tin đơn hàng đi đơn
+  default_shipping_fee: 30000, // Phí ship mặc định
+  free_shipping_threshold: 350000, // Ngưỡng miễn phí ship
+};
+
+const getSavedSettings = () => {
+  try {
+    const raw = localStorage.getItem('nganha_shop_settings');
+    if (!raw) return DEFAULT_SETTINGS;
+    const parsed = JSON.parse(raw);
+    return { ...DEFAULT_SETTINGS, ...parsed };
+  } catch (e) {
+    return DEFAULT_SETTINGS;
+  }
+};
+
 // Trạng thái tính toán tự động dựa trên tồn kho
 const computeStatus = (stock) => {
   const s = Number(stock);
@@ -136,6 +196,16 @@ const computeStatus = (stock) => {
 export const useAdminStore = create((set, get) => ({
   products: JSON.parse(localStorage.getItem('nganha_admin_products') || JSON.stringify(DEFAULT_PRODUCTS)),
   orders: getSavedOrders(),
+  auditLogs: getSavedAuditLogs(),
+  settings: getSavedSettings(),
+
+  // Cập nhật cài đặt ngân hàng & phí ship
+  updateSettings: (newSettings) => {
+    const updated = { ...get().settings, ...newSettings };
+    localStorage.setItem('nganha_shop_settings', JSON.stringify(updated));
+    set({ settings: updated });
+    return updated;
+  },
 
   // 1. Cập nhật thông tin dược liệu (giá tiền, số lượng tồn kho, tên, quy cách, trạng thái)
   updateProduct: (id, updatedFields) => {
@@ -155,6 +225,103 @@ export const useAdminStore = create((set, get) => ({
 
     localStorage.setItem('nganha_admin_products', JSON.stringify(products));
     set({ products });
+  },
+
+  // 1b. Cân bằng tồn kho nhanh (Quick Balance)
+  rebalanceStock: (id, actualStock, note) => {
+    const targetProduct = get().products.find((p) => p.id === id);
+    if (!targetProduct) return;
+
+    const oldStock = targetProduct.stock;
+    const newStock = Number(actualStock);
+    const diff = newStock - oldStock;
+
+    // Cập nhật tồn kho sản phẩm
+    get().updateProduct(id, { stock: newStock });
+
+    // Tự động ghi nhật ký phiếu kiểm kho
+    const code = `KK${String(Date.now()).slice(-6)}`;
+    const newLog = {
+      code,
+      created_at: new Date().toISOString(),
+      balanced_at: new Date().toISOString(),
+      creator: 'Quản Trị Viên Ngân Hà',
+      balancer: 'Quản Trị Viên Ngân Hà',
+      status: 'Đã cân bằng kho',
+      total_diff: diff,
+      total_diff_value: diff * targetProduct.price,
+      total_increase: diff > 0 ? diff : 0,
+      total_decrease: diff < 0 ? Math.abs(diff) : 0,
+      note: note || `Cân bằng nhanh tồn kho dược liệu #${id} (${targetProduct.name}): ${oldStock} ➔ ${newStock} gói`,
+      items: [
+        {
+          product_id: targetProduct.id,
+          name: targetProduct.name,
+          unit: targetProduct.unit,
+          system_stock: oldStock,
+          actual_stock: newStock,
+          diff,
+          price: targetProduct.price,
+        },
+      ],
+    };
+
+    const updatedLogs = [newLog, ...get().auditLogs];
+    localStorage.setItem('nganha_admin_audit_logs', JSON.stringify(updatedLogs));
+    set({ auditLogs: updatedLogs });
+  },
+
+  // 1c. Thêm phiếu kiểm kho hoàn chỉnh (Multiple items audit)
+  addAuditLog: (logData) => {
+    const updatedLogs = [logData, ...get().auditLogs];
+    localStorage.setItem('nganha_admin_audit_logs', JSON.stringify(updatedLogs));
+
+    // Nếu phiếu ở trạng thái Đã cân bằng thì cập nhật tồn kho tất cả sản phẩm trong phiếu
+    if (logData.status === 'Đã cân bằng kho' && Array.isArray(logData.items)) {
+      logData.items.forEach((item) => {
+        if (item.product_id && item.actual_stock !== undefined) {
+          get().updateProduct(item.product_id, { stock: Number(item.actual_stock) });
+        }
+      });
+    }
+
+    set({ auditLogs: updatedLogs });
+  },
+
+  // 1d. Cân bằng một phiếu kiểm kho đã lưu tạm
+  balanceAuditSheet: (code) => {
+    const target = get().auditLogs.find((l) => l.code === code);
+    if (!target) return;
+
+    const updatedLogs = get().auditLogs.map((l) => {
+      if (l.code === code) {
+        return {
+          ...l,
+          status: 'Đã cân bằng kho',
+          balanced_at: new Date().toISOString(),
+          balancer: 'Quản Trị Viên Ngân Hà',
+        };
+      }
+      return l;
+    });
+
+    if (Array.isArray(target.items)) {
+      target.items.forEach((item) => {
+        if (item.product_id && item.actual_stock !== undefined) {
+          get().updateProduct(item.product_id, { stock: Number(item.actual_stock) });
+        }
+      });
+    }
+
+    localStorage.setItem('nganha_admin_audit_logs', JSON.stringify(updatedLogs));
+    set({ auditLogs: updatedLogs });
+  },
+
+  // 1e. Xóa phiếu kiểm kho
+  deleteAuditSheet: (code) => {
+    const updatedLogs = get().auditLogs.filter((l) => l.code !== code);
+    localStorage.setItem('nganha_admin_audit_logs', JSON.stringify(updatedLogs));
+    set({ auditLogs: updatedLogs });
   },
 
   // 2. Thêm dược liệu mới vào cửa hàng
