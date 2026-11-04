@@ -4,6 +4,7 @@ import { useCartStore } from '@/store/useCartStore';
 import { useAdminStore } from '@/store/useAdminStore';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { notifyAdminNewOrder } from '@/utils/orderNotification';
+import { sanitizeInput, isValidVietnamesePhone, isValidEmail, checkClientThrottle } from '@/utils/security';
 import api from '@/services/api';
 
 export const CheckoutPage = () => {
@@ -24,6 +25,9 @@ export const CheckoutPage = () => {
     customer_address: '',
     customer_note: '',
   });
+
+  // Bẫy Honeypot chống bot cào dữ liệu và spam hàng ngàn đơn hàng
+  const [botTrap, setBotTrap] = useState('');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -49,15 +53,42 @@ export const CheckoutPage = () => {
     e.preventDefault();
     setErrorMessage('');
 
-    // Kiểm tra tính hợp lệ cơ bản
-    if (!formData.customer_name.trim() || !formData.customer_phone.trim() || !formData.customer_address.trim()) {
+    // 1. Chống Bot Spam: Kiểm tra bẫy Honeypot
+    if (botTrap.trim() !== '') {
+      setIsSubmitting(true);
+      await new Promise((resolve) => setTimeout(resolve, 1200));
+      setIsSubmitting(false);
+      setErrorMessage('Phát hiện truy cập tự động bất thường. Yêu cầu đã bị hủy.');
+      return;
+    }
+
+    // 2. Chống DDoS / Click Flooding: Giới hạn tối đa 3 lần bấm đặt hàng trong 15 giây
+    const throttleCheck = checkClientThrottle('checkout_order_submission', 3, 15000);
+    if (!throttleCheck.allowed) {
+      setErrorMessage(throttleCheck.message);
+      return;
+    }
+
+    // 3. Làm sạch dữ liệu khách hàng (Sanitize chống tấn công XSS / HTML Injection)
+    const cleanName = sanitizeInput(formData.customer_name, 100);
+    const cleanPhone = sanitizeInput(formData.customer_phone, 15);
+    const cleanEmail = sanitizeInput(formData.customer_email, 100);
+    const cleanAddress = sanitizeInput(formData.customer_address, 250);
+    const cleanNote = sanitizeInput(formData.customer_note, 300);
+
+    // 4. Kiểm tra tính hợp lệ cơ bản
+    if (!cleanName || !cleanPhone || !cleanAddress) {
       setErrorMessage('Vui lòng điền đầy đủ Họ tên, Số điện thoại và Địa chỉ giao hàng.');
       return;
     }
 
-    const phoneRegex = /^(0[3|5|7|8|9])+([0-9]{8})$/;
-    if (!phoneRegex.test(formData.customer_phone.trim())) {
-      setErrorMessage('Số điện thoại không đúng định dạng di động Việt Nam (10 chữ số).');
+    if (!isValidVietnamesePhone(cleanPhone)) {
+      setErrorMessage('Số điện thoại không đúng định dạng di động Việt Nam (10 chữ số: 03x, 05x, 07x, 08x, 09x).');
+      return;
+    }
+
+    if (cleanEmail && !isValidEmail(cleanEmail)) {
+      setErrorMessage('Địa chỉ email không đúng định dạng hợp lệ.');
       return;
     }
 
@@ -70,11 +101,11 @@ export const CheckoutPage = () => {
         id: realOrderCode,
         order_code: realOrderCode,
         created_at: new Date().toISOString(),
-        customer_name: formData.customer_name.trim(),
-        customer_phone: formData.customer_phone.trim(),
-        customer_email: formData.customer_email.trim(),
-        customer_address: formData.customer_address.trim(),
-        customer_note: formData.customer_note.trim(),
+        customer_name: cleanName,
+        customer_phone: cleanPhone,
+        customer_email: cleanEmail,
+        customer_address: cleanAddress,
+        customer_note: cleanNote,
         payment_method: 'VIETQR',
         payment_status: 'UNPAID',
         order_status: 'PENDING',
@@ -83,29 +114,29 @@ export const CheckoutPage = () => {
         total: total,
         items: items.map((item) => ({
           id: item.id,
-          name: item.name,
-          unit: item.unit,
-          price: item.price,
-          quantity: item.quantity,
+          name: sanitizeInput(item.name, 150),
+          unit: sanitizeInput(item.unit, 50),
+          price: Number(item.price) || 0,
+          quantity: Math.max(1, Number(item.quantity) || 1),
           thumbnail_url: item.thumbnail_url,
         })),
       };
 
-      // Ghi nhận đơn hàng vào hệ thống quản lý
+      // Ghi nhận đơn hàng vào hệ thống quản lý an toàn
       addOrder(newOrder);
 
       // Tự động kích hoạt thông báo đơn hàng gửi đến Gmail của chủ shop
       const adminEmail = settings?.admin_email || 'tiemthaomocnganha@gmail.com';
       notifyAdminNewOrder(newOrder, adminEmail);
 
-      // Gọi backend nếu có
+      // Gọi backend nếu có (với dữ liệu đã làm sạch triệt để)
       try {
         const payload = {
-          customer_name: formData.customer_name.trim(),
-          customer_phone: formData.customer_phone.trim(),
-          customer_email: formData.customer_email.trim() || undefined,
-          customer_address: formData.customer_address.trim(),
-          customer_note: formData.customer_note.trim() || undefined,
+          customer_name: cleanName,
+          customer_phone: cleanPhone,
+          customer_email: cleanEmail || undefined,
+          customer_address: cleanAddress,
+          customer_note: cleanNote || undefined,
           items: items.map((item) => ({
             product_id: item.id,
             quantity: item.quantity,
@@ -137,15 +168,27 @@ export const CheckoutPage = () => {
       </h1>
 
       {errorMessage && (
-        <div className="mb-6 p-3.5 sm:p-4 rounded-xl bg-error-container text-on-error-container text-xs sm:text-body-sm flex items-center gap-2.5">
-          <span className="material-symbols-outlined text-[1.25rem] shrink-0">error</span>
-          <span>{errorMessage}</span>
+        <div className="mb-6 p-3.5 sm:p-4 rounded-none bg-red-50 border border-red-300 text-red-900 text-xs sm:text-body-sm flex items-center gap-2.5">
+          <span className="material-symbols-outlined text-[1.25rem] text-red-600 shrink-0">gpp_bad</span>
+          <span className="font-medium">{errorMessage}</span>
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
+        {/* Bẫy Honeypot ẩn dành cho bot tự động (Người thật không nhìn thấy) */}
+        <div style={{ display: 'none' }} aria-hidden="true">
+          <input
+            type="text"
+            name="company_tax_trap"
+            value={botTrap}
+            onChange={(e) => setBotTrap(e.target.value)}
+            tabIndex={-1}
+            autoComplete="off"
+          />
+        </div>
+
         {/* Form thông tin giao hàng */}
-        <div className="lg:col-span-7 bg-surface-container-lowest rounded-2xl p-4 sm:p-6 lg:p-8 border border-border-herbal shadow-xs">
+        <div className="lg:col-span-7 bg-surface-container-lowest rounded-none p-4 sm:p-6 lg:p-8 border border-border-herbal shadow-xs">
           <h2 className="font-serif text-base sm:text-lg font-bold text-primary mb-5 sm:mb-6 pb-2.5 border-b border-border-herbal flex items-center gap-2">
             <span className="material-symbols-outlined text-secondary text-[1.25rem]">local_shipping</span>
             <span>1. Người Nhận Hàng</span>
@@ -163,7 +206,8 @@ export const CheckoutPage = () => {
                 onChange={handleChange}
                 placeholder="Ví dụ: Nguyễn Thị Hoa"
                 required
-                className="w-full px-3.5 py-2.5 bg-surface-container-low border border-border-herbal rounded-xl text-base sm:text-body-sm text-on-surface focus:outline-none focus:border-primary transition-colors"
+                maxLength={100}
+                className="w-full px-3.5 py-2.5 bg-surface-container-low border border-border-herbal rounded-none text-base sm:text-body-sm text-on-surface focus:outline-none focus:border-primary transition-colors font-medium"
               />
             </div>
 
@@ -179,7 +223,8 @@ export const CheckoutPage = () => {
                   onChange={handleChange}
                   placeholder="0987 654 321"
                   required
-                  className="w-full px-3.5 py-2.5 bg-surface-container-low border border-border-herbal rounded-xl text-base sm:text-body-sm text-on-surface focus:outline-none focus:border-primary transition-colors"
+                  maxLength={15}
+                  className="w-full px-3.5 py-2.5 bg-surface-container-low border border-border-herbal rounded-none text-base sm:text-body-sm text-on-surface focus:outline-none focus:border-primary transition-colors font-medium"
                 />
               </div>
 
@@ -193,7 +238,8 @@ export const CheckoutPage = () => {
                   value={formData.customer_email}
                   onChange={handleChange}
                   placeholder="hoa.nguyen@example.com"
-                  className="w-full px-3.5 py-2.5 bg-surface-container-low border border-border-herbal rounded-xl text-base sm:text-body-sm text-on-surface focus:outline-none focus:border-primary transition-colors"
+                  maxLength={100}
+                  className="w-full px-3.5 py-2.5 bg-surface-container-low border border-border-herbal rounded-none text-base sm:text-body-sm text-on-surface focus:outline-none focus:border-primary transition-colors font-medium"
                 />
               </div>
             </div>
@@ -209,7 +255,8 @@ export const CheckoutPage = () => {
                 onChange={handleChange}
                 placeholder="Số nhà, tên ngõ/đường, phường/xã, quận/huyện, tỉnh/thành"
                 required
-                className="w-full px-3.5 py-2.5 bg-surface-container-low border border-border-herbal rounded-xl text-base sm:text-body-sm text-on-surface focus:outline-none focus:border-primary transition-colors"
+                maxLength={250}
+                className="w-full px-3.5 py-2.5 bg-surface-container-low border border-border-herbal rounded-none text-base sm:text-body-sm text-on-surface focus:outline-none focus:border-primary transition-colors font-medium"
               />
             </div>
 
@@ -222,15 +269,16 @@ export const CheckoutPage = () => {
                 value={formData.customer_note}
                 onChange={handleChange}
                 rows={3}
+                maxLength={300}
                 placeholder="Ví dụ: Giao giờ hành chính, gọi trước khi đến..."
-                className="w-full px-3.5 py-2.5 bg-surface-container-low border border-border-herbal rounded-xl text-base sm:text-body-sm text-on-surface focus:outline-none focus:border-primary transition-colors"
+                className="w-full px-3.5 py-2.5 bg-surface-container-low border border-border-herbal rounded-none text-base sm:text-body-sm text-on-surface focus:outline-none focus:border-primary transition-colors"
               />
             </div>
           </div>
         </div>
 
         {/* Xem lại đơn hàng & Nút xác nhận */}
-        <div className="lg:col-span-5 bg-surface-container-low rounded-2xl p-4 sm:p-6 lg:p-8 border border-border-herbal shadow-xs">
+        <div className="lg:col-span-5 bg-surface-container-low rounded-none p-4 sm:p-6 lg:p-8 border border-border-herbal shadow-xs">
           <h2 className="font-serif text-base sm:text-lg font-bold text-primary mb-3.5 sm:mb-4 pb-2.5 border-b border-border-herbal flex items-center gap-2">
             <span className="material-symbols-outlined text-secondary text-[1.25rem]">inventory_2</span>
             <span>2. Tóm Tắt Đơn Hàng ({items.length} món)</span>
@@ -268,13 +316,16 @@ export const CheckoutPage = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-3.5 px-4 bg-tertiary-container hover:bg-tertiary text-on-tertiary font-semibold text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 transition-all shadow-xs disabled:opacity-60 cursor-pointer active:scale-98"
+            className="w-full py-3.5 px-4 bg-[#cbb07c] hover:bg-[#dfc492] text-[#14261a] font-bold text-xs uppercase tracking-widest rounded-none flex items-center justify-center gap-2 transition-all shadow-xs disabled:opacity-60 cursor-pointer active:scale-98"
           >
             {isSubmitting ? (
-              <span>Đang tạo đơn hàng...</span>
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 border-2 border-[#14261a] border-t-transparent rounded-full animate-spin"></div>
+                <span>Đang xử lý đơn hàng an toàn...</span>
+              </div>
             ) : (
               <>
-                <span>Xác Nhận Đặt Hàng &amp; Quét Mã QR</span>
+                <span>XÁC NHẬN ĐẶT HÀNG &amp; QUÉT MÃ QR</span>
                 <span className="material-symbols-outlined text-[1.125rem]">qr_code_2</span>
               </>
             )}
@@ -284,4 +335,3 @@ export const CheckoutPage = () => {
     </div>
   );
 };
-

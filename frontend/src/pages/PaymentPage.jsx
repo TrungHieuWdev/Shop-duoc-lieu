@@ -147,12 +147,11 @@ export const PaymentPage = () => {
             type="button"
             onClick={() => {
               updateOrderStatus(orderCode, 'CONFIRMED', 'PAID');
-              if (matchedOrder) {
-                notifyAdminNewOrder(
-                  { ...matchedOrder, payment_status: 'PAID', status: 'CONFIRMED' },
-                  settings?.admin_email
-                );
-              }
+              const targetOrder = matchedOrder || { order_code: orderCode, total: finalAmount };
+              notifyAdminNewOrder(
+                { ...targetOrder, payment_status: 'PAID', status: 'CONFIRMED' },
+                settings?.admin_email
+              );
               clearCart();
               navigate(`/dat-hang-thanh-cong/${orderCode}?token=${token || 'success'}`);
             }}

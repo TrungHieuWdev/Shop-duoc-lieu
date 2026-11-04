@@ -81,6 +81,9 @@ export const notifyAdminNewOrder = (order, targetEmail = 'tiemthaomocnganha@gmai
     subject
   )}&body=${encodeURIComponent(body)}`;
 
+  // 4. Đồng thời kích hoạt gửi tự động ngầm
+  sendAutomaticOrderEmail(order, adminEmail);
+
   return {
     adminEmail,
     subject,
@@ -88,5 +91,82 @@ export const notifyAdminNewOrder = (order, targetEmail = 'tiemthaomocnganha@gmai
     gmailComposeUrl,
     mailtoUrl,
   };
+};
+
+/**
+ * Tự động gửi email thông báo đơn hàng trực tiếp về địa chỉ email mà chủ cửa hàng đã thiết lập
+ * - Gửi tự động ngầm (background) không làm gián đoạn hay hiện popup cho khách
+ * - Gửi qua API Backend (Nodemailer) nếu có kết nối
+ * - Gửi qua dịch vụ Email Gateway (FormSubmit direct to recipient)
+ * - Lưu bản ghi lịch sử gửi vào localStorage
+ */
+export const sendAutomaticOrderEmail = async (order, targetEmail) => {
+  if (!order || !order.order_code) return;
+  const adminEmail = targetEmail || 'tiemthaomocnganha@gmail.com';
+  const { subject, body } = createOrderEmailContent(order);
+
+  // 1. Lưu bản ghi vào nhật ký hệ thống
+  try {
+    const raw = localStorage.getItem('nganha_admin_email_logs') || '[]';
+    const logs = JSON.parse(raw);
+    const existing = logs.find(
+      (l) => l.order_code === order.order_code && l.status === 'SENT_AUTO'
+    );
+    if (!existing) {
+      const newLog = {
+        order_code: order.order_code,
+        sent_to: adminEmail,
+        sent_at: new Date().toISOString(),
+        customer_name: order.customer_name,
+        total: order.total,
+        status: 'SENT_AUTO',
+      };
+      localStorage.setItem(
+        'nganha_admin_email_logs',
+        JSON.stringify([newLog, ...logs.slice(0, 50)])
+      );
+    }
+  } catch (e) {
+    console.error('Lỗi lưu log email:', e);
+  }
+
+  // 2. Gửi tự động ngầm qua Backend Node.js / Nodemailer
+  try {
+    fetch('/api/notifications/send-order-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        order,
+        recipientEmail: adminEmail,
+        subject,
+        body,
+      }),
+    }).catch(() => {});
+  } catch (e) {}
+
+  // 3. Gửi tự động qua Email Gateway trực tiếp đến hòm thư của chủ shop
+  try {
+    fetch(`https://formsubmit.co/ajax/${encodeURIComponent(adminEmail)}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({
+        _subject: subject,
+        _template: 'box',
+        _captcha: 'false',
+        'Mã Đơn Hàng': `#${order.order_code}`,
+        'Khách Hàng': order.customer_name,
+        'Số Điện Thoại': order.customer_phone,
+        'Địa Chỉ Giao Hàng': order.customer_address,
+        'Ghi Chú Khách Dặn': order.customer_note || 'Không có ghi chú',
+        'Hình Thức Thanh Toán': order.payment_method === 'VIETQR' ? 'Chuyển khoản VietQR' : 'Tiền mặt (COD)',
+        'Trạng Thái Thanh Toán': order.payment_status === 'PAID' ? 'ĐÃ THANH TOÁN (PAID)' : 'CHƯA THANH TOÁN',
+        'Tổng Tiền Thu': formatCurrency(order.total || 0),
+        'Chi Tiết Dược Liệu Đi Đơn': body,
+      }),
+    }).catch(() => {});
+  } catch (e) {}
 };
 

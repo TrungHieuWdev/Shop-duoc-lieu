@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { useAdminStore } from '@/store/useAdminStore';
 import { formatCurrency } from '@/utils/formatCurrency';
-import { notifyAdminNewOrder } from '@/utils/orderNotification';
+import { sendAutomaticOrderEmail } from '@/utils/orderNotification';
 import api from '@/services/api';
 
 export const OrderSuccessPage = () => {
@@ -17,19 +17,18 @@ export const OrderSuccessPage = () => {
   // Tìm đơn hàng từ store phòng trường hợp backend offline hoặc mock
   const fallbackOrder = orders.find((o) => o.order_code === orderCode);
   const displayOrder = order || fallbackOrder;
-
   const adminEmail = settings?.admin_email || 'tiemthaomocnganha@gmail.com';
-  const gmailDispatch = notifyAdminNewOrder(
-    displayOrder || {
-      order_code: orderCode,
-      customer_name: 'Quý Khách',
-      customer_phone: '',
-      customer_address: '',
-      total: 0,
-      payment_status: 'PAID',
-    },
-    adminEmail
-  );
+
+  // Tự động gửi thông báo đơn hàng trực tiếp về email chủ tiệm đã thiết lập
+  useEffect(() => {
+    if (orderCode && displayOrder) {
+      const dispatchedKey = `nganha_order_email_dispatched_${orderCode}`;
+      if (!sessionStorage.getItem(dispatchedKey)) {
+        sessionStorage.setItem(dispatchedKey, 'true');
+        sendAutomaticOrderEmail(displayOrder, adminEmail);
+      }
+    }
+  }, [orderCode, displayOrder, adminEmail]);
 
   useEffect(() => {
     let isMounted = true;
@@ -87,39 +86,10 @@ export const OrderSuccessPage = () => {
           Đặt Hàng &amp; Thanh Toán Thành Công!
         </h1>
         <p className="text-xs sm:text-body-sm text-on-surface-variant max-w-lg mx-auto mb-6 sm:mb-8 leading-relaxed">
-          Cảm ơn bạn đã tin chọn các sản phẩm thảo mộc tự nhiên. Đơn hàng của bạn đã được tiếp nhận và thông báo trực tiếp đến chủ tiệm để sẵn sàng đóng gói và đi đơn sớm nhất.
+          Cảm ơn bạn đã tin chọn các sản phẩm thảo mộc tự nhiên. Đơn hàng của bạn đã được chuyển đến chủ cửa hàng để chuẩn bị đóng gói và gửi hàng sớm nhất.
         </p>
 
-        {/* Hộp Thông Báo Gửi Đơn Về Gmail Chủ Shop Nhận Để Đi Đơn */}
-        <div className="bg-emerald-50 border border-emerald-200 p-4 sm:p-5 rounded-xl text-left mb-6 sm:mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-start gap-3">
-            <span className="material-symbols-outlined text-emerald-700 text-2xl shrink-0 mt-0.5">
-              mark_email_read
-            </span>
-            <div>
-              <h4 className="font-serif font-bold text-emerald-950 text-sm sm:text-base">
-                Thông Tin Đơn Hàng Đã Gửi Về Gmail Chủ Tiệm
-              </h4>
-              <p className="text-xs text-emerald-800 mt-1 leading-relaxed">
-                Chi tiết đơn hàng #{orderCode} đã được gửi trực tiếp đến Gmail:{' '}
-                <strong className="font-semibold text-emerald-900 underline">{adminEmail}</strong>{' '}
-                để shop chuẩn bị đóng gói và đi đơn.
-              </p>
-            </div>
-          </div>
-
-          <a
-            href={gmailDispatch.gmailComposeUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full sm:w-auto px-4 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs uppercase tracking-wider rounded transition-colors shrink-0 flex items-center justify-center gap-1.5 shadow-xs"
-          >
-            <span className="material-symbols-outlined text-base">forward_to_inbox</span>
-            <span>Mở Gmail Đi Đơn</span>
-          </a>
-        </div>
-
-        {/* Thông tin đơn hàng */}
+        {/* Thông tin hóa đơn đơn hàng */}
         <div className="bg-surface-container-low rounded-xl p-4 sm:p-6 border border-border-herbal/70 text-left mb-6 sm:mb-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-4 border-b border-border-herbal text-body-sm">
             <div>
@@ -153,7 +123,7 @@ export const OrderSuccessPage = () => {
             )}
           </div>
 
-          {/* Danh sách mặt hàng nếu có */}
+          {/* Danh sách mặt hàng trong hóa đơn */}
           {items.length > 0 && (
             <div className="pt-4 divide-y divide-border-herbal/50">
               <span className="text-xs font-semibold text-secondary uppercase tracking-widest block mb-2">

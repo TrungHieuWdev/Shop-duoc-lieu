@@ -1,8 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { VIETQR_BANKS, getVietQrUrl } from '@/utils/vietqr';
 import { formatCurrency } from '@/utils/formatCurrency';
+import { sendAutomaticOrderEmail, notifyAdminNewOrder } from '@/utils/orderNotification';
+import { useAuthStore } from '@/store/useAuthStore';
 
 export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation }) => {
+  const { changePassword } = useAuthStore();
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  });
+  const [passwordStatus, setPasswordStatus] = useState(null);
   const [formData, setFormData] = useState({
     bank_id: settings?.bank_id || 'MB',
     bank_name: settings?.bank_name || 'MBBank (Quân Đội)',
@@ -15,6 +24,63 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
 
   const [testAmount, setTestAmount] = useState(50000);
   const [isSaved, setIsSaved] = useState(false);
+  const [testingEmail, setTestingEmail] = useState(false);
+  const [testResult, setTestResult] = useState(null);
+  const [emailLogs, setEmailLogs] = useState([]);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('nganha_admin_email_logs') || '[]';
+      setEmailLogs(JSON.parse(raw));
+    } catch (e) {
+      setEmailLogs([]);
+    }
+  }, [isSaved, testingEmail]);
+
+  const handleSendTestEmail = async () => {
+    if (!formData.admin_email) return;
+    setTestingEmail(true);
+    setTestResult(null);
+
+    const testOrder = {
+      order_code: 'TEST-' + Math.floor(100000 + Math.random() * 900000),
+      customer_name: 'Khách Hàng Thử Nghiệm',
+      customer_phone: '0983124567',
+      customer_address: '123 Đường Thảo Mộc, Phường An Lành, TP.HCM',
+      customer_note: 'Đơn hàng kiểm tra gửi thông báo email',
+      payment_method: 'VIETQR',
+      payment_status: 'PAID',
+      subtotal: 50000,
+      shipping_fee: 20000,
+      total: 70000,
+      items: [
+        {
+          name: 'Hoa Hồng Phơi Khô (Nụ & Cánh)',
+          unit: 'Túi zip 100g',
+          quantity: 1,
+          price: 50000,
+        },
+      ],
+    };
+
+    try {
+      await sendAutomaticOrderEmail(testOrder, formData.admin_email);
+      setTestResult({
+        success: true,
+        message: `Đã phát lệnh gửi thông báo đơn hàng thử nghiệm đến: ${formData.admin_email}.`,
+      });
+      // Làm mới danh sách log
+      const raw = localStorage.getItem('nganha_admin_email_logs') || '[]';
+      setEmailLogs(JSON.parse(raw));
+    } catch (err) {
+      setTestResult({
+        success: false,
+        message: 'Lỗi khi gửi thông báo: ' + (err.message || 'Không thể kết nối'),
+      });
+    } finally {
+      setTestingEmail(false);
+    }
+  };
 
   // Chọn ngân hàng từ danh sách
   const handleBankChange = (e) => {
@@ -174,7 +240,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
               </span>
             </div>
 
-            <div className="space-y-2 text-xs">
+            <div className="space-y-3 text-xs">
               <div>
                 <label className="block text-[11px] font-bold text-primary uppercase tracking-wider mb-1">
                   Địa Chỉ Gmail / Email Nhận Đơn Hàng <span className="text-red-600">*</span>
@@ -185,7 +251,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
                     required
                     value={formData.admin_email}
                     onChange={(e) => setFormData({ ...formData, admin_email: e.target.value })}
-                    placeholder="VD: shop.nganha@gmail.com, tiemthaomocnganha@gmail.com..."
+                    placeholder="VD: trunghieudev88@gmail.com..."
                     className="w-full pl-8 pr-3 py-2 bg-[#faf8f3] border border-border-herbal rounded-none text-xs font-semibold text-primary focus:outline-none focus:border-primary"
                   />
                   <span className="material-symbols-outlined text-outline text-sm absolute left-2.5 top-2.5">
@@ -193,9 +259,101 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
                   </span>
                 </div>
                 <p className="text-[11px] text-on-surface-variant mt-1.5 leading-relaxed">
-                  Khi khách đặt đơn hoặc quét mã VietQR thanh toán, hệ thống sẽ tự động gửi toàn bộ thông tin đơn (Tên khách, SĐT, Địa chỉ, Danh sách các món thảo mộc, Phí ship và Tổng tiền) về hòm thư này để tiệm chuẩn bị đóng gói và đi đơn ngay.
+                  Khi khách đặt đơn hoặc hoàn tất thanh toán, hệ thống sẽ tự động gửi toàn bộ thông tin đơn (Tên khách, SĐT, Địa chỉ, Danh sách các món thảo mộc, Phí ship và Tổng tiền) về hòm thư này để tiệm chuẩn bị đóng gói và đi đơn ngay.
                 </p>
               </div>
+
+              {/* Nút gửi thử email kiểm tra kết nối */}
+              <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-border-herbal/50">
+                <button
+                  type="button"
+                  disabled={testingEmail || !formData.admin_email}
+                  onClick={handleSendTestEmail}
+                  className="px-3 py-1.5 bg-[#14261a] hover:bg-[#233f2c] text-[#cbb07c] font-bold text-xs uppercase tracking-wider rounded-none flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50 shadow-xs"
+                >
+                  <span className={`material-symbols-outlined text-sm ${testingEmail ? 'animate-spin' : ''}`}>
+                    {testingEmail ? 'progress_activity' : 'send'}
+                  </span>
+                  <span>{testingEmail ? 'Đang Gửi Thử...' : 'Gửi Thử Email Thông Báo'}</span>
+                </button>
+
+                <a
+                  href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
+                    formData.admin_email
+                  )}&su=${encodeURIComponent('[ĐƠN HÀNG MẪU] Kiểm tra hòm thư')}&body=${encodeURIComponent(
+                    'Đây là thư kiểm tra kết nối từ hệ thống Tiệm Thảo Mộc Ngân Hà.'
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1.5 bg-surface hover:bg-surface-container border border-border-herbal text-primary font-semibold text-xs rounded-none flex items-center gap-1 transition-all cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-sm">open_in_new</span>
+                  <span>Mở Gmail Kiểm Tra</span>
+                </a>
+              </div>
+
+              {testResult && (
+                <div
+                  className={`p-2.5 text-xs font-medium border flex items-start gap-2 ${
+                    testResult.success
+                      ? 'bg-green-50 text-green-900 border-green-200'
+                      : 'bg-red-50 text-red-900 border-red-200'
+                  }`}
+                >
+                  <span className="material-symbols-outlined text-sm mt-0.5 shrink-0">
+                    {testResult.success ? 'check_circle' : 'error'}
+                  </span>
+                  <div className="leading-relaxed">
+                    <p>{testResult.message}</p>
+                    <p className="text-[11px] text-green-800 mt-1">
+                      💡 <em>Mẹo:</em> Nếu chưa thấy trong Hộp thư đến, bạn vui lòng kiểm tra mục <strong>Thư rác (Spam)</strong> hoặc <strong>Quảng cáo</strong> của Gmail {formData.admin_email}.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Hộp hướng dẫn nhận thư vào Gmail */}
+              <div className="p-2.5 bg-amber-50/80 border border-amber-200 text-amber-950 text-xs leading-relaxed space-y-1">
+                <div className="font-bold flex items-center gap-1 text-amber-900">
+                  <span className="material-symbols-outlined text-sm">info</span>
+                  <span>Cách kích hoạt để nhận thư tự động vào Gmail:</span>
+                </div>
+                <p className="text-[11px]">
+                  1. Khi hệ thống gửi email tự động lần đầu đến <strong>{formData.admin_email}</strong>, FormSubmit sẽ gửi 1 thư kích hoạt với tiêu đề <em>"Action Required: Confirm your form"</em>.
+                </p>
+                <p className="text-[11px]">
+                  2. Bạn chỉ cần mở thư đó và bấm nút <strong>"Activate Form"</strong> (chỉ làm 1 lần duy nhất).
+                </p>
+                <p className="text-[11px]">
+                  3. Kể từ đó, mọi đơn hàng mới khách đặt sẽ tự động gửi thẳng vào hòm thư Gmail của bạn mà không bị chặn.
+                </p>
+              </div>
+
+              {/* Nhật ký gửi email gần nhất */}
+              {emailLogs.length > 0 && (
+                <div className="pt-2 border-t border-border-herbal/60 space-y-1.5">
+                  <span className="text-[10px] font-bold text-outline uppercase tracking-wider block">
+                    Nhật ký thông báo gần nhất ({emailLogs.length} lần gửi):
+                  </span>
+                  <div className="max-h-32 overflow-y-auto space-y-1 divide-y divide-border-herbal/30 pr-1">
+                    {emailLogs.slice(0, 5).map((log, idx) => (
+                      <div key={idx} className="pt-1 flex items-center justify-between text-[11px]">
+                        <div>
+                          <span className="font-mono font-bold text-primary">#{log.order_code}</span>
+                          <span className="text-on-surface-variant mx-1">•</span>
+                          <span className="text-primary">{log.customer_name}</span>
+                          <span className="text-on-surface-variant text-[10px] block">
+                            {log.sent_at ? new Date(log.sent_at).toLocaleTimeString('vi-VN') : ''} ➔ {log.sent_to}
+                          </span>
+                        </div>
+                        <span className="px-1.5 py-0.2 bg-green-100 text-green-800 text-[10px] font-bold">
+                          ĐÃ GỬI
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -256,6 +414,122 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
               <span className="material-symbols-outlined text-base">save</span>
               <span>Lưu Cài Đặt Ngân Hàng, Gmail &amp; Phí Ship</span>
             </button>
+          </div>
+
+          {/* Card 4: An Ninh & Đổi Mật Khẩu Quản Trị Viên (Chuẩn 2026) */}
+          <div className="bg-white border border-border-herbal p-4 shadow-xs rounded-none space-y-3 mt-4">
+            <div className="border-b border-border-herbal pb-2 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary text-base">security</span>
+                <h3 className="font-serif text-sm font-bold text-primary uppercase tracking-wider">
+                  4. An Ninh &amp; Đổi Mật Khẩu Quản Trị Hệ Thống
+                </h3>
+              </div>
+              <span className="text-[10px] bg-red-100 text-red-800 font-bold px-1.5 py-0.2">
+                Bảo vệ nội bộ
+              </span>
+            </div>
+
+            <p className="text-xs text-on-surface-variant leading-relaxed">
+              Để bảo vệ tài khoản khỏi các đối tượng tấn công dò mật khẩu tự động (Brute-force/Bot), vui lòng đặt mật khẩu có độ dài tối thiểu từ <strong>8 ký tự</strong> trở lên.
+            </p>
+
+            {passwordStatus && (
+              <div
+                className={`p-2.5 text-xs font-medium border flex items-start gap-2 ${
+                  passwordStatus.success
+                    ? 'bg-green-50 text-green-900 border-green-200'
+                    : 'bg-red-50 text-red-900 border-red-200'
+                }`}
+              >
+                <span className="material-symbols-outlined text-sm mt-0.5 shrink-0">
+                  {passwordStatus.success ? 'check_circle' : 'gpp_bad'}
+                </span>
+                <span>{passwordStatus.message}</span>
+              </div>
+            )}
+
+            <div className="space-y-2.5 text-xs">
+              <div>
+                <label className="block text-[11px] font-bold text-primary uppercase tracking-wider mb-1">
+                  Mật khẩu hiện tại
+                </label>
+                <input
+                  type="password"
+                  value={passwordForm.currentPassword}
+                  onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
+                  placeholder="••••••••"
+                  className="w-full px-3 py-2 bg-[#faf8f3] border border-border-herbal rounded-none text-xs font-medium text-primary focus:outline-none focus:border-primary"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div>
+                  <label className="block text-[11px] font-bold text-primary uppercase tracking-wider mb-1">
+                    Mật khẩu mới (Tối thiểu 8 ký tự)
+                  </label>
+                  <input
+                    type="password"
+                    value={passwordForm.newPassword}
+                    onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
+                    placeholder="Tối thiểu 8 ký tự..."
+                    className="w-full px-3 py-2 bg-[#faf8f3] border border-border-herbal rounded-none text-xs font-medium text-primary focus:outline-none focus:border-primary"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-primary uppercase tracking-wider mb-1">
+                    Xác nhận mật khẩu mới
+                  </label>
+                  <input
+                    type="password"
+                    value={passwordForm.confirmPassword}
+                    onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
+                    placeholder="Nhập lại mật khẩu mới..."
+                    className="w-full px-3 py-2 bg-[#faf8f3] border border-border-herbal rounded-none text-xs font-medium text-primary focus:outline-none focus:border-primary"
+                  />
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setPasswordStatus(null);
+                  if (!passwordForm.currentPassword) {
+                    setPasswordStatus({ success: false, message: 'Vui lòng nhập mật khẩu hiện tại.' });
+                    return;
+                  }
+                  if (passwordForm.newPassword.length < 8) {
+                    setPasswordStatus({ success: false, message: 'Mật khẩu mới phải dài tối thiểu 8 ký tự.' });
+                    return;
+                  }
+                  if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+                    setPasswordStatus({ success: false, message: 'Mật khẩu mới và xác nhận mật khẩu không khớp.' });
+                    return;
+                  }
+
+                  requestConfirmation({
+                    title: 'Xác Nhận Đổi Mật Khẩu Quản Trị',
+                    subtitle: 'Bảo mật chuẩn an ninh 2026',
+                    message: 'Bạn có chắc chắn muốn cập nhật mật khẩu đăng nhập Quản Trị Viên mới không?',
+                    confirmText: 'Xác Nhận Đổi Mật Khẩu',
+                    variant: 'primary',
+                    icon: 'lock_reset',
+                    onConfirm: () => {
+                      const res = changePassword(passwordForm.currentPassword, passwordForm.newPassword);
+                      setPasswordStatus(res);
+                      if (res.success) {
+                        setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });
+                      }
+                    },
+                  });
+                }}
+                className="w-full py-2 bg-[#14261a] hover:bg-[#233f2c] text-[#cbb07c] font-bold text-xs uppercase tracking-wider rounded-none flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-xs mt-1"
+              >
+                <span className="material-symbols-outlined text-sm">lock_reset</span>
+                <span>Cập Nhật Mật Khẩu Bảo Mật Mới</span>
+              </button>
+            </div>
           </div>
         </div>
 

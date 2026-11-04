@@ -8,6 +8,7 @@ import { InvoiceDetailModal } from '@/features/admin/components/InvoiceDetailMod
 import { AuditSheetModal } from '@/features/admin/components/AuditSheetModal';
 import { AdminOverviewDashboard } from '@/features/admin/components/AdminOverviewDashboard';
 import { AdminSettingsTab } from '@/features/admin/components/AdminSettingsTab';
+import { AdminConfirmModal } from '@/features/admin/components/AdminConfirmModal';
 
 export const AdminDashboardPage = () => {
   const navigate = useNavigate();
@@ -52,6 +53,45 @@ export const AdminDashboardPage = () => {
   const [productToEdit, setProductToEdit] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [toastMessage, setToastMessage] = useState(null);
+  const [notifDropdownOpen, setNotifDropdownOpen] = useState(false);
+
+  // Dialog xác nhận mọi thao tác thay đổi dữ liệu trong Admin
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    title: '',
+    subtitle: '',
+    message: null,
+    confirmText: 'Xác Nhận Thay Đổi',
+    cancelText: 'Hủy Bỏ',
+    variant: 'primary',
+    icon: 'published_with_changes',
+    onConfirm: () => {},
+  });
+
+  const requestConfirmation = ({
+    title,
+    subtitle = 'Xác nhận thao tác quản trị',
+    message,
+    confirmText = 'Xác Nhận Thay Đổi',
+    cancelText = 'Hủy Bỏ',
+    variant = 'primary',
+    icon = 'published_with_changes',
+    onConfirm,
+  }) => {
+    setConfirmDialog({
+      isOpen: true,
+      title,
+      subtitle,
+      message,
+      confirmText,
+      cancelText,
+      variant,
+      icon,
+      onConfirm: () => {
+        if (onConfirm) onConfirm();
+      },
+    });
+  };
 
   // Checkbox selection state
   const [selectedLogCodes, setSelectedLogCodes] = useState([]);
@@ -95,8 +135,18 @@ export const AdminDashboardPage = () => {
   };
 
   const handleLogout = () => {
-    logout();
-    navigate('/');
+    requestConfirmation({
+      title: 'Xác Nhận Đăng Xuất Quản Trị',
+      subtitle: 'Kết Thúc Phiên Làm Việc',
+      icon: 'logout',
+      variant: 'warning',
+      confirmText: 'Đăng Xuất Ngay',
+      message: 'Bạn có chắc chắn muốn đăng xuất khỏi trang quản trị Tiệm Thảo Mộc Ngân Hà?',
+      onConfirm: () => {
+        logout();
+        navigate('/');
+      },
+    });
   };
 
   // 1. Quản lý Phiếu Kiểm Kho (Audit Logs)
@@ -177,8 +227,8 @@ export const AdminDashboardPage = () => {
     }
   };
 
-  // Xuất file CSV (Tương thích Excel với UTF-8 BOM tiếng Việt)
-  const handleExportCsv = () => {
+  // Thực hiện xuất file CSV sau khi đã xác nhận
+  const executeExportCsv = () => {
     let csvContent = '\uFEFF'; // UTF-8 BOM
     let fileName = 'xuat_du_lieu.csv';
 
@@ -213,22 +263,165 @@ export const AdminDashboardPage = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    showToast(`Đã xuất file thành công: ${fileName}`);
+    showToast(`✓ Đã xuất file thành công: ${fileName}`);
   };
 
-  // Cân bằng kho cho một phiếu tạm
+  // Xác nhận xuất file CSV
+  const handleExportCsv = () => {
+    const tabNames = {
+      audit: 'Phiếu Kiểm Kho',
+      products: 'Hàng Hóa & Tồn Kho',
+      orders: 'Hóa Đơn & Đơn Hàng',
+    };
+    const currentTabName = tabNames[activeTab] || 'Dữ Liệu';
+
+    requestConfirmation({
+      title: `Xác Nhận Xuất Dữ Liệu: ${currentTabName}`,
+      subtitle: 'Tải Báo Cáo Định Dạng CSV',
+      icon: 'download',
+      variant: 'info',
+      confirmText: 'Tải File Về Máy',
+      message: `Hệ thống sẽ kết xuất toàn bộ dữ liệu ${currentTabName} hiện tại ra tệp tin CSV (tương thích Microsoft Excel với font tiếng Việt chuẩn UTF-8). Bạn có muốn tải về ngay không?`,
+      onConfirm: () => {
+        executeExportCsv();
+      },
+    });
+  };
+
+  // Cân bằng kho cho một phiếu tạm với xác nhận
   const handleBalanceSheet = (code) => {
-    balanceAuditSheet(code);
-    showToast(`Đã cân bằng phiếu kiểm kho ${code} & cập nhật số lượng tồn kho`);
+    const targetLog = auditLogs.find((l) => l.code === code);
+    requestConfirmation({
+      title: `Xác Nhận Cân Bằng Phiếu Kiểm Kho: ${code}`,
+      subtitle: 'Đồng Bộ Số Lượng Tồn Kho Thực Tế',
+      icon: 'done_all',
+      variant: 'warning',
+      confirmText: 'Xác Nhận Cân Bằng Kho',
+      message: (
+        <div className="space-y-2 text-xs">
+          <p>
+            Bạn có chắc chắn muốn cân bằng kho theo phiếu kiểm kho <strong>{code}</strong>?
+          </p>
+          <div className="bg-amber-50 p-2.5 border border-amber-200 text-amber-900 space-y-1">
+            <div>• Ghi chú: <strong>{targetLog?.note || 'Kiểm kho định kỳ'}</strong></div>
+            <div>• Tổng chênh lệch: <strong>{targetLog?.total_diff > 0 ? `+${targetLog?.total_diff}` : targetLog?.total_diff} gói</strong></div>
+            <div>• Hệ thống sẽ tự động cập nhật số lượng tồn kho thực tế vào kho hàng chính.</div>
+          </div>
+        </div>
+      ),
+      onConfirm: () => {
+        balanceAuditSheet(code);
+        showToast(`✓ Đã cân bằng phiếu kiểm kho ${code} & cập nhật tồn kho thành công`);
+      },
+    });
   };
 
-  // Xóa phiếu kiểm kho
+  // Xóa phiếu kiểm kho với xác nhận
   const handleDeleteSheet = (code) => {
-    if (window.confirm(`Bạn có chắc muốn xóa phiếu kiểm kho ${code}?`)) {
-      deleteAuditSheet(code);
-      if (expandedLogCode === code) setExpandedLogCode(null);
-      showToast(`Đã xóa phiếu kiểm kho ${code}`);
+    requestConfirmation({
+      title: `Xác Nhận Xóa Phiếu Kiểm Kho: ${code}`,
+      subtitle: 'Xóa Bản Ghi Kiểm Kho',
+      icon: 'delete',
+      variant: 'danger',
+      confirmText: 'Xác Nhận Xóa Phiếu',
+      message: (
+        <div className="space-y-2 text-xs">
+          <p className="text-red-800 font-semibold">
+            CẢNH BÁO: Thao tác này không thể hoàn tác!
+          </p>
+          <p>
+            Bạn có chắc chắn muốn xóa vĩnh viễn phiếu kiểm kho <strong>{code}</strong> khỏi hệ thống?
+          </p>
+        </div>
+      ),
+      onConfirm: () => {
+        deleteAuditSheet(code);
+        if (expandedLogCode === code) setExpandedLogCode(null);
+        showToast(`✓ Đã xóa thành công phiếu kiểm kho ${code}`);
+      },
+    });
+  };
+
+  // Lưu sửa nhanh giá bán & tồn kho với xác nhận
+  const handleSaveQuickEdit = (p) => {
+    const newPriceNum = Number(inlinePrice);
+    const newStockNum = Number(inlineStock);
+
+    if (newPriceNum <= 0) {
+      showToast('⚠️ Giá bán phải lớn hơn 0 đ');
+      return;
     }
+    if (newStockNum < 0) {
+      showToast('⚠️ Số lượng tồn kho không được âm');
+      return;
+    }
+
+    requestConfirmation({
+      title: `Xác Nhận Cập Nhật Dược Liệu: ${p.name}`,
+      subtitle: 'Sửa Nhanh Giá Bán & Tồn Kho',
+      icon: 'published_with_changes',
+      variant: 'primary',
+      confirmText: 'Xác Nhận Lưu Thay Đổi',
+      message: (
+        <div className="space-y-2 text-xs">
+          <p>
+            Bạn có chắc chắn muốn thay đổi thông tin dược liệu <strong>#{p.id} - {p.name}</strong>?
+          </p>
+          <div className="bg-[#faf8f3] p-2.5 border border-[#ded7ca] space-y-1">
+            <div className="flex justify-between">
+              <span className="text-on-surface-variant">Giá bán lẻ:</span>
+              <span className="font-mono font-bold text-primary">
+                {formatCurrency(p.price)} ➔ <span className="text-tertiary">{formatCurrency(newPriceNum)}</span>
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-on-surface-variant">Tồn kho thực tế:</span>
+              <span className="font-mono font-bold text-primary">
+                {p.stock} gói ➔ <span className="text-emerald-700">{newStockNum} gói</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      ),
+      onConfirm: () => {
+        updateProduct(p.id, {
+          price: newPriceNum,
+          stock: newStockNum,
+        });
+        setEditingProdId(null);
+        showToast(`✓ Đã cập nhật dược liệu #${p.id} (${p.name}): ${formatCurrency(newPriceNum)} | ${newStockNum} gói`);
+      },
+    });
+  };
+
+  // Xóa dược liệu với xác nhận
+  const handleDeleteProduct = (p) => {
+    requestConfirmation({
+      title: `Xác Nhận Xóa Dược Liệu: ${p.name}`,
+      subtitle: 'Xóa Dược Liệu Khỏi Kho Hàng',
+      icon: 'delete_forever',
+      variant: 'danger',
+      confirmText: 'Xác Nhận Xóa Vĩnh Viễn',
+      message: (
+        <div className="space-y-2 text-xs">
+          <p className="text-red-800 font-semibold">
+            CẢNH BÁO: Thao tác này sẽ loại bỏ hoàn toàn dược liệu khỏi danh mục bán lẻ!
+          </p>
+          <p>
+            Bạn có chắc chắn muốn xóa dược liệu <strong>#{p.id} - {p.name}</strong>?
+          </p>
+          <div className="bg-red-50 p-2.5 border border-red-200 text-red-900 space-y-1">
+            <div>• Danh mục: <strong>{p.category_name}</strong></div>
+            <div>• Quy cách: <strong>{p.unit}</strong></div>
+            <div>• Tồn kho hiện có: <strong>{p.stock} gói</strong></div>
+          </div>
+        </div>
+      ),
+      onConfirm: () => {
+        deleteProduct(p.id);
+        showToast(`✓ Đã xóa hoàn tất dược liệu "${p.name}"`);
+      },
+    });
   };
 
   // In phiếu kiểm kho
@@ -349,6 +542,99 @@ export const AdminDashboardPage = () => {
 
           {/* Right User Actions & View Store button */}
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            {/* Chuông Thông Báo Đơn Hàng Mới */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setNotifDropdownOpen(!notifDropdownOpen)}
+                className="relative p-1.5 text-[#cbb07c] hover:bg-white/10 rounded-none transition-colors cursor-pointer flex items-center justify-center"
+                title="Thông báo đơn hàng mới"
+              >
+                <span className="material-symbols-outlined text-xl">notifications</span>
+                {orders.length > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-pulse">
+                    {orders.length}
+                  </span>
+                )}
+              </button>
+
+              {/* Dropdown Danh Sách Thông Báo Đơn Hàng */}
+              {notifDropdownOpen && (
+                <div
+                  className="absolute right-0 mt-2 w-80 sm:w-96 bg-white text-[#1c241e] border border-border-herbal shadow-2xl rounded-none z-50 animate-scaleUp overflow-hidden"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="bg-[#14261a] text-white px-3.5 py-2.5 flex items-center justify-between border-b border-[#28402f]">
+                    <div className="flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-[#cbb07c] text-base">notifications_active</span>
+                      <span className="font-serif font-bold text-xs uppercase tracking-wider text-[#cbb07c]">
+                        Thông Báo Đơn Hàng ({orders.length})
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setNotifDropdownOpen(false)}
+                      className="text-white/60 hover:text-white p-0.5 cursor-pointer"
+                    >
+                      <span className="material-symbols-outlined text-sm">close</span>
+                    </button>
+                  </div>
+
+                  <div className="max-h-72 overflow-y-auto divide-y divide-border-herbal/50">
+                    {orders.length === 0 ? (
+                      <div className="p-6 text-center text-xs text-on-surface-variant">
+                        <span className="material-symbols-outlined text-2xl text-outline mb-1 block">notifications_off</span>
+                        <span>Chưa có thông báo đơn hàng nào mới</span>
+                      </div>
+                    ) : (
+                      orders.slice(0, 10).map((o) => (
+                        <div
+                          key={o.order_code}
+                          onClick={() => {
+                            setSelectedOrder(o);
+                            setNotifDropdownOpen(false);
+                          }}
+                          className="p-3 hover:bg-[#faf8f3] cursor-pointer transition-colors flex items-start gap-2.5"
+                        >
+                          <div className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${o.payment_status === 'PAID' ? 'bg-green-600' : 'bg-amber-500'}`} />
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between gap-1">
+                              <span className="font-mono font-bold text-xs text-primary">#{o.order_code}</span>
+                              <span className="font-serif font-bold text-xs text-tertiary">{formatCurrency(o.total || 0)}</span>
+                            </div>
+                            <p className="text-xs text-primary font-medium truncate mt-0.5">{o.customer_name} • {o.customer_phone}</p>
+                            <div className="flex items-center justify-between mt-1 text-[10px]">
+                              <span className={o.payment_status === 'PAID' ? 'text-green-700 font-bold' : 'text-amber-700 font-bold'}>
+                                {o.payment_status === 'PAID' ? '✓ Đã thanh toán (VietQR)' : '• Chờ thanh toán'}
+                              </span>
+                              <span className="text-on-surface-variant">
+                                {o.created_at ? new Date(o.created_at).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) : 'Vừa xong'}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+
+                  {orders.length > 0 && (
+                    <div className="p-2 bg-[#f4f1ea] border-t border-border-herbal text-center">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveTab('orders');
+                          setNotifDropdownOpen(false);
+                        }}
+                        className="text-[11px] font-bold text-primary hover:text-secondary uppercase tracking-wider cursor-pointer"
+                      >
+                        Xem tất cả {orders.length} hóa đơn trong hệ thống →
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
             <Link
               to="/"
               className="px-2.5 sm:px-3 py-1 bg-[#20402b] hover:bg-[#2b5439] text-[#cbb07c] border border-[#cbb07c]/40 font-bold text-xs rounded-none transition-all flex items-center gap-1 shadow-xs"
@@ -400,9 +686,10 @@ export const AdminDashboardPage = () => {
         {activeTab === 'settings' && (
           <AdminSettingsTab
             settings={settings}
+            requestConfirmation={requestConfirmation}
             onSaveSettings={(newSettings) => {
               updateSettings(newSettings);
-              showToast('Đã lưu cấu hình tài khoản VietQR & phí ship thành công!');
+              showToast('✓ Đã lưu cấu hình tài khoản VietQR, Gmail & phí ship thành công!');
             }}
           />
         )}
@@ -1261,15 +1548,8 @@ export const AdminDashboardPage = () => {
                               <div className="flex items-center gap-2 pt-1">
                                 <button
                                   type="button"
-                                  onClick={() => {
-                                    updateProduct(p.id, {
-                                      price: Number(inlinePrice),
-                                      stock: Number(inlineStock),
-                                    });
-                                    setEditingProdId(null);
-                                    showToast(`Đã cập nhật dược liệu #${p.id}`);
-                                  }}
-                                  className="flex-1 py-1 bg-green-700 text-white font-bold text-xs rounded-none cursor-pointer"
+                                  onClick={() => handleSaveQuickEdit(p)}
+                                  className="flex-1 py-1 bg-green-700 hover:bg-green-800 text-white font-bold text-xs rounded-none cursor-pointer"
                                 >
                                   Lưu
                                 </button>
@@ -1315,6 +1595,14 @@ export const AdminDashboardPage = () => {
                                   title="Chi tiết"
                                 >
                                   <span className="material-symbols-outlined text-base">tune</span>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteProduct(p)}
+                                  className="p-1 text-red-600 hover:bg-red-50 rounded-none border border-red-200 cursor-pointer"
+                                  title="Xóa dược liệu"
+                                >
+                                  <span className="material-symbols-outlined text-base">delete</span>
                                 </button>
                               </div>
                             </div>
@@ -1406,23 +1694,16 @@ export const AdminDashboardPage = () => {
                                   <div className="flex items-center justify-end gap-1">
                                     <button
                                       type="button"
-                                      onClick={() => {
-                                        updateProduct(p.id, {
-                                          price: Number(inlinePrice),
-                                          stock: Number(inlineStock),
-                                        });
-                                        setEditingProdId(null);
-                                        showToast(`Đã cập nhật dược liệu #${p.id}`);
-                                      }}
-                                      className="p-1 bg-green-700 text-white rounded-none cursor-pointer"
-                                      title="Lưu"
+                                      onClick={() => handleSaveQuickEdit(p)}
+                                      className="p-1 bg-green-700 hover:bg-green-800 text-white rounded-none cursor-pointer"
+                                      title="Lưu thay đổi"
                                     >
                                       <span className="material-symbols-outlined text-sm">check</span>
                                     </button>
                                     <button
                                       type="button"
                                       onClick={() => setEditingProdId(null)}
-                                      className="p-1 bg-gray-200 rounded-none cursor-pointer"
+                                      className="p-1 bg-gray-200 hover:bg-gray-300 rounded-none cursor-pointer"
                                       title="Hủy"
                                     >
                                       <span className="material-symbols-outlined text-sm">close</span>
@@ -1454,14 +1735,9 @@ export const AdminDashboardPage = () => {
                                     </button>
                                     <button
                                       type="button"
-                                      onClick={() => {
-                                        if (window.confirm(`Xóa dược liệu "${p.name}"?`)) {
-                                          deleteProduct(p.id);
-                                          showToast(`Đã xóa "${p.name}"`);
-                                        }
-                                      }}
-                                      className="p-1 text-red-600 hover:bg-red-50 rounded-none border border-red-200"
-                                      title="Xóa"
+                                      onClick={() => handleDeleteProduct(p)}
+                                      className="p-1 text-red-600 hover:bg-red-50 rounded-none border border-red-200 cursor-pointer"
+                                      title="Xóa dược liệu"
                                     >
                                       <span className="material-symbols-outlined text-sm">delete</span>
                                     </button>
@@ -1592,34 +1868,41 @@ export const AdminDashboardPage = () => {
         isOpen={auditModalOpen}
         onClose={() => setAuditModalOpen(false)}
         products={products}
+        requestConfirmation={requestConfirmation}
         onSaveAudit={(newAuditLog) => {
           addAuditLog(newAuditLog);
           setExpandedLogCode(newAuditLog.code);
-          showToast(`Đã tạo thành công phiếu kiểm kho ${newAuditLog.code}`);
+          showToast(`✓ Đã tạo thành công phiếu kiểm kho ${newAuditLog.code}`);
         }}
       />
 
       {/* 2. Modal Thêm / Chỉnh Sửa Dược Liệu */}
       <ProductFormModal
         isOpen={productModalOpen}
-        onClose={() => setProductModalOpen(false)}
+        onClose={() => {
+          setProductModalOpen(false);
+          setProductToEdit(null);
+        }}
         productToEdit={productToEdit}
+        requestConfirmation={requestConfirmation}
         onSave={(data) => {
           if (productToEdit) {
             updateProduct(productToEdit.id, data);
-            showToast(`Đã cập nhật dược liệu "${data.name}"`);
+            showToast(`✓ Đã cập nhật thành công dược liệu "${data.name}"`);
           } else {
             addProduct(data);
-            showToast(`Đã thêm dược liệu mới "${data.name}"`);
+            showToast(`✓ Đã thêm mới thành công dược liệu "${data.name}"`);
           }
         }}
       />
 
-      {/* 3. Modal Xem Chi Tiết Hóa Đơn */}
+      {/* 3. Modal Xem Chi Tiết Hóa Đơn & Cập Nhật Trạng Thái */}
       <InvoiceDetailModal
         isOpen={!!selectedOrder}
         onClose={() => setSelectedOrder(null)}
         order={selectedOrder}
+        requestConfirmation={requestConfirmation}
+        showToast={showToast}
         onUpdateStatus={(code, orderStatus, paymentStatus) => {
           updateOrderStatus(code, orderStatus, paymentStatus);
           setSelectedOrder((prev) =>
@@ -1627,15 +1910,36 @@ export const AdminDashboardPage = () => {
               ? { ...prev, order_status: orderStatus, payment_status: paymentStatus }
               : prev
           );
-          showToast(`Đã cập nhật trạng thái đơn #${code}`);
         }}
       />
 
-      {/* 4. Toast Thông Báo */}
+      {/* 4. Modal Xác Nhận Mọi Thao Tác Thay Đổi Chuẩn 2026 ERP */}
+      <AdminConfirmModal
+        isOpen={confirmDialog.isOpen}
+        onClose={() => setConfirmDialog((prev) => ({ ...prev, isOpen: false }))}
+        onConfirm={confirmDialog.onConfirm}
+        title={confirmDialog.title}
+        subtitle={confirmDialog.subtitle}
+        message={confirmDialog.message}
+        confirmText={confirmDialog.confirmText}
+        cancelText={confirmDialog.cancelText}
+        variant={confirmDialog.variant}
+        icon={confirmDialog.icon}
+      />
+
+      {/* 5. Toast Thông Báo Phản Hồi Xác Nhận */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-[120] bg-[#14261a] text-[#cbb07c] px-4 py-3 rounded-none shadow-2xl border border-[#cbb07c]/40 flex items-center gap-2 animate-bounce text-xs font-bold">
-          <span className="material-symbols-outlined text-green-400 text-base">check_circle</span>
-          <span>{toastMessage}</span>
+        <div className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-[140] bg-[#14261a] text-[#cbb07c] px-4 py-3 rounded-none shadow-2xl border border-[#cbb07c]/60 flex items-center gap-2.5 text-xs font-bold animate-fadeIn">
+          <span className="material-symbols-outlined text-green-400 text-lg shrink-0">check_circle</span>
+          <span className="leading-tight">{toastMessage}</span>
+          <button
+            type="button"
+            onClick={() => setToastMessage(null)}
+            className="ml-2 text-white/50 hover:text-white p-0.5 rounded-none cursor-pointer"
+            title="Đóng thông báo"
+          >
+            <span className="material-symbols-outlined text-sm">close</span>
+          </button>
         </div>
       )}
     </div>
