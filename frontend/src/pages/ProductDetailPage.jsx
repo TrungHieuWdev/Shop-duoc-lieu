@@ -143,7 +143,7 @@ export const ProductDetailPage = () => {
   };
 
   return (
-    <div className="max-w-[1536px] mx-auto px-3.5 sm:px-8 lg:px-12 xl:px-16 py-6 sm:py-12">
+    <div className="w-full max-w-[1536px] mx-auto px-3.5 sm:px-8 lg:px-12 xl:px-16 py-6 sm:py-12">
       {/* Breadcrumb - cuộn ngang mượt mà trên điện thoại */}
       <nav className="flex items-center gap-2 text-xs text-on-surface-variant mb-6 sm:mb-8 overflow-x-auto whitespace-nowrap scrollbar-none py-1">
         <Link to="/" className="hover:text-primary shrink-0">Trang chủ</Link>
@@ -153,9 +153,9 @@ export const ProductDetailPage = () => {
         <span className="text-primary font-medium shrink-0">{product.name}</span>
       </nav>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10 lg:gap-12 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10 lg:gap-12 items-start w-full">
         {/* Hình ảnh sản phẩm */}
-        <div className="lg:col-span-6 bg-surface-container-lowest rounded-2xl p-2.5 sm:p-4 border border-border-herbal shadow-xs">
+        <div className="lg:col-span-6 w-full bg-surface-container-lowest rounded-2xl p-2.5 sm:p-4 border border-border-herbal shadow-xs">
           <div className="aspect-square rounded-xl overflow-hidden bg-surface-container">
             <img
               ref={imgRef}
@@ -167,7 +167,7 @@ export const ProductDetailPage = () => {
         </div>
 
         {/* Thông tin chi tiết & Mua hàng */}
-        <div className="lg:col-span-6 flex flex-col gap-4 sm:gap-6">
+        <div className="lg:col-span-6 w-full flex flex-col gap-4 sm:gap-6">
           <div>
             <span className="text-[10px] sm:text-xs font-semibold text-secondary uppercase tracking-widest block mb-1.5 sm:mb-2">
               {product.category_name}
@@ -180,11 +180,11 @@ export const ProductDetailPage = () => {
 
           {/* Giá tiền */}
           <div className="flex flex-wrap items-baseline gap-2.5 sm:gap-3 p-3.5 sm:p-4 bg-surface-container-low rounded-xl border border-border-herbal/70">
-            <span className="font-serif text-2xl sm:text-3xl font-bold text-primary">
+            <span className="font-serif text-2xl sm:text-3xl font-bold text-primary tabular-nums">
               {formatCurrency(product.price)}
             </span>
             {product.original_price && (
-              <span className="text-sm sm:text-base text-outline line-through">
+              <span className="text-sm sm:text-base text-outline line-through tabular-nums">
                 {formatCurrency(product.original_price)}
               </span>
             )}
@@ -200,16 +200,18 @@ export const ProductDetailPage = () => {
           {/* Chọn số lượng */}
           <div className="flex items-center gap-3 sm:gap-4">
             <span className="text-xs font-semibold text-primary">Số lượng:</span>
-            <div className="flex items-center border border-border-herbal rounded-lg bg-surface">
+            <div className="flex items-center border border-border-herbal rounded-lg bg-surface select-none">
               <button
+                type="button"
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                 className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-on-surface hover:bg-surface-container text-base cursor-pointer"
                 aria-label="Giảm số lượng"
               >
                 -
               </button>
-              <span className="w-10 text-center font-medium text-xs sm:text-sm">{quantity}</span>
+              <span className="w-12 text-center font-semibold text-xs sm:text-sm tabular-nums">{quantity}</span>
               <button
+                type="button"
                 onClick={() => setQuantity((q) => q + 1)}
                 className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-on-surface hover:bg-surface-container text-base cursor-pointer"
                 aria-label="Tăng số lượng"
@@ -222,15 +224,17 @@ export const ProductDetailPage = () => {
           {/* Nút thao tác (Dễ bấm bằng một tay trên điện thoại) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pt-1 sm:pt-2">
             <button
+              type="button"
               onClick={handleAddToCart}
-              className="py-3 sm:py-3.5 px-4 bg-surface-container-lowest border-2 border-primary text-primary hover:bg-surface-container font-semibold text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 transition-all shadow-xs active:scale-95 cursor-pointer"
+              className="py-3 sm:py-3.5 px-4 bg-surface-container-lowest border-2 border-primary text-primary hover:bg-surface-container font-semibold text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 transition-colors shadow-xs cursor-pointer"
             >
               <span className="material-symbols-outlined text-[1.125rem] sm:text-[1.25rem]">shopping_bag</span>
               <span>+ Thêm Vào Giỏ</span>
             </button>
             <button
+              type="button"
               onClick={handleBuyNow}
-              className="py-3 sm:py-3.5 px-4 bg-tertiary-container hover:bg-tertiary text-on-tertiary font-semibold text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 transition-all shadow-xs active:scale-95 cursor-pointer"
+              className="py-3 sm:py-3.5 px-4 bg-tertiary-container hover:bg-tertiary text-on-tertiary font-semibold text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 transition-colors shadow-xs cursor-pointer"
             >
               <span>Mua Ngay</span>
               <span className="material-symbols-outlined text-[1.125rem] sm:text-[1.25rem]">bolt</span>

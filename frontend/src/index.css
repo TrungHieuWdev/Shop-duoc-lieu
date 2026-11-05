@@ -8,6 +8,7 @@
     background-color: #fbf9f2;
     color: #1b1c18;
     overflow-x: hidden;
+    scrollbar-gutter: stable;
   }
 
   body {

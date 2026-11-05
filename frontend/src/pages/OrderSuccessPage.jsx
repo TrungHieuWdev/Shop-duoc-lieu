@@ -19,16 +19,7 @@ export const OrderSuccessPage = () => {
   const displayOrder = order || fallbackOrder;
   const adminEmail = settings?.admin_email || 'tiemthaomocnganha@gmail.com';
 
-  // Tự động gửi thông báo đơn hàng trực tiếp về email chủ tiệm đã thiết lập
-  useEffect(() => {
-    if (orderCode && displayOrder) {
-      const dispatchedKey = `nganha_order_email_dispatched_${orderCode}`;
-      if (!sessionStorage.getItem(dispatchedKey)) {
-        sessionStorage.setItem(dispatchedKey, 'true');
-        sendAutomaticOrderEmail(displayOrder, adminEmail);
-      }
-    }
-  }, [orderCode, displayOrder, adminEmail]);
+  // Đơn hàng đã được tự động thông báo qua Google SMTP tại bước Đặt hàng (CheckoutPage)
 
   useEffect(() => {
     let isMounted = true;
@@ -61,7 +52,7 @@ export const OrderSuccessPage = () => {
 
   if (loading) {
     return (
-      <div className="max-w-2xl mx-auto px-6 py-24 text-center">
+      <div className="w-full max-w-2xl mx-auto px-6 py-24 text-center">
         <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
         <p className="text-body-sm text-on-surface-variant font-medium">Đang tải thông tin đơn hàng...</p>
       </div>
@@ -72,7 +63,7 @@ export const OrderSuccessPage = () => {
   const totalAmount = displayOrder?.total ?? displayOrder?.total_amount ?? 0;
 
   return (
-    <div className="max-w-3xl mx-auto px-3.5 sm:px-6 lg:px-12 py-8 sm:py-16">
+    <div className="w-full max-w-3xl mx-auto px-3.5 sm:px-6 lg:px-12 py-8 sm:py-16">
       <div className="bg-surface-container-lowest rounded-2xl p-5 sm:p-8 lg:p-12 border border-border-herbal shadow-xs text-center">
         {/* Success Icon */}
         <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-secondary-container text-on-secondary-container mx-auto flex items-center justify-center mb-4 sm:mb-6 shadow-xs">

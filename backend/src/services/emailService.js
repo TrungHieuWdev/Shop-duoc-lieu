@@ -217,14 +217,39 @@ export const buildOrderHtmlTemplate = (order) => {
   `;
 };
 
+// Bộ nhớ đệm chống gửi trùng lặp email cho cùng 1 đơn hàng (TTL: 30 phút)
+const sentOrdersDeduplicationCache = new Map();
+
 /**
  * Gửi email thông báo đơn hàng qua Google SMTP
  */
 export const sendOrderEmailViaGoogleSmtp = async ({ order, recipientEmail, subject, textBody }) => {
+  const orderCode = order?.order_code;
+
+  // 1. Kiểm tra chống gửi trùng lặp (Deduplication Guard)
+  if (orderCode) {
+    const lastSentTime = sentOrdersDeduplicationCache.get(orderCode);
+    const now = Date.now();
+    if (lastSentTime && now - lastSentTime < 1000 * 60 * 30) {
+      console.log(
+        `[GOOGLE SMTP DEDUP] Đơn hàng #${orderCode} đã được gửi email trước đó (${Math.round((now - lastSentTime) / 1000)}s trước). Tự động chặn để không gửi lặp!`
+      );
+      return {
+        success: true,
+        configured: true,
+        deduplicated: true,
+        message: `Đơn hàng #${orderCode} đã được gửi thông báo trước đó.`,
+      };
+    }
+  }
+
   const transporter = getGoogleTransporter();
 
-  const targetEmail =
-    recipientEmail || process.env.STORE_OWNER_EMAIL || process.env.SMTP_USER || 'tiemthaomocnganha@gmail.com';
+  // Luôn ưu tiên hòm thư thực tế của chủ shop trong .env, bỏ qua email mẫu 'tiemthaomocnganha@gmail.com'
+  const isDummyEmail = !recipientEmail || recipientEmail === 'tiemthaomocnganha@gmail.com';
+  const targetEmail = !isDummyEmail
+    ? recipientEmail
+    : (process.env.STORE_OWNER_EMAIL || process.env.SMTP_USER || 'tiemthaomocnganha@gmail.com');
 
   const safeSubject = String(
     subject || `[ĐƠN HÀNG MỚI #${order?.order_code || ''}] Tiếp nhận đơn hàng mới`
@@ -251,6 +276,7 @@ export const sendOrderEmailViaGoogleSmtp = async ({ order, recipientEmail, subje
   const mailOptions = {
     from: `"Tiệm Thảo Mộc Ngân Hà" <${fromEmail}>`,
     to: targetEmail,
+    replyTo: order?.customer_email || fromEmail,
     subject: safeSubject,
     text: textBody || 'Thông báo đơn hàng mới từ Tiệm Thảo Mộc Ngân Hà',
     html: htmlContent,
@@ -258,6 +284,11 @@ export const sendOrderEmailViaGoogleSmtp = async ({ order, recipientEmail, subje
 
   const info = await transporter.sendMail(mailOptions);
   console.log(`[GOOGLE SMTP SUCCESS] Đã gửi thành công thư tới ${targetEmail}. MessageId: ${info.messageId}`);
+
+  // Đánh dấu đơn hàng đã gửi thành công vào cache chống trùng
+  if (orderCode) {
+    sentOrdersDeduplicationCache.set(orderCode, Date.now());
+  }
 
   return {
     success: true,

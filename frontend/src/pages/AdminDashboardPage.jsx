@@ -1528,10 +1528,15 @@ export const AdminDashboardPage = () => {
                                   <label className="block text-[10px] font-bold text-primary">Giá bán lẻ (đ):</label>
                                   <input
                                     type="number"
-                                    step="1000"
+                                    min="0"
+                                    step="any"
+                                    placeholder="VD: 50000"
                                     value={inlinePrice}
-                                    onChange={(e) => setInlinePrice(e.target.value)}
-                                    className="w-full px-2 py-1 bg-white border border-primary rounded-none font-bold"
+                                    onChange={(e) => {
+                                      const val = e.target.value;
+                                      setInlinePrice(val === '' ? '' : val.replace(/^0+(?=\d)/, ''));
+                                    }}
+                                    className="w-full px-2 py-1 bg-white border border-primary rounded-lg font-bold tabular-nums"
                                   />
                                 </div>
                                 <div>
@@ -1539,9 +1544,14 @@ export const AdminDashboardPage = () => {
                                   <input
                                     type="number"
                                     min="0"
+                                    step="1"
+                                    placeholder="0"
                                     value={inlineStock}
-                                    onChange={(e) => setInlineStock(e.target.value)}
-                                    className="w-full px-2 py-1 bg-white border border-primary rounded-none font-bold"
+                                    onChange={(e) => {
+                                      const val = e.target.value;
+                                      setInlineStock(val === '' ? '' : val.replace(/^0+(?=\d)/, ''));
+                                    }}
+                                    className="w-full px-2 py-1 bg-white border border-primary rounded-lg font-bold tabular-nums"
                                   />
                                 </div>
                               </div>
@@ -1650,13 +1660,18 @@ export const AdminDashboardPage = () => {
                                 {isEditing ? (
                                   <input
                                     type="number"
-                                    step="1000"
+                                    min="0"
+                                    step="any"
+                                    placeholder="VD: 50000"
                                     value={inlinePrice}
-                                    onChange={(e) => setInlinePrice(e.target.value)}
-                                    className="w-24 px-2 py-1 bg-surface border-2 border-primary rounded-none font-bold text-xs"
+                                    onChange={(e) => {
+                                      const val = e.target.value;
+                                      setInlinePrice(val === '' ? '' : val.replace(/^0+(?=\d)/, ''));
+                                    }}
+                                    className="w-24 px-2 py-1 bg-surface border-2 border-primary rounded-lg font-bold text-xs tabular-nums"
                                   />
                                 ) : (
-                                  <span className="font-serif font-bold text-primary text-sm">
+                                  <span className="font-serif font-bold text-primary text-sm tabular-nums">
                                     {formatCurrency(p.price)}
                                   </span>
                                 )}
@@ -1666,12 +1681,17 @@ export const AdminDashboardPage = () => {
                                   <input
                                     type="number"
                                     min="0"
+                                    step="1"
+                                    placeholder="0"
                                     value={inlineStock}
-                                    onChange={(e) => setInlineStock(e.target.value)}
-                                    className="w-20 px-2 py-1 bg-surface border-2 border-primary rounded-none font-bold text-xs"
+                                    onChange={(e) => {
+                                      const val = e.target.value;
+                                      setInlineStock(val === '' ? '' : val.replace(/^0+(?=\d)/, ''));
+                                    }}
+                                    className="w-20 px-2 py-1 bg-surface border-2 border-primary rounded-lg font-bold text-xs tabular-nums"
                                   />
                                 ) : (
-                                  <span className="font-semibold text-primary">
+                                  <span className="font-semibold text-primary tabular-nums">
                                     {p.stock} <span className="text-[10px] text-outline font-normal">gói</span>
                                   </span>
                                 )}

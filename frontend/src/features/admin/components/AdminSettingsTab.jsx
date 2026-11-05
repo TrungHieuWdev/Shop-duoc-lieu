@@ -17,7 +17,10 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
     bank_name: settings?.bank_name || 'MBBank (Quân Đội)',
     bank_account: settings?.bank_account || '0983124567',
     account_name: settings?.account_name || 'TIỆM THẢO MỘC NGÂN HÀ',
-    admin_email: settings?.admin_email || 'tiemthaomocnganha@gmail.com',
+    admin_email:
+      (settings?.admin_email && settings?.admin_email !== 'tiemthaomocnganha@gmail.com')
+        ? settings.admin_email
+        : 'hieunedz@gmail.com',
     default_shipping_fee: settings?.default_shipping_fee || 30000,
     free_shipping_threshold: settings?.free_shipping_threshold || 350000,
   });
@@ -93,17 +96,34 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
     }));
   };
 
+  const handleNumericFieldChange = (field, rawVal) => {
+    if (rawVal === '') {
+      setFormData((prev) => ({ ...prev, [field]: '' }));
+      return;
+    }
+    const cleaned = rawVal.replace(/^0+(?=\d)/, '');
+    const parsed = Number(cleaned);
+    if (!Number.isNaN(parsed)) {
+      setFormData((prev) => ({ ...prev, [field]: parsed }));
+    }
+  };
+
   // Tạo URL VietQR sống động để xem trước và quét thử
   const liveQrUrl = getVietQrUrl({
     bankId: formData.bank_id,
     bankAccount: formData.bank_account,
     accountName: formData.account_name,
-    amount: testAmount,
+    amount: Number(testAmount) || 0,
     orderCode: 'TEST_QUET_MA',
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const normalizedSettings = {
+      ...formData,
+      default_shipping_fee: Number(formData.default_shipping_fee) || 0,
+      free_shipping_threshold: Number(formData.free_shipping_threshold) || 0,
+    };
     if (requestConfirmation) {
       requestConfirmation({
         title: 'Xác Nhận Lưu Cài Đặt Hệ Thống',
@@ -117,22 +137,24 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
               Bạn có chắc chắn muốn lưu và áp dụng toàn bộ cấu hình mới cho hệ thống?
             </p>
             <div className="bg-[#faf8f3] p-2.5 border border-[#ded7ca] space-y-1">
-              <div>• Ngân hàng thụ hưởng: <strong>{formData.bank_name}</strong></div>
-              <div>• Số tài khoản: <strong className="font-mono">{formData.bank_account}</strong> ({formData.account_name})</div>
-              <div>• Gmail nhận đơn để đi đơn: <strong className="text-secondary">{formData.admin_email}</strong></div>
-              <div>• Phí ship mặc định: <strong>{formatCurrency(formData.default_shipping_fee)}</strong></div>
-              <div>• Ngưỡng Freeship: <strong>{formatCurrency(formData.free_shipping_threshold)}</strong></div>
+              <div>• Ngân hàng thụ hưởng: <strong>{normalizedSettings.bank_name}</strong></div>
+              <div>• Số tài khoản: <strong className="font-mono">{normalizedSettings.bank_account}</strong> ({normalizedSettings.account_name})</div>
+              <div>• Gmail nhận đơn để đi đơn: <strong className="text-secondary">{normalizedSettings.admin_email}</strong></div>
+              <div>• Phí ship mặc định: <strong>{formatCurrency(normalizedSettings.default_shipping_fee)}</strong></div>
+              <div>• Ngưỡng Freeship: <strong>{formatCurrency(normalizedSettings.free_shipping_threshold)}</strong></div>
             </div>
           </div>
         ),
         onConfirm: () => {
-          onSaveSettings(formData);
+          onSaveSettings(normalizedSettings);
+          setFormData(normalizedSettings);
           setIsSaved(true);
           setTimeout(() => setIsSaved(false), 3000);
         },
       });
     } else {
-      onSaveSettings(formData);
+      onSaveSettings(normalizedSettings);
+      setFormData(normalizedSettings);
       setIsSaved(true);
       setTimeout(() => setIsSaved(false), 3000);
     }
@@ -388,14 +410,15 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
                 <input
                   type="number"
                   min="0"
-                  step="1000"
+                  step="any"
                   required
+                  placeholder="VD: 30000"
                   value={formData.default_shipping_fee}
-                  onChange={(e) => setFormData({ ...formData, default_shipping_fee: Number(e.target.value) })}
-                  className="w-full px-3 py-2 bg-[#faf8f3] border border-border-herbal rounded-xl text-xs font-bold text-primary focus:outline-none focus:border-primary"
+                  onChange={(e) => handleNumericFieldChange('default_shipping_fee', e.target.value)}
+                  className="w-full px-3 py-2 bg-[#faf8f3] border border-border-herbal rounded-xl text-xs font-bold text-primary tabular-nums focus:outline-none focus:border-primary"
                 />
-                <span className="text-[10px] text-on-surface-variant mt-0.5 block">
-                  Hiện hành: {formatCurrency(formData.default_shipping_fee)}
+                <span className="text-[10px] text-on-surface-variant mt-0.5 block tabular-nums">
+                  Hiện hành: {formatCurrency(Number(formData.default_shipping_fee) || 0)}
                 </span>
               </div>
 
@@ -406,14 +429,15 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
                 <input
                   type="number"
                   min="0"
-                  step="10000"
+                  step="any"
                   required
+                  placeholder="VD: 350000"
                   value={formData.free_shipping_threshold}
-                  onChange={(e) => setFormData({ ...formData, free_shipping_threshold: Number(e.target.value) })}
-                  className="w-full px-3 py-2 bg-[#faf8f3] border border-border-herbal rounded-xl text-xs font-bold text-primary focus:outline-none focus:border-primary"
+                  onChange={(e) => handleNumericFieldChange('free_shipping_threshold', e.target.value)}
+                  className="w-full px-3 py-2 bg-[#faf8f3] border border-border-herbal rounded-xl text-xs font-bold text-primary tabular-nums focus:outline-none focus:border-primary"
                 />
-                <span className="text-[10px] text-on-surface-variant mt-0.5 block">
-                  Đơn từ {formatCurrency(formData.free_shipping_threshold)} được Freeship
+                <span className="text-[10px] text-on-surface-variant mt-0.5 block tabular-nums">
+                  Đơn từ {formatCurrency(Number(formData.free_shipping_threshold) || 0)} được Freeship
                 </span>
               </div>
             </div>
@@ -596,10 +620,20 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
                 <span className="text-on-surface-variant">Số tiền quét thử:</span>
                 <input
                   type="number"
-                  step="10000"
+                  min="0"
+                  step="any"
+                  placeholder="50000"
                   value={testAmount}
-                  onChange={(e) => setTestAmount(Number(e.target.value))}
-                  className="w-24 px-2 py-0.5 bg-white border border-border-herbal rounded-none font-bold text-right text-xs"
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val === '') {
+                      setTestAmount('');
+                    } else {
+                      const parsed = Number(val.replace(/^0+(?=\d)/, ''));
+                      if (!Number.isNaN(parsed)) setTestAmount(parsed);
+                    }
+                  }}
+                  className="w-24 px-2 py-0.5 bg-white border border-border-herbal rounded-lg font-bold text-right text-xs tabular-nums"
                 />
               </div>
             </div>

@@ -16,8 +16,8 @@ export const MainLayout = () => {
   return (
     <div className="min-h-screen flex flex-col bg-surface text-on-surface">
       <Header />
-      <main className="flex-1 pt-16 md:pt-20 min-h-[calc(100vh-12rem)] flex flex-col">
-        <div key={location.pathname} className="flex-1 flex flex-col">
+      <main className="flex-1 w-full pt-16 md:pt-20 min-h-[calc(100vh-12rem)] flex flex-col">
+        <div key={location.pathname} className="flex-1 w-full">
           <Suspense fallback={<SubPageFallback />}>
             <Outlet />
           </Suspense>

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 export const UsageGuidePage = () => {
   return (
-    <div className="max-w-[1536px] mx-auto px-3.5 sm:px-8 lg:px-12 xl:px-16 py-6 sm:py-12">
+    <div className="w-full max-w-[1536px] mx-auto px-3.5 sm:px-8 lg:px-12 xl:px-16 py-6 sm:py-12">
       {/* 1. HERO BANNER TRANG CÁCH DÙNG (B-ECO EDITORIAL STYLE) */}
       <section className="mb-8 sm:mb-16 overflow-hidden rounded-2xl border border-border-herbal/70 bg-surface-container-low shadow-sm">
         <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] items-stretch">

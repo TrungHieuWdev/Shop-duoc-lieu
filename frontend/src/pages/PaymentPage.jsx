@@ -107,7 +107,7 @@ export const PaymentPage = () => {
 
   if (loading) {
     return (
-      <div className="max-w-2xl mx-auto px-6 py-24 text-center">
+      <div className="w-full max-w-2xl mx-auto px-6 py-24 text-center">
         <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
         <p className="text-body-sm text-on-surface-variant font-medium">
           Đang khởi tạo mã thanh toán VietQR an toàn...
@@ -117,7 +117,7 @@ export const PaymentPage = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-3.5 sm:px-6 lg:px-12 py-6 sm:py-12">
+    <div className="w-full max-w-4xl mx-auto px-3.5 sm:px-6 lg:px-12 py-6 sm:py-12">
       <div className="text-center mb-6 sm:mb-10">
         <span className="text-[0.625rem] sm:text-[0.6875rem] font-semibold text-secondary uppercase tracking-widest block mb-1.5 sm:mb-2">
           Thanh Toán Đơn Hàng #{orderCode}
@@ -147,11 +147,6 @@ export const PaymentPage = () => {
             type="button"
             onClick={() => {
               updateOrderStatus(orderCode, 'CONFIRMED', 'PAID');
-              const targetOrder = matchedOrder || { order_code: orderCode, total: finalAmount };
-              notifyAdminNewOrder(
-                { ...targetOrder, payment_status: 'PAID', status: 'CONFIRMED' },
-                settings?.admin_email
-              );
               clearCart();
               navigate(`/dat-hang-thanh-cong/${orderCode}?token=${token || 'success'}`);
             }}

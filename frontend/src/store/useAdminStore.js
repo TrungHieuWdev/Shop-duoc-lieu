@@ -169,7 +169,7 @@ const DEFAULT_SETTINGS = {
   bank_name: 'MBBank (Quân Đội)',
   bank_account: '0983124567', // Số tài khoản ngân hàng
   account_name: 'TIỆM THẢO MỘC NGÂN HÀ', // Tên chủ tài khoản
-  admin_email: 'tiemthaomocnganha@gmail.com', // Gmail chủ tiệm để nhận thông tin đơn hàng đi đơn
+  admin_email: 'hieunedz@gmail.com', // Gmail chủ tiệm để nhận thông tin đơn hàng đi đơn
   default_shipping_fee: 30000, // Phí ship mặc định
   free_shipping_threshold: 350000, // Ngưỡng miễn phí ship
 };
@@ -179,7 +179,12 @@ const getSavedSettings = () => {
     const raw = localStorage.getItem('nganha_shop_settings');
     if (!raw) return DEFAULT_SETTINGS;
     const parsed = JSON.parse(raw);
-    return { ...DEFAULT_SETTINGS, ...parsed };
+    const merged = { ...DEFAULT_SETTINGS, ...parsed };
+    // Tự động nâng cấp nếu đang lưu email mẫu cũ
+    if (!merged.admin_email || merged.admin_email === 'tiemthaomocnganha@gmail.com') {
+      merged.admin_email = 'hieunedz@gmail.com';
+    }
+    return merged;
   } catch (e) {
     return DEFAULT_SETTINGS;
   }

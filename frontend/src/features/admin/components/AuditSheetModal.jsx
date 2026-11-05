@@ -29,7 +29,23 @@ export const AuditSheetModal = ({ isOpen, onClose, products, onSaveAudit, reques
   if (!isOpen) return null;
 
   const handleActualChange = (productId, val) => {
-    const num = val === '' ? 0 : Math.max(0, parseInt(val, 10) || 0);
+    if (val === '') {
+      setItems((prev) =>
+        prev.map((item) => {
+          if (item.product_id === productId) {
+            return {
+              ...item,
+              actual_stock: '',
+              diff: 0 - item.system_stock,
+            };
+          }
+          return item;
+        })
+      );
+      return;
+    }
+    const cleaned = val.replace(/^0+(?=\d)/, '');
+    const num = Math.max(0, parseInt(cleaned, 10) || 0);
     setItems((prev) =>
       prev.map((item) => {
         if (item.product_id === productId) {
@@ -44,7 +60,7 @@ export const AuditSheetModal = ({ isOpen, onClose, products, onSaveAudit, reques
     );
   };
 
-  const totalActual = items.reduce((sum, item) => sum + item.actual_stock, 0);
+  const totalActual = items.reduce((sum, item) => sum + (Number(item.actual_stock) || 0), 0);
   const totalIncrease = items.reduce((sum, item) => sum + (item.diff > 0 ? item.diff : 0), 0);
   const totalDecrease = items.reduce((sum, item) => sum + (item.diff < 0 ? Math.abs(item.diff) : 0), 0);
   const totalDiff = totalIncrease - totalDecrease;
@@ -55,6 +71,14 @@ export const AuditSheetModal = ({ isOpen, onClose, products, onSaveAudit, reques
     const code = `KK${String(Date.now()).slice(-6)}`;
     const nowIso = new Date().toISOString();
     const isBalanced = saveMode === 'balanced';
+    const normalizedItems = items.map((it) => {
+      const actualNum = Number(it.actual_stock) || 0;
+      return {
+        ...it,
+        actual_stock: actualNum,
+        diff: actualNum - it.system_stock,
+      };
+    });
 
     const auditData = {
       code,
@@ -68,7 +92,7 @@ export const AuditSheetModal = ({ isOpen, onClose, products, onSaveAudit, reques
       total_increase: totalIncrease,
       total_decrease: totalDecrease,
       note: note.trim() || 'Kiểm kho định kỳ Tiệm Thảo Mộc Ngân Hà',
-      items,
+      items: normalizedItems,
     };
 
     if (requestConfirmation) {

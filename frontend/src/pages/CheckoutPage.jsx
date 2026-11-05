@@ -34,7 +34,7 @@ export const CheckoutPage = () => {
 
   if (items.length === 0) {
     return (
-      <div className="max-w-2xl mx-auto px-6 py-20 text-center">
+      <div className="w-full max-w-2xl mx-auto px-6 py-20 text-center">
         <h2 className="font-serif text-2xl font-bold text-primary mb-4">
           Bạn chưa có sản phẩm nào để đặt hàng
         </h2>
@@ -162,19 +162,19 @@ export const CheckoutPage = () => {
   };
 
   return (
-    <div className="max-w-[1536px] mx-auto px-3.5 sm:px-8 lg:px-12 xl:px-16 py-6 sm:py-12">
+    <div className="w-full max-w-[1536px] mx-auto px-3.5 sm:px-8 lg:px-12 xl:px-16 py-6 sm:py-12">
       <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-primary mb-6 sm:mb-8">
         Thông Tin Nhận Hàng &amp; Thanh Toán
       </h1>
 
       {errorMessage && (
-        <div className="mb-6 p-3.5 sm:p-4 rounded-none bg-red-50 border border-red-300 text-red-900 text-xs sm:text-body-sm flex items-center gap-2.5">
+        <div className="mb-6 p-3.5 sm:p-4 rounded-xl bg-red-50 border border-red-300 text-red-900 text-xs sm:text-body-sm flex items-center gap-2.5">
           <span className="material-symbols-outlined text-[1.25rem] text-red-600 shrink-0">gpp_bad</span>
           <span className="font-medium">{errorMessage}</span>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start w-full">
         {/* Bẫy Honeypot ẩn dành cho bot tự động (Người thật không nhìn thấy) */}
         <div style={{ display: 'none' }} aria-hidden="true">
           <input

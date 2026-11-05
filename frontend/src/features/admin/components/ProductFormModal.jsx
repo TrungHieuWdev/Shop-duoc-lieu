@@ -56,25 +56,44 @@ export const ProductFormModal = ({ isOpen, onClose, productToEdit, onSave, reque
 
   if (!isOpen) return null;
 
+  const handleNumberChange = (field, rawVal) => {
+    if (rawVal === '') {
+      setFormData((prev) => ({ ...prev, [field]: '' }));
+      return;
+    }
+    const cleaned = rawVal.replace(/^0+(?=\d)/, '');
+    const parsed = Number(cleaned);
+    if (!Number.isNaN(parsed)) {
+      setFormData((prev) => ({ ...prev, [field]: parsed }));
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrorMsg('');
+
+    const numericPrice = Number(formData.price) || 0;
+    const numericOriginalPrice = Number(formData.original_price) || 0;
+    const numericStock = formData.stock === '' ? 0 : Number(formData.stock);
 
     if (!formData.name.trim()) {
       setErrorMsg('Vui lòng nhập tên dược liệu');
       return;
     }
-    if (formData.price <= 0) {
+    if (numericPrice <= 0) {
       setErrorMsg('Giá bán phải lớn hơn 0');
       return;
     }
-    if (formData.stock < 0) {
+    if (numericStock < 0 || Number.isNaN(numericStock)) {
       setErrorMsg('Số lượng tồn kho không được âm');
       return;
     }
 
     const payload = {
       ...formData,
+      price: numericPrice,
+      original_price: numericOriginalPrice,
+      stock: numericStock,
       thumbnail_url: customImageUrl.trim() || formData.thumbnail_url,
     };
 
@@ -210,12 +229,13 @@ export const ProductFormModal = ({ isOpen, onClose, productToEdit, onSave, reque
               </label>
               <input
                 type="number"
-                min="1000"
-                step="1000"
+                min="0"
+                step="any"
                 required
+                placeholder="VD: 50000"
                 value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
-                className="w-full px-2.5 py-1.5 bg-surface-container-low border border-border-herbal rounded-none text-xs font-bold text-primary focus:outline-none focus:border-primary transition-colors"
+                onChange={(e) => handleNumberChange('price', e.target.value)}
+                className="w-full px-2.5 py-1.5 bg-surface-container-low border border-border-herbal rounded-lg text-xs font-bold text-primary tabular-nums focus:outline-none focus:border-primary transition-colors"
               />
             </div>
 
@@ -226,10 +246,11 @@ export const ProductFormModal = ({ isOpen, onClose, productToEdit, onSave, reque
               <input
                 type="number"
                 min="0"
-                step="1000"
+                step="any"
+                placeholder="VD: 65000"
                 value={formData.original_price}
-                onChange={(e) => setFormData({ ...formData, original_price: Number(e.target.value) })}
-                className="w-full px-2.5 py-1.5 bg-surface-container-low border border-border-herbal rounded-none text-xs text-on-surface focus:outline-none focus:border-primary transition-colors"
+                onChange={(e) => handleNumberChange('original_price', e.target.value)}
+                className="w-full px-2.5 py-1.5 bg-surface-container-low border border-border-herbal rounded-lg text-xs text-on-surface tabular-nums focus:outline-none focus:border-primary transition-colors"
               />
             </div>
 
@@ -240,10 +261,12 @@ export const ProductFormModal = ({ isOpen, onClose, productToEdit, onSave, reque
               <input
                 type="number"
                 min="0"
+                step="1"
                 required
+                placeholder="0"
                 value={formData.stock}
-                onChange={(e) => setFormData({ ...formData, stock: Number(e.target.value) })}
-                className="w-full px-2.5 py-1.5 bg-surface-container-low border border-border-herbal rounded-none text-xs font-bold text-primary focus:outline-none focus:border-primary transition-colors"
+                onChange={(e) => handleNumberChange('stock', e.target.value)}
+                className="w-full px-2.5 py-1.5 bg-surface-container-low border border-border-herbal rounded-lg text-xs font-bold text-primary tabular-nums focus:outline-none focus:border-primary transition-colors"
               />
             </div>
           </div>
