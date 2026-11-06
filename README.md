@@ -1,7 +1,8 @@
 # Ngân Hà Shop (`NganHashop`)
 
 Hệ thống thương mại điện tử bán lẻ thảo dược bản địa phơi khô (bài thuốc xông tắm 7 vị & dược liệu lẻ). Kiến trúc tách biệt Frontend SPA và Backend REST API, tích hợp thanh toán chuyển khoản VietQR (SePay Webhook) và thông báo đơn hàng qua SMTP.
-
+# Demo
+https://nganhashop.pages.dev/
 ---
 
 ## Tech Stack
@@ -124,7 +125,6 @@ npm run preview
 - Hỗ trợ hiển thị trực tiếp trong hộp thư đến kể cả khi `SMTP_USER` và `STORE_OWNER_EMAIL` dùng chung một tài khoản Gmail.
 
 ### 3. Quản trị nội bộ (`/admin`)
-- Đường dẫn đăng nhập: `/admin/login` (tài khoản mặc định local: `admin@nganha.vn` / `admin123`, có thể đổi mật khẩu trong phần Cài đặt).
 - Chức năng:
   - Quản lý danh mục dược liệu, giá bán, quy cách đóng gói.
   - Tạo phiếu kiểm kho (`KK...`), cân bằng tồn kho tự động và theo dõi lịch sử chênh lệch.
