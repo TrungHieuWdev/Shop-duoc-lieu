@@ -100,7 +100,7 @@ export const UsageGuidePage = () => {
                 Thêm nước vào nồi
               </h4>
               <p className="text-xs text-on-surface-variant leading-relaxed">
-                Cho vào nồi cùng khoảng 3–5 lít nước để ngập đều toàn bộ thảo mộc.
+                Cho vào nồi cùng khoảng 10-15 lít nước cho 1 gói và để ngập đều toàn bộ thảo mộc.
               </p>
             </div>
 

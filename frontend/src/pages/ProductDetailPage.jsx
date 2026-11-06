@@ -15,7 +15,7 @@ const MOCK_DETAILS = {
     summary: 'Bài thuốc xông tắm dân gian tổng hợp đủ 7 vị thảo dược phơi khô: Đinh lăng, gừng sẻ, sả chanh, lá trầu không, ngải cứu nếp, lá bưởi thơm và hoa hồng.',
     description: 'Được phối ngũ theo phương pháp cổ truyền từ 7 loại thảo mộc bản địa Việt Nam phơi khô tự nhiên. Nồi nước xông tỏa hương thơm thảo mộc ấm nồng dịu ngọt, giúp toát mồ hôi giải cảm lạnh, thông kinh hoạt lạc, làm ấm cơ thể cho mẹ sau sinh, dưỡng nhan sáng da và xua tan căng thẳng sau ngày làm việc mệt mỏi.',
     ingredients: '1. Lá đinh lăng phơi khô • 2. Gừng sẻ thái lát phơi khô • 3. Lá sả chanh cắt khúc • 4. Lá trầu không phơi khô • 5. Lá ngải cứu nếp • 6. Lá bưởi già phơi khô • 7. Nụ và cánh hoa hồng phơi khô.',
-    usage: 'Rửa sơ thảo mộc qua nước sạch. Cho toàn bộ gói thảo mộc vào nồi cùng 3 - 5 lít nước sạch, đun sôi kỹ từ 5 - 10 phút để dược chất và tinh dầu tỏa đều. Trùm chăn hoặc lều xông kín người trong 10 - 15 phút đến khi cơ thể toát mồ hôi nhẹ. Sau khi xông, pha thêm nước ấm để lau người hoặc tắm dội nhẹ nhàng (không tắm nước lạnh ngay).',
+    usage: 'Rửa sơ thảo mộc qua nước sạch. Cho vào nồi cùng khoảng 10-15 lít nước cho 1 gói và để ngập đều toàn bộ thảo mộc, đun sôi rồi hạ nhỏ lửa khoảng 30 - 45 phút để dược chất và tinh dầu tỏa đều. Trùm chăn hoặc lều xông kín người trong 10 - 15 phút đến khi cơ thể toát mồ hôi nhẹ. Sau khi xông, lọc lấy nước cốt pha thêm nước sạch đến khi ấm vừa phải (38°C - 40°C) để lau người hoặc tắm dội nhẹ nhàng (không tắm nước lạnh ngay).',
     image_url: '/images/products/bai-thuoc-7-vi.jpg',
   },
   'la-dinh-lang-phoi-kho-200g': {
