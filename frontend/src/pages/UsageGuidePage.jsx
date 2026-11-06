@@ -62,7 +62,7 @@ export const UsageGuidePage = () => {
             PHƯƠNG PHÁP NẤU NƯỚC TẮM DÂN GIAN
           </span>
           <h2 className="font-serif text-2xl sm:text-3xl text-primary font-bold">
-            1. Nấu Nước Tắm
+            <span className="font-sans">1.</span> Nấu Nước Tắm
           </h2>
           <p className="text-xs sm:text-sm text-on-surface-variant mt-1.5">
             Áp dụng cho bài thuốc tổng hợp 7 vị và các loại thảo dược phơi khô bản địa
@@ -70,13 +70,13 @@ export const UsageGuidePage = () => {
         </div>
 
         {/* 5 Thẻ bước quy trình */}
-        <div className="scroll-reveal bg-surface rounded-2xl border border-border-herbal p-6 sm:p-8 lg:p-10 shadow-xs mb-8">
+        <div className="scroll-reveal bg-surface rounded-none border border-border-herbal p-6 sm:p-8 lg:p-10 shadow-xs mb-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-5">
             {/* Bước 1 */}
-            <div className="scroll-reveal bg-surface-container-lowest rounded-xl p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
+            <div className="scroll-reveal bg-surface-container-lowest rounded-none p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
               <div className="flex items-center justify-between mb-3">
-                <span className="font-serif text-2xl font-bold text-tertiary">01</span>
-                <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                <span className="font-sans text-2xl font-bold text-tertiary tabular-nums">01</span>
+                <div className="w-10 h-10 rounded-none bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                   <span className="material-symbols-outlined text-[1.25rem]">inventory_2</span>
                 </div>
               </div>
@@ -89,10 +89,10 @@ export const UsageGuidePage = () => {
             </div>
 
             {/* Bước 2 */}
-            <div className="scroll-reveal bg-surface-container-lowest rounded-xl p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
+            <div className="scroll-reveal bg-surface-container-lowest rounded-none p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
               <div className="flex items-center justify-between mb-3">
-                <span className="font-serif text-2xl font-bold text-tertiary">02</span>
-                <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                <span className="font-sans text-2xl font-bold text-tertiary tabular-nums">02</span>
+                <div className="w-10 h-10 rounded-none bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                   <span className="material-symbols-outlined text-[1.25rem]">water_drop</span>
                 </div>
               </div>
@@ -105,10 +105,10 @@ export const UsageGuidePage = () => {
             </div>
 
             {/* Bước 3 */}
-            <div className="scroll-reveal bg-surface-container-lowest rounded-xl p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
+            <div className="scroll-reveal bg-surface-container-lowest rounded-none p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
               <div className="flex items-center justify-between mb-3">
-                <span className="font-serif text-2xl font-bold text-tertiary">03</span>
-                <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                <span className="font-sans text-2xl font-bold text-tertiary tabular-nums">03</span>
+                <div className="w-10 h-10 rounded-none bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                   <span className="material-symbols-outlined text-[1.25rem]">mode_heat</span>
                 </div>
               </div>
@@ -121,10 +121,10 @@ export const UsageGuidePage = () => {
             </div>
 
             {/* Bước 4 */}
-            <div className="scroll-reveal bg-surface-container-lowest rounded-xl p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
+            <div className="scroll-reveal bg-surface-container-lowest rounded-none p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
               <div className="flex items-center justify-between mb-3">
-                <span className="font-serif text-2xl font-bold text-tertiary">04</span>
-                <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                <span className="font-sans text-2xl font-bold text-tertiary tabular-nums">04</span>
+                <div className="w-10 h-10 rounded-none bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                   <span className="material-symbols-outlined text-[1.25rem]">filter_alt</span>
                 </div>
               </div>
@@ -137,10 +137,10 @@ export const UsageGuidePage = () => {
             </div>
 
             {/* Bước 5 */}
-            <div className="scroll-reveal bg-surface-container-lowest rounded-xl p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
+            <div className="scroll-reveal bg-surface-container-lowest rounded-none p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
               <div className="flex items-center justify-between mb-3">
-                <span className="font-serif text-2xl font-bold text-tertiary">05</span>
-                <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                <span className="font-sans text-2xl font-bold text-tertiary tabular-nums">05</span>
+                <div className="w-10 h-10 rounded-none bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                   <span className="material-symbols-outlined text-[1.25rem]">thermostat</span>
                 </div>
               </div>
@@ -168,8 +168,8 @@ export const UsageGuidePage = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="scroll-reveal bg-surface rounded-2xl border border-border-herbal/70 p-6 sm:p-8 flex flex-col">
-            <div className="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center mb-4">
+          <div className="scroll-reveal bg-surface rounded-none border border-border-herbal/70 p-6 sm:p-8 flex flex-col">
+            <div className="w-12 h-12 rounded-none bg-secondary-container text-on-secondary-container flex items-center justify-center mb-4">
               <span className="material-symbols-outlined text-[1.75rem]">air</span>
             </div>
             <h3 className="font-serif text-lg font-bold text-primary mb-2">Xông Hơi Giải Cảm</h3>
@@ -179,8 +179,8 @@ export const UsageGuidePage = () => {
             <span className="text-xs text-[#8a7258] font-semibold mt-auto">Khuyên dùng: Gừng, Lá sả, Lá bưởi</span>
           </div>
 
-          <div className="scroll-reveal bg-surface rounded-2xl border border-border-herbal/70 p-6 sm:p-8 flex flex-col">
-            <div className="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center mb-4">
+          <div className="scroll-reveal bg-surface rounded-none border border-border-herbal/70 p-6 sm:p-8 flex flex-col">
+            <div className="w-12 h-12 rounded-none bg-secondary-container text-on-secondary-container flex items-center justify-center mb-4">
               <span className="material-symbols-outlined text-[1.75rem]">family_restroom</span>
             </div>
             <h3 className="font-serif text-lg font-bold text-primary mb-2">Tắm Xông Cho Mẹ Sau Sinh</h3>
@@ -190,8 +190,8 @@ export const UsageGuidePage = () => {
             <span className="text-xs text-[#8a7258] font-semibold mt-auto">Khuyên dùng: Bài thuốc tổng hợp 7 vị, Lá trầu, Đinh lăng</span>
           </div>
 
-          <div className="scroll-reveal bg-surface rounded-2xl border border-border-herbal/70 p-6 sm:p-8 flex flex-col">
-            <div className="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center mb-4">
+          <div className="scroll-reveal bg-surface rounded-none border border-border-herbal/70 p-6 sm:p-8 flex flex-col">
+            <div className="w-12 h-12 rounded-none bg-secondary-container text-on-secondary-container flex items-center justify-center mb-4">
               <span className="material-symbols-outlined text-[1.75rem]">footprint</span>
             </div>
             <h3 className="font-serif text-lg font-bold text-primary mb-2">Ngâm Chân Buổi Tối</h3>
@@ -204,9 +204,9 @@ export const UsageGuidePage = () => {
       </section>
 
       {/* 4. MẸO NHỎ DÂN GIAN & LƯU Ý AN TOÀN */}
-      <section className="scroll-reveal bg-surface-container-low rounded-2xl border border-border-herbal/70 p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <section className="scroll-reveal bg-surface-container-low rounded-none border border-border-herbal/70 p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center shrink-0 mt-0.5">
+          <div className="w-10 h-10 rounded-none bg-primary text-on-primary flex items-center justify-center shrink-0 mt-0.5">
             <span className="material-symbols-outlined text-[1.25rem]">spa</span>
           </div>
           <div>
@@ -219,7 +219,7 @@ export const UsageGuidePage = () => {
 
         <Link
           to="/san-pham"
-          className="px-6 py-3 bg-primary hover:bg-primary-container text-on-primary text-xs font-bold uppercase tracking-wider rounded-lg shrink-0 transition-all shadow-xs"
+          className="px-6 py-3 bg-primary hover:bg-primary-container text-on-primary text-xs font-bold uppercase tracking-wider rounded-none shrink-0 transition-all shadow-xs"
         >
           Mua Thảo Mộc Ngay
         </Link>

@@ -126,15 +126,15 @@ export const OrderSuccessPage = () => {
                 return (
                   <div key={idx} className="py-2 flex justify-between text-body-sm">
                     <span>
-                      {itemName} <span className="text-xs text-on-surface-variant">x {item.quantity}</span>
+                      {itemName} <span className="text-xs text-on-surface-variant tabular-nums">x {item.quantity}</span>
                     </span>
-                    <span className="font-semibold text-primary">{formatCurrency(lineTotal)}</span>
+                    <span className="font-sans font-semibold text-primary tabular-nums">{formatCurrency(lineTotal)}</span>
                   </div>
                 );
               })}
               <div className="pt-3 flex justify-between items-baseline font-bold border-t border-border-herbal mt-2">
                 <span className="font-serif text-primary">Tổng tiền thanh toán:</span>
-                <span className="font-serif text-lg text-tertiary">{formatCurrency(totalAmount)}</span>
+                <span className="font-sans font-bold text-lg text-tertiary tabular-nums">{formatCurrency(totalAmount)}</span>
               </div>
             </div>
           )}

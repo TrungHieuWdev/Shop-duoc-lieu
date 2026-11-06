@@ -198,8 +198,19 @@ const computeStatus = (stock) => {
   return 'Còn hàng';
 };
 
+const getSavedProducts = () => {
+  try {
+    const raw = localStorage.getItem('nganha_admin_products');
+    if (!raw) return DEFAULT_PRODUCTS;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : DEFAULT_PRODUCTS;
+  } catch (e) {
+    return DEFAULT_PRODUCTS;
+  }
+};
+
 export const useAdminStore = create((set, get) => ({
-  products: JSON.parse(localStorage.getItem('nganha_admin_products') || JSON.stringify(DEFAULT_PRODUCTS)),
+  products: getSavedProducts(),
   orders: getSavedOrders(),
   auditLogs: getSavedAuditLogs(),
   settings: getSavedSettings(),

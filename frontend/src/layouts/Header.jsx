@@ -99,8 +99,9 @@ export const Header = () => {
         >
           <div className="flex items-center gap-2">
             <BrandLogoIcon className="w-6 h-6 sm:w-7 sm:h-7 text-[#5c5d53] group-hover:text-primary transition-all shrink-0" />
-            <span className="font-serif text-base sm:text-lg md:text-xl font-bold text-primary tracking-tight leading-none">
-              NgânHàshop
+            <span className="font-sans italic text-lg sm:text-xl md:text-[1.35rem] tracking-tight leading-none">
+              <span className="font-extrabold text-primary">NgânHà</span>
+              <span className="font-normal text-secondary">shop</span>
             </span>
           </div>
           <span className="mt-1.5 text-[0.625rem] sm:text-[0.6875rem] font-semibold text-secondary tracking-widest uppercase leading-none">

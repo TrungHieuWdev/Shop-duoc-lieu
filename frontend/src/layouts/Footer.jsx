@@ -9,26 +9,21 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 lg:gap-8">
           {/* Cột 1: Thông điệp thương hiệu */}
           <div className="flex flex-col gap-3.5 sm:gap-4">
-            <div className="flex items-center gap-2.5 sm:gap-3">
-              <BrandLogoIcon className="w-8 h-8 sm:w-9 sm:h-9 text-[#5c5d53] shrink-0" />
-              <div className="flex flex-col">
-                <span className="font-serif text-lg font-bold text-primary">NgânHàshop</span>
-                <span className="text-[0.625rem] font-semibold text-secondary tracking-widest uppercase">
-                  Đơn giản, tinh tế, an lành
+            <div className="flex flex-col items-start">
+              <div className="flex items-center gap-2">
+                <BrandLogoIcon className="w-6 h-6 sm:w-7 sm:h-7 text-[#5c5d53] shrink-0" />
+                <span className="font-sans italic text-lg sm:text-xl tracking-tight leading-none">
+                  <span className="font-extrabold text-primary">NgânHà</span>
+                  <span className="font-normal text-secondary">shop</span>
                 </span>
               </div>
+              <span className="mt-1.5 text-[0.625rem] font-semibold text-secondary tracking-widest uppercase leading-none">
+                Đơn giản, tinh tế, an lành
+              </span>
             </div>
             <p className="text-xs sm:text-body-sm text-on-surface-variant leading-relaxed">
               Giữ vẹn nguyên hồn thảo mộc bản địa Việt Nam. Thuần khiết, mộc mạc và an tâm cho sức khỏe gia đình bạn.
             </p>
-            <div className="flex flex-col gap-1 pt-1 sm:pt-2">
-              <span className="text-[0.6875rem] sm:text-[0.75rem] font-semibold text-tertiary uppercase tracking-wider">
-                Chứng Nhận Dược Liệu
-              </span>
-              <p className="text-xs sm:text-body-sm text-on-surface-variant">
-                Dược liệu phơi khô tự nhiên, kiểm định chất lượng an toàn, không pha trộn tạp chất.
-              </p>
-            </div>
           </div>
 
           {/* Cột 2: Cam kết tự nhiên */}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { ProductCard } from '@/features/products/components/ProductCard';
 import { useAdminStore } from '@/store/useAdminStore';
 
@@ -246,15 +246,25 @@ export const ProductsPage = () => {
         </div>
       )}
 
-      {/* Toast Popup */}
+      {/* Toast Popup (Bấm vào thanh thông báo hoặc biểu tượng giỏ hàng để mở trang Giỏ hàng) */}
       {toastMessage && (
-        <div className="fixed bottom-4 inset-x-4 sm:bottom-6 sm:right-6 sm:inset-x-auto sm:max-w-md z-50 bg-primary text-on-primary px-4 sm:px-5 py-3 sm:py-3.5 rounded-xl sm:rounded shadow-lg border border-primary-container flex items-center gap-3 animate-bounce">
-          <span className="material-symbols-outlined text-secondary-fixed text-[1.375rem] sm:text-[1.5rem] shrink-0">check_circle</span>
-          <div className="flex flex-col min-w-0">
-            <span className="font-serif font-bold text-xs sm:text-sm">{toastMessage.title}</span>
-            <span className="text-[11px] sm:text-xs text-primary-fixed-dim truncate">{toastMessage.desc}</span>
+        <Link
+          to="/gio-hang"
+          title="Nhấn để xem giỏ hàng"
+          className="fixed bottom-4 inset-x-4 sm:bottom-6 sm:right-6 sm:inset-x-auto sm:max-w-md z-50 bg-primary hover:bg-primary-container text-on-primary px-4 sm:px-5 py-3 sm:py-3.5 rounded-none shadow-lg border border-primary-container flex items-center justify-between gap-3 animate-bounce cursor-pointer transition-colors group"
+        >
+          <div className="flex items-center gap-3 min-w-0">
+            <span className="material-symbols-outlined text-secondary-fixed text-[1.375rem] sm:text-[1.5rem] shrink-0">check_circle</span>
+            <div className="flex flex-col min-w-0">
+              <span className="font-serif font-bold text-xs sm:text-sm">{toastMessage.title}</span>
+              <span className="text-[11px] sm:text-xs text-primary-fixed-dim truncate">{toastMessage.desc}</span>
+            </div>
           </div>
-        </div>
+          <div className="flex items-center gap-1 pl-2 border-l border-white/20 shrink-0 text-secondary-fixed group-hover:translate-x-0.5 transition-transform">
+            <span className="material-symbols-outlined text-[1.25rem]">shopping_bag</span>
+            <span className="material-symbols-outlined text-[1rem]">arrow_forward</span>
+          </div>
+        </Link>
       )}
     </div>
   );

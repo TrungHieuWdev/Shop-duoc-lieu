@@ -34,10 +34,10 @@ export const ProductCard = ({ product, onAddToCartSuccess }) => {
   return (
     <div
       ref={cardRef}
-      className="scroll-reveal group relative flex flex-col bg-surface-container-lowest rounded-xl p-2.5 sm:p-4 border border-border-herbal/70 shadow-xs hover:shadow-md transition-all duration-300"
+      className="scroll-reveal group relative flex flex-col bg-surface-container-lowest rounded-none p-2.5 sm:p-4 border border-border-herbal/70 shadow-xs hover:shadow-md transition-all duration-300"
     >
       {/* Product Image */}
-      <Link to={`/san-pham/${product.slug}`} className="relative w-full aspect-square bg-surface-container rounded-lg overflow-hidden block">
+      <Link to={`/san-pham/${product.slug}`} className="relative w-full aspect-square bg-surface-container rounded-none overflow-hidden block">
         <img
           src={product.thumbnail_url || product.image_url}
           alt={product.name}
@@ -46,7 +46,7 @@ export const ProductCard = ({ product, onAddToCartSuccess }) => {
           decoding="async"
         />
         {product.is_featured && (
-          <span className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-tertiary-container text-on-tertiary text-[10px] sm:text-[0.6875rem] font-semibold tracking-wider uppercase px-2 py-0.5 sm:px-2.5 sm:py-1 rounded shadow-xs">
+          <span className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-tertiary-container text-on-tertiary text-[10px] sm:text-[0.6875rem] font-semibold tracking-wider uppercase px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-none shadow-xs">
             Bán chạy
           </span>
         )}
@@ -66,26 +66,27 @@ export const ProductCard = ({ product, onAddToCartSuccess }) => {
           {product.unit || 'Quy cách chuẩn'}
         </span>
 
-        {/* Price Display */}
-        <div className="mt-2 sm:mt-3 flex flex-wrap items-baseline gap-1 sm:gap-2">
-          <span className="font-serif text-sm sm:text-lg font-bold text-primary">
-            {formatCurrency(product.price)}
-          </span>
-          {product.original_price && Number(product.original_price) > Number(product.price) && (
-            <span className="text-[10px] sm:text-body-sm text-outline line-through">
-              {formatCurrency(product.original_price)}
+        {/* Giá tiền (ví dụ: 50.000 ₫ / 1 gói) bên trái & Nút vuông chỉ hiện icon giỏ hàng (không bo góc) bên phải */}
+        <div className="mt-auto pt-3 sm:pt-4 flex items-center justify-between gap-2">
+          <div className="flex items-baseline gap-1 min-w-0">
+            <span className="font-sans text-sm sm:text-lg font-bold text-primary tabular-nums whitespace-nowrap">
+              {formatCurrency(product.price)}
             </span>
-          )}
-        </div>
+            <span className="text-[11px] sm:text-xs text-on-surface-variant font-medium whitespace-nowrap">
+              / 1 gói
+            </span>
+          </div>
 
-        {/* Add to Cart Button */}
-        <button
-          onClick={handleAddToCart}
-          className="mt-2.5 sm:mt-4 w-full py-2 sm:py-2.5 px-2 sm:px-4 bg-tertiary-container hover:bg-tertiary text-on-tertiary text-[11px] sm:text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 sm:gap-2 transition-all duration-200 shadow-xs active:scale-95 cursor-pointer"
-        >
-          <span className="material-symbols-outlined text-[15px] sm:text-base">shopping_bag</span>
-          <span>+ Giỏ Hàng</span>
-        </button>
+          <button
+            type="button"
+            onClick={handleAddToCart}
+            aria-label="Thêm vào giỏ hàng"
+            title="Thêm vào giỏ hàng"
+            className="w-9 h-9 sm:w-10 sm:h-10 bg-tertiary-container hover:bg-tertiary text-on-tertiary rounded-none flex items-center justify-center shrink-0 transition-all duration-200 shadow-xs active:scale-95 cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-[18px] sm:text-[20px]">shopping_bag</span>
+          </button>
+        </div>
       </div>
     </div>
   );

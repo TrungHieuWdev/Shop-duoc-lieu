@@ -20,9 +20,19 @@ const getStoredCredentials = () => {
   }
 };
 
+const getSavedAdminUser = () => {
+  try {
+    const raw = localStorage.getItem('nganha_admin_user');
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch (e) {
+    return null;
+  }
+};
+
 export const useAuthStore = create((set, get) => ({
-  user: JSON.parse(localStorage.getItem('nganha_admin_user') || 'null'),
-  isAuthenticated: !!localStorage.getItem('nganha_admin_user'),
+  user: getSavedAdminUser(),
+  isAuthenticated: !!getSavedAdminUser(),
 
   // Đăng nhập quản trị viên - Tiêu chuẩn bảo mật 2026 chống rò rỉ dữ liệu
   login: (email, password) => {

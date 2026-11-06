@@ -174,7 +174,7 @@ export const PaymentPage = () => {
             <div className="p-3 bg-surface-container-low rounded-none border border-border-herbal/60 flex justify-between items-center">
               <div>
                 <span className="text-xs text-on-surface-variant block">Số tài khoản:</span>
-                <span className="font-serif font-bold text-lg text-primary tracking-wider">
+                <span className="font-sans font-bold text-lg text-primary tracking-wider tabular-nums">
                   {bankAccount}
                 </span>
               </div>
@@ -198,7 +198,7 @@ export const PaymentPage = () => {
             <div className="p-3 bg-surface-container-low rounded-none border border-border-herbal/60 flex justify-between items-center">
               <div>
                 <span className="text-xs text-on-surface-variant block">Số tiền thanh toán:</span>
-                <span className="font-serif font-bold text-xl text-tertiary">
+                <span className="font-sans font-bold text-xl text-tertiary tabular-nums">
                   {formatCurrency(finalAmount)}
                 </span>
               </div>

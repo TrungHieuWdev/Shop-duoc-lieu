@@ -138,31 +138,27 @@ export const HomePage = () => {
         {/* Khối Nội Dung Bên Trái (Đã tinh gọn chữ tối đa theo phong cách tối giản cao cấp B ECO) */}
         <div className="relative z-10 max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 w-full py-8 sm:py-20 flex flex-col justify-center items-start text-left">
           {/* Nhãn phụ tinh tế */}
-          <span className="eco-rise text-xs sm:text-sm font-semibold text-[#cbb07c] uppercase tracking-wider mb-2 sm:mb-3 drop-shadow-sm">
+          <span className="eco-rise text-[0.625rem] sm:text-xs font-semibold text-[#cbb07c] uppercase tracking-[0.2em] sm:tracking-[0.3em] mb-4 sm:mb-6 flex items-center gap-1.5 sm:gap-2 drop-shadow-sm">
+            <span className="material-symbols-outlined text-[0.875rem] sm:text-[1rem]">spa</span>
             TINH CHỌN THẢO DƯỢC • HƯƠNG VỊ TỰ NHIÊN
           </span>
 
-          {/* Tên thương hiệu lớn */}
-          <h1 className="eco-rise-1 font-serif text-3xl sm:text-5xl md:text-6xl font-bold tracking-normal text-[#fbf9f2] drop-shadow-lg leading-tight mb-2 sm:mb-3 whitespace-nowrap">
+          {/* Tên thương hiệu lớn phong cách B ECO (chữ viết gần nhau) */}
+          <h1 className="eco-rise-1 font-serif text-3xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold tracking-normal text-[#fbf9f2] drop-shadow-lg leading-none mb-4 sm:mb-6 whitespace-nowrap">
             NGÂN HÀ
           </h1>
 
           {/* Slogan màu vàng rơm mộc mạc */}
-          <p className="eco-rise-2 text-base sm:text-xl lg:text-2xl text-[#cbb07c] font-bold tracking-normal mb-2.5 sm:mb-3.5 drop-shadow-sm">
+          <p className="eco-rise-2 font-serif text-sm sm:text-xl lg:text-2xl text-[#d8c9aa] font-medium tracking-wide mb-8 sm:mb-12 drop-shadow-sm">
             Gom hương thảo dược – Gói trọn an nhiên
           </p>
 
-          {/* Đoạn mô tả ngắn */}
-          <p className="eco-rise-2 text-xs sm:text-base text-[#fbf9f2]/85 font-normal tracking-normal leading-relaxed max-w-2xl mb-6 sm:mb-8 drop-shadow-sm">
-            Khám phá các sản phẩm thảo dược khô được tuyển chọn, đóng gói tiện lợi cho nhu cầu nấu tắm và xông tại nhà.
-          </p>
-
-          {/* Cặp Nút Hành Động (Dual CTA) chuẩn phong cách B ECO */}
+          {/* Cặp Nút Hành Động (Dual CTA) không bo góc */}
           <div className="eco-rise-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
-            {/* Nút chính: Màu vàng rơm đất ấm */}
+            {/* Nút chính: Màu vàng rơm đất ấm, không bo góc */}
             <Link
               to="/san-pham"
-              className="w-full sm:w-auto px-5 sm:px-6 py-3 sm:py-3.5 bg-[#cbb07c] hover:bg-[#dfc492] text-[#14261a] font-bold text-xs sm:text-sm tracking-normal uppercase rounded-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 group cursor-pointer"
+              className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 bg-[#cbb07c] hover:bg-[#dfc492] text-[#14261a] font-bold text-xs sm:text-sm tracking-widest uppercase rounded-none shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 group cursor-pointer"
             >
               <span>KHÁM PHÁ SẢN PHẨM</span>
               <span className="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">
@@ -170,10 +166,10 @@ export const HomePage = () => {
               </span>
             </Link>
 
-            {/* Nút phụ: Khung viền mỏng trong suốt kính mờ dẫn sang trang Cách Dùng */}
+            {/* Nút phụ: Khung viền mỏng trong suốt kính mờ, không bo góc */}
             <Link
               to="/cach-dung"
-              className="w-full sm:w-auto px-5 sm:px-6 py-3 sm:py-3.5 border border-white/40 hover:border-white bg-black/25 hover:bg-white/10 text-white font-bold text-xs sm:text-sm tracking-normal uppercase rounded-lg backdrop-blur-sm transition-all hover:-translate-y-0.5 flex items-center justify-center cursor-pointer"
+              className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 border border-white/40 hover:border-white bg-black/25 hover:bg-white/10 text-white font-medium text-xs sm:text-sm tracking-widest uppercase rounded-none backdrop-blur-sm transition-all hover:-translate-y-0.5 flex items-center justify-center cursor-pointer"
             >
               TÌM HIỂU CÁCH DÙNG
             </Link>
@@ -214,7 +210,7 @@ export const HomePage = () => {
       <section className="bg-surface-container-low border-t border-border-herbal py-10 sm:py-20 px-3.5 sm:px-8 lg:px-12 xl:px-16">
         <div className="max-w-[1536px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
           {/* Card Về thảo dược */}
-          <div className="scroll-reveal bg-surface rounded-2xl border border-border-herbal/70 p-5 sm:p-8 md:p-10 flex flex-col justify-between hover:border-primary transition-all duration-300 shadow-xs group">
+          <div className="scroll-reveal bg-surface rounded-none border border-border-herbal/70 p-5 sm:p-8 md:p-10 flex flex-col justify-between hover:border-primary transition-all duration-300 shadow-xs group">
             <div>
               <span className="text-[0.625rem] sm:text-[0.6875rem] font-semibold text-secondary uppercase tracking-widest block mb-1.5 sm:mb-2">
                 NGUỒN GỐC & DƯỢC TÍNH
@@ -236,7 +232,7 @@ export const HomePage = () => {
           </div>
 
           {/* Card Cách dùng */}
-          <div className="scroll-reveal bg-surface rounded-2xl border border-border-herbal/70 p-5 sm:p-8 md:p-10 flex flex-col justify-between hover:border-primary transition-all duration-300 shadow-xs group">
+          <div className="scroll-reveal bg-surface rounded-none border border-border-herbal/70 p-5 sm:p-8 md:p-10 flex flex-col justify-between hover:border-primary transition-all duration-300 shadow-xs group">
             <div>
               <span className="text-[0.625rem] sm:text-[0.6875rem] font-semibold text-secondary uppercase tracking-widest block mb-1.5 sm:mb-2">
                 HƯỚNG DẪN DÂN GIAN
@@ -259,15 +255,25 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* TOAST NOTIFICATION POPUP */}
+      {/* TOAST NOTIFICATION POPUP (Bấm vào thanh thông báo hoặc biểu tượng giỏ hàng để mở trang Giỏ hàng) */}
       {toastMessage && (
-        <div className="fixed bottom-4 inset-x-4 sm:bottom-6 sm:right-6 sm:inset-x-auto sm:max-w-md z-50 bg-primary text-on-primary px-4 sm:px-5 py-3 sm:py-3.5 rounded-xl sm:rounded shadow-lg border border-primary-container flex items-center gap-3 animate-bounce">
-          <span className="material-symbols-outlined text-secondary-fixed text-[1.375rem] sm:text-[1.5rem] shrink-0">check_circle</span>
-          <div className="flex flex-col min-w-0">
-            <span className="font-serif font-bold text-xs sm:text-sm">{toastMessage.title}</span>
-            <span className="text-[11px] sm:text-xs text-primary-fixed-dim truncate">{toastMessage.desc}</span>
+        <Link
+          to="/gio-hang"
+          title="Nhấn để xem giỏ hàng"
+          className="fixed bottom-4 inset-x-4 sm:bottom-6 sm:right-6 sm:inset-x-auto sm:max-w-md z-50 bg-primary hover:bg-primary-container text-on-primary px-4 sm:px-5 py-3 sm:py-3.5 rounded-none shadow-lg border border-primary-container flex items-center justify-between gap-3 animate-bounce cursor-pointer transition-colors group"
+        >
+          <div className="flex items-center gap-3 min-w-0">
+            <span className="material-symbols-outlined text-secondary-fixed text-[1.375rem] sm:text-[1.5rem] shrink-0">check_circle</span>
+            <div className="flex flex-col min-w-0">
+              <span className="font-serif font-bold text-xs sm:text-sm">{toastMessage.title}</span>
+              <span className="text-[11px] sm:text-xs text-primary-fixed-dim truncate">{toastMessage.desc}</span>
+            </div>
           </div>
-        </div>
+          <div className="flex items-center gap-1 pl-2 border-l border-white/20 shrink-0 text-secondary-fixed group-hover:translate-x-0.5 transition-transform">
+            <span className="material-symbols-outlined text-[1.25rem]">shopping_bag</span>
+            <span className="material-symbols-outlined text-[1rem]">arrow_forward</span>
+          </div>
+        </Link>
       )}
     </div>
   );

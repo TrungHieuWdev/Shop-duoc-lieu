@@ -1,7 +1,18 @@
 import { create } from 'zustand';
 
+const getSavedCartItems = () => {
+  try {
+    const raw = localStorage.getItem('nganha_herbal_cart');
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    return [];
+  }
+};
+
 export const useCartStore = create((set, get) => ({
-  items: JSON.parse(localStorage.getItem('nganha_herbal_cart') || '[]'),
+  items: getSavedCartItems(),
   cartBounceTick: 0,
 
   // Kích hoạt rung giỏ hàng 1 nhịp khi hàng rơi vào giỏ

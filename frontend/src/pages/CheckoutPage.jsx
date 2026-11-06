@@ -31,6 +31,7 @@ export const CheckoutPage = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [showBackConfirm, setShowBackConfirm] = useState(false);
 
   if (items.length === 0) {
     return (
@@ -163,9 +164,19 @@ export const CheckoutPage = () => {
 
   return (
     <div className="w-full max-w-[1536px] mx-auto px-3.5 sm:px-8 lg:px-12 xl:px-16 py-6 sm:py-12">
-      <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-primary mb-6 sm:mb-8">
-        Thông Tin Nhận Hàng &amp; Thanh Toán
-      </h1>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 sm:mb-8">
+        <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-primary">
+          Thông Tin Nhận Hàng &amp; Thanh Toán
+        </h1>
+        <button
+          type="button"
+          onClick={() => setShowBackConfirm(true)}
+          className="self-start sm:self-auto inline-flex items-center gap-2 px-4 py-2 bg-surface-container-low hover:bg-surface-container border border-border-herbal text-primary text-xs font-semibold uppercase tracking-wider rounded-none transition-colors cursor-pointer"
+        >
+          <span className="material-symbols-outlined text-[1rem]">arrow_back</span>
+          <span>Quay Lại Chỉnh Sửa Giỏ Hàng</span>
+        </button>
+      </div>
 
       {errorMessage && (
         <div className="mb-6 p-3.5 sm:p-4 rounded-xl bg-red-50 border border-red-300 text-red-900 text-xs sm:text-body-sm flex items-center gap-2.5">
@@ -191,7 +202,7 @@ export const CheckoutPage = () => {
         <div className="lg:col-span-7 bg-surface-container-lowest rounded-none p-4 sm:p-6 lg:p-8 border border-border-herbal shadow-xs">
           <h2 className="font-serif text-base sm:text-lg font-bold text-primary mb-5 sm:mb-6 pb-2.5 border-b border-border-herbal flex items-center gap-2">
             <span className="material-symbols-outlined text-secondary text-[1.25rem]">local_shipping</span>
-            <span>1. Người Nhận Hàng</span>
+            <span><span className="font-sans">1.</span> Người Nhận Hàng</span>
           </h2>
 
           <div className="flex flex-col gap-3.5 sm:gap-4">
@@ -281,7 +292,7 @@ export const CheckoutPage = () => {
         <div className="lg:col-span-5 bg-surface-container-low rounded-none p-4 sm:p-6 lg:p-8 border border-border-herbal shadow-xs">
           <h2 className="font-serif text-base sm:text-lg font-bold text-primary mb-3.5 sm:mb-4 pb-2.5 border-b border-border-herbal flex items-center gap-2">
             <span className="material-symbols-outlined text-secondary text-[1.25rem]">inventory_2</span>
-            <span>2. Tóm Tắt Đơn Hàng ({items.length} món)</span>
+            <span><span className="font-sans">2.</span> Tóm Tắt Đơn Hàng (<span className="font-sans tabular-nums">{items.length}</span> món)</span>
           </h2>
 
           <div className="divide-y divide-border-herbal/50 max-h-56 overflow-y-auto mb-5 sm:mb-6 pr-1">
@@ -289,9 +300,9 @@ export const CheckoutPage = () => {
               <div key={item.id} className="py-2.5 first:pt-0 flex justify-between items-center text-xs sm:text-body-sm gap-2">
                 <div className="min-w-0 pr-2">
                   <span className="font-medium text-primary block truncate">{item.name}</span>
-                  <span className="text-[11px] text-on-surface-variant">SL: {item.quantity}</span>
+                  <span className="text-[11px] text-on-surface-variant tabular-nums">SL: {item.quantity}</span>
                 </div>
-                <span className="font-semibold text-primary shrink-0">
+                <span className="font-sans font-semibold text-primary shrink-0 tabular-nums whitespace-nowrap">
                   {formatCurrency(item.price * item.quantity)}
                 </span>
               </div>
@@ -301,15 +312,15 @@ export const CheckoutPage = () => {
           <div className="flex flex-col gap-2.5 text-xs sm:text-body-sm text-on-surface-variant border-t border-border-herbal pt-3.5 mb-5 sm:mb-6">
             <div className="flex justify-between">
               <span>Tiền hàng:</span>
-              <span className="font-medium text-on-surface">{formatCurrency(subtotal)}</span>
+              <span className="font-sans font-semibold text-on-surface tabular-nums whitespace-nowrap">{formatCurrency(subtotal)}</span>
             </div>
             <div className="flex justify-between">
               <span>Phí giao hàng:</span>
-              <span>{shippingFee === 0 ? 'Miễn phí' : formatCurrency(shippingFee)}</span>
+              <span className="font-sans font-medium tabular-nums whitespace-nowrap">{shippingFee === 0 ? 'Miễn phí' : formatCurrency(shippingFee)}</span>
             </div>
             <div className="border-t border-border-herbal pt-3 flex justify-between items-baseline font-bold">
               <span className="font-serif text-sm sm:text-base text-primary">TỔNG CỘNG:</span>
-              <span className="font-serif text-xl sm:text-2xl text-tertiary">{formatCurrency(total)}</span>
+              <span className="font-sans font-bold text-xl sm:text-2xl text-tertiary tabular-nums whitespace-nowrap">{formatCurrency(total)}</span>
             </div>
           </div>
 
@@ -330,8 +341,58 @@ export const CheckoutPage = () => {
               </>
             )}
           </button>
+
+          <button
+            type="button"
+            onClick={() => setShowBackConfirm(true)}
+            className="mt-3 w-full py-3 px-4 bg-surface hover:bg-surface-container border border-border-herbal text-primary font-semibold text-xs uppercase tracking-wider rounded-none flex items-center justify-center gap-2 transition-colors cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-[1.125rem]">arrow_back</span>
+            <span>Quay Lại Giỏ Hàng Chỉnh Sửa</span>
+          </button>
         </div>
       </form>
+
+      {/* Modal xác nhận quay lại trang giỏ hàng */}
+      {showBackConfirm && (
+        <div
+          className="fixed inset-0 z-50 bg-black/45 backdrop-blur-xs flex items-center justify-center p-4"
+          onClick={() => setShowBackConfirm(false)}
+        >
+          <div
+            className="bg-surface w-full max-w-md border border-border-herbal p-6 shadow-xl rounded-none"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 bg-surface-container border border-border-herbal text-primary flex items-center justify-center shrink-0">
+                <span className="material-symbols-outlined text-[1.375rem]">shopping_bag</span>
+              </div>
+              <h3 className="font-serif text-lg font-bold text-primary">
+                Xác Nhận Quay Lại Giỏ Hàng
+              </h3>
+            </div>
+            <p className="text-xs sm:text-sm text-on-surface-variant leading-relaxed mb-6">
+              Bạn có muốn quay lại trang giỏ hàng để chỉnh sửa lại số lượng hoặc danh sách sản phẩm trong đơn hàng không?
+            </p>
+            <div className="flex items-center justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setShowBackConfirm(false)}
+                className="px-4 py-2.5 border border-border-herbal bg-surface-container-low hover:bg-surface-container text-primary text-xs font-semibold uppercase tracking-wider rounded-none transition-colors cursor-pointer"
+              >
+                Ở Lại Trang Này
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate('/gio-hang')}
+                className="px-5 py-2.5 bg-primary hover:bg-primary-container text-on-primary text-xs font-bold uppercase tracking-wider rounded-none transition-colors cursor-pointer shadow-xs"
+              >
+                Quay Lại Giỏ Hàng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

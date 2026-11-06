@@ -180,7 +180,7 @@ export const ProductDetailPage = () => {
 
           {/* Giá tiền */}
           <div className="flex flex-wrap items-baseline gap-2.5 sm:gap-3 p-3.5 sm:p-4 bg-surface-container-low rounded-xl border border-border-herbal/70">
-            <span className="font-serif text-2xl sm:text-3xl font-bold text-primary tabular-nums">
+            <span className="font-sans text-2xl sm:text-3xl font-bold text-primary tabular-nums">
               {formatCurrency(product.price)}
             </span>
             {product.original_price && (
@@ -255,15 +255,25 @@ export const ProductDetailPage = () => {
         </div>
       </div>
 
-      {/* Toast Notification */}
+      {/* Toast Notification (Bấm vào thanh thông báo hoặc biểu tượng giỏ hàng để mở trang Giỏ hàng) */}
       {toastVisible && (
-        <div className="fixed bottom-4 inset-x-4 sm:bottom-6 sm:right-6 sm:inset-x-auto sm:max-w-md z-50 bg-primary text-on-primary px-4 sm:px-5 py-3 sm:py-3.5 rounded-xl sm:rounded shadow-lg border border-primary-container flex items-center gap-3 animate-bounce">
-          <span className="material-symbols-outlined text-secondary-fixed text-[1.375rem] sm:text-[1.5rem] shrink-0">check_circle</span>
-          <div className="min-w-0">
-            <span className="font-serif font-bold text-xs sm:text-sm block">Đã thêm vào giỏ hàng</span>
-            <span className="text-[11px] sm:text-xs text-primary-fixed-dim truncate block">{product.name} (SL: {quantity})</span>
+        <Link
+          to="/gio-hang"
+          title="Nhấn để xem giỏ hàng"
+          className="fixed bottom-4 inset-x-4 sm:bottom-6 sm:right-6 sm:inset-x-auto sm:max-w-md z-50 bg-primary hover:bg-primary-container text-on-primary px-4 sm:px-5 py-3 sm:py-3.5 rounded-none shadow-lg border border-primary-container flex items-center justify-between gap-3 animate-bounce cursor-pointer transition-colors group"
+        >
+          <div className="flex items-center gap-3 min-w-0">
+            <span className="material-symbols-outlined text-secondary-fixed text-[1.375rem] sm:text-[1.5rem] shrink-0">check_circle</span>
+            <div className="min-w-0">
+              <span className="font-serif font-bold text-xs sm:text-sm block">Đã thêm vào giỏ hàng</span>
+              <span className="text-[11px] sm:text-xs text-primary-fixed-dim truncate block">{product.name} (SL: {quantity})</span>
+            </div>
           </div>
-        </div>
+          <div className="flex items-center gap-1 pl-2 border-l border-white/20 shrink-0 text-secondary-fixed group-hover:translate-x-0.5 transition-transform">
+            <span className="material-symbols-outlined text-[1.25rem]">shopping_bag</span>
+            <span className="material-symbols-outlined text-[1rem]">arrow_forward</span>
+          </div>
+        </Link>
       )}
     </div>
   );

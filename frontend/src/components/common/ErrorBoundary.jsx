@@ -92,7 +92,7 @@ export class ErrorBoundary extends React.Component {
             </div>
 
             {/* Chi tiết lỗi kỹ thuật cho Dev (thu gọn) */}
-            {process.env.NODE_ENV !== 'production' && this.state.error && (
+            {import.meta.env?.DEV && this.state.error && (
               <details className="text-left bg-surface-container-low border border-border-herbal rounded-lg p-3 text-xs text-on-surface-variant max-w-lg mx-auto">
                 <summary className="cursor-pointer font-medium text-error hover:underline select-none">
                   Chi tiết lỗi kỹ thuật (chế độ phát triển)
