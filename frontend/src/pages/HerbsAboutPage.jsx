@@ -55,7 +55,7 @@ export const HerbsAboutPage = () => {
 
       {/* 2. KHÁM PHÁ CHI TIẾT 7 VỊ THẢO DƯỢC BẢN ĐỊA */}
       <section className="mb-14 sm:mb-20">
-        <div className="eco-rise-2 text-center max-w-xl mx-auto mb-8 sm:mb-12">
+        <div className="scroll-reveal text-center max-w-xl mx-auto mb-8 sm:mb-12">
           <span className="text-[0.6875rem] sm:text-xs font-semibold text-secondary uppercase tracking-widest flex items-center justify-center gap-1.5 mb-1.5">
             <span className="material-symbols-outlined text-[1rem] text-[#8a7258]">local_florist</span>
             7 VỊ THẢO MỘC CỔ TRUYỀN
@@ -69,11 +69,11 @@ export const HerbsAboutPage = () => {
         </div>
 
         {/* Lưới 7 thẻ thảo mộc thiết kế tinh tế */}
-        <div className="eco-rise-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {NATURAL_HERBS.map((herb) => (
             <div
               key={herb.id}
-              className="bg-surface rounded-2xl border border-border-herbal/70 overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 flex flex-col group"
+              className="scroll-reveal bg-surface rounded-2xl border border-border-herbal/70 overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 flex flex-col group"
             >
               {/* Hình ảnh thảo dược */}
               <div className="relative aspect-[4/3] bg-surface-container-high overflow-hidden">
@@ -125,7 +125,7 @@ export const HerbsAboutPage = () => {
       </section>
 
       {/* 3. CAM KẾT CHẤT LƯỢNG NGÂN HÀ */}
-      <section className="eco-rise-4 bg-surface-container-low rounded-2xl border border-border-herbal/70 p-8 sm:p-12 mb-8">
+      <section className="scroll-reveal bg-surface-container-low rounded-2xl border border-border-herbal/70 p-8 sm:p-12 mb-8">
         <div className="max-w-3xl mx-auto text-center">
           <span className="text-[0.6875rem] sm:text-xs font-semibold text-secondary uppercase tracking-widest block mb-2">
             TRIẾT LÝ TỰ NHIÊN
@@ -138,19 +138,19 @@ export const HerbsAboutPage = () => {
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-left">
-            <div className="bg-surface p-5 rounded-xl border border-border-herbal/60">
+            <div className="scroll-reveal bg-surface p-5 rounded-xl border border-border-herbal/60">
               <span className="material-symbols-outlined text-primary text-[2rem] mb-2">eco</span>
               <h4 className="font-serif text-sm font-bold text-primary mb-1">100% Tự Nhiên</h4>
               <p className="text-xs text-on-surface-variant">Không chất bảo quản, không hương liệu tổng hợp, an toàn cho cả phụ nữ sau sinh.</p>
             </div>
 
-            <div className="bg-surface p-5 rounded-xl border border-border-herbal/60">
+            <div className="scroll-reveal bg-surface p-5 rounded-xl border border-border-herbal/60">
               <span className="material-symbols-outlined text-primary text-[2rem] mb-2">wb_sunny</span>
               <h4 className="font-serif text-sm font-bold text-primary mb-1">Phơi Khô Tự Nhiên</h4>
               <p className="text-xs text-on-surface-variant">Đón nắng gió mộc mạc, giữ trọn vẹn màu sắc tự nhiên và túi tinh dầu quý giá.</p>
             </div>
 
-            <div className="bg-surface p-5 rounded-xl border border-border-herbal/60">
+            <div className="scroll-reveal bg-surface p-5 rounded-xl border border-border-herbal/60">
               <span className="material-symbols-outlined text-primary text-[2rem] mb-2">verified</span>
               <h4 className="font-serif text-sm font-bold text-primary mb-1">Dược Liệu Bản Địa</h4>
               <p className="text-xs text-on-surface-variant">Tuyển chọn từ nguồn thảo dược quen thuộc, lành tính trong dân gian Việt Nam.</p>

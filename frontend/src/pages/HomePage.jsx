@@ -182,8 +182,8 @@ export const HomePage = () => {
       </section>
 
       {/* 2. SẢN PHẨM NỔI BẬT */}
-      <section className="eco-rise-3 py-10 sm:py-20 px-3.5 sm:px-8 lg:px-12 xl:px-16 max-w-[1536px] mx-auto w-full">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-12 gap-2 sm:gap-3">
+      <section className="py-10 sm:py-20 px-3.5 sm:px-8 lg:px-12 xl:px-16 max-w-[1536px] mx-auto w-full">
+        <div className="scroll-reveal flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-12 gap-2 sm:gap-3">
           <div>
             <span className="text-[0.625rem] sm:text-xs font-semibold text-secondary uppercase tracking-[0.2em] flex items-center gap-1.5 mb-1">
               <span className="material-symbols-outlined text-[0.875rem] sm:text-[1rem] text-[#8a7258]">spa</span>
@@ -211,10 +211,10 @@ export const HomePage = () => {
       </section>
 
       {/* 3. KHÁM PHÁ VỀ THẢO DƯỢC & CÁCH DÙNG (CẦU NỐI SANG 2 TRANG CHUYÊN BIỆT) */}
-      <section className="eco-rise-4 bg-surface-container-low border-t border-border-herbal py-10 sm:py-20 px-3.5 sm:px-8 lg:px-12 xl:px-16">
+      <section className="bg-surface-container-low border-t border-border-herbal py-10 sm:py-20 px-3.5 sm:px-8 lg:px-12 xl:px-16">
         <div className="max-w-[1536px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
           {/* Card Về thảo dược */}
-          <div className="bg-surface rounded-2xl border border-border-herbal/70 p-5 sm:p-8 md:p-10 flex flex-col justify-between hover:border-primary transition-all duration-300 shadow-xs group">
+          <div className="scroll-reveal bg-surface rounded-2xl border border-border-herbal/70 p-5 sm:p-8 md:p-10 flex flex-col justify-between hover:border-primary transition-all duration-300 shadow-xs group">
             <div>
               <span className="text-[0.625rem] sm:text-[0.6875rem] font-semibold text-secondary uppercase tracking-widest block mb-1.5 sm:mb-2">
                 NGUỒN GỐC & DƯỢC TÍNH
@@ -236,7 +236,7 @@ export const HomePage = () => {
           </div>
 
           {/* Card Cách dùng */}
-          <div className="bg-surface rounded-2xl border border-border-herbal/70 p-5 sm:p-8 md:p-10 flex flex-col justify-between hover:border-primary transition-all duration-300 shadow-xs group">
+          <div className="scroll-reveal bg-surface rounded-2xl border border-border-herbal/70 p-5 sm:p-8 md:p-10 flex flex-col justify-between hover:border-primary transition-all duration-300 shadow-xs group">
             <div>
               <span className="text-[0.625rem] sm:text-[0.6875rem] font-semibold text-secondary uppercase tracking-widest block mb-1.5 sm:mb-2">
                 HƯỚNG DẪN DÂN GIAN

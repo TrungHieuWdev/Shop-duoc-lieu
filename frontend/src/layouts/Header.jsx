@@ -90,12 +90,12 @@ export const Header = () => {
 
   return (
     <header className="fixed top-0 inset-x-0 z-50 bg-surface/95 backdrop-blur-md border-b border-border-herbal">
-      <div className="h-16 md:h-20 max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 flex items-center justify-between gap-4">
+      <div className="relative h-16 md:h-20 max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 flex items-center justify-between gap-4">
         {/* Khối Trái: Logo + Tên thương hiệu trên cùng 1 hàng, Slogan xếp ngay bên dưới */}
         <Link
           to="/"
           onClick={handleHomeClick}
-          className="flex flex-col items-start shrink-0 group whitespace-nowrap"
+          className="flex flex-col items-start shrink-0 group whitespace-nowrap z-10"
         >
           <div className="flex items-center gap-2">
             <BrandLogoIcon className="w-6 h-6 sm:w-7 sm:h-7 text-[#5c5d53] group-hover:text-primary transition-all shrink-0" />
@@ -108,8 +108,8 @@ export const Header = () => {
           </span>
         </Link>
 
-        {/* Khối Giữa: Navigation Links căn giữa (Desktop >= lg) */}
-        <nav className="hidden lg:flex items-center justify-center gap-6 xl:gap-9 text-body-sm font-medium shrink-0">
+        {/* Khối Giữa: Navigation Links cố định chính giữa tuyệt đối (không bao giờ bị xê dịch khi mở ô tìm kiếm) */}
+        <nav className="hidden lg:flex items-center justify-center gap-6 xl:gap-9 text-body-sm font-medium shrink-0 lg:absolute lg:left-1/2 lg:-translate-x-1/2 z-10">
           <Link
             to="/"
             onClick={handleHomeClick}
@@ -137,49 +137,68 @@ export const Header = () => {
           </Link>
         </nav>
 
-        {/* Khối Phải: Icon Tìm kiếm, Giỏ hàng + Số lượng ngang hàng, Menu Mobile */}
-        <div className="flex items-center gap-2 sm:gap-3.5 shrink-0">
-          {/* Nút Kính lúp Tìm kiếm (Mở rộng gọn gàng khi nhấn) */}
+        {/* Khối Phải: Ô Tìm kiếm tự co giãn mượt mà, Admin, Giỏ hàng + Số lượng ngang hàng, Menu Mobile */}
+        <div className="flex items-center justify-end gap-1.5 sm:gap-2.5 shrink-0 z-10">
+          {/* Ô Tìm kiếm tự co giãn (Expandable Search Form) */}
           <div ref={searchContainerRef} className="relative flex items-center">
-            {searchOpen ? (
-              <form
-                onSubmit={handleSearch}
-                className="flex items-center bg-surface-container-low border border-border-herbal rounded-full px-3 py-1 w-44 sm:w-56 xl:w-64 transition-all shadow-xs"
-              >
-                <span className="material-symbols-outlined text-outline text-[1.125rem] mr-1.5 shrink-0">
-                  search
-                </span>
-                <input
-                  ref={searchInputRef}
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Escape' && setSearchOpen(false)}
-                  placeholder="Tìm thảo mộc..."
-                  className="w-full bg-transparent text-body-sm text-on-surface placeholder:text-outline focus:outline-none"
-                />
-                <button
-                  type="button"
-                  onClick={() => setSearchOpen(false)}
-                  className="text-outline hover:text-primary ml-1 flex items-center"
-                  aria-label="Đóng tìm kiếm"
-                >
-                  <span className="material-symbols-outlined text-[1rem]">close</span>
-                </button>
-              </form>
-            ) : (
+            <form
+              onSubmit={handleSearch}
+              className={`flex items-center rounded-full overflow-hidden transition-all duration-300 ease-out ${
+                searchOpen
+                  ? 'w-44 sm:w-52 xl:w-60 h-9 px-3 bg-surface-container-low border border-border-herbal shadow-xs'
+                  : 'w-9 h-9 px-0 bg-transparent border border-transparent hover:bg-surface-container-low justify-center'
+              }`}
+            >
               <button
-                type="button"
-                onClick={() => setSearchOpen(true)}
+                type={searchOpen && searchTerm.trim() ? 'submit' : 'button'}
+                onClick={() => {
+                  if (!searchOpen) {
+                    setSearchOpen(true);
+                  }
+                }}
                 aria-label="Tìm kiếm thảo mộc"
                 title="Tìm kiếm thảo mộc"
-                className="p-1.5 rounded-full hover:bg-surface-container-low transition-colors text-primary flex items-center justify-center cursor-pointer"
+                className={`flex items-center justify-center shrink-0 cursor-pointer transition-colors ${
+                  searchOpen ? 'text-outline hover:text-primary mr-1.5' : 'w-9 h-9 text-primary'
+                }`}
               >
-                <span className="material-symbols-outlined text-[1.375rem] sm:text-[1.5rem]">
+                <span
+                  className={`material-symbols-outlined transition-all duration-200 ${
+                    searchOpen ? 'text-[1.125rem]' : 'text-[1.375rem] sm:text-[1.5rem]'
+                  }`}
+                >
                   search
                 </span>
               </button>
-            )}
+
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyDown={(e) => e.key === 'Escape' && setSearchOpen(false)}
+                placeholder="Tìm thảo mộc..."
+                tabIndex={searchOpen ? 0 : -1}
+                className={`bg-transparent text-body-sm text-on-surface placeholder:text-outline focus:outline-none transition-all duration-300 ${
+                  searchOpen ? 'w-full opacity-100' : 'w-0 opacity-0 pointer-events-none'
+                }`}
+              />
+
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchTerm('');
+                  setSearchOpen(false);
+                }}
+                tabIndex={searchOpen ? 0 : -1}
+                aria-label="Đóng tìm kiếm"
+                className={`text-outline hover:text-primary flex items-center justify-center shrink-0 transition-all duration-200 cursor-pointer ${
+                  searchOpen ? 'w-5 h-5 ml-1 opacity-100' : 'w-0 h-0 opacity-0 pointer-events-none overflow-hidden'
+                }`}
+              >
+                <span className="material-symbols-outlined text-[1rem]">close</span>
+              </button>
+            </form>
           </div>
 
           {/* Cổng Quản Trị Nội Bộ (Trang đăng nhập / quản trị admin) */}

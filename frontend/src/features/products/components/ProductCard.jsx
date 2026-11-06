@@ -34,7 +34,7 @@ export const ProductCard = ({ product, onAddToCartSuccess }) => {
   return (
     <div
       ref={cardRef}
-      className="group relative flex flex-col bg-surface-container-lowest rounded-xl p-2.5 sm:p-4 border border-border-herbal/70 shadow-xs hover:shadow-md transition-all duration-300"
+      className="scroll-reveal group relative flex flex-col bg-surface-container-lowest rounded-xl p-2.5 sm:p-4 border border-border-herbal/70 shadow-xs hover:shadow-md transition-all duration-300"
     >
       {/* Product Image */}
       <Link to={`/san-pham/${product.slug}`} className="relative w-full aspect-square bg-surface-container rounded-lg overflow-hidden block">

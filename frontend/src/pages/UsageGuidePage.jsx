@@ -56,7 +56,7 @@ export const UsageGuidePage = () => {
 
       {/* 2. QUY TRÌNH 5 BƯỚC NẤU NƯỚC TẮM THẢO MỘC */}
       <section className="mb-14 sm:mb-20">
-        <div className="eco-rise-2 text-center max-w-xl mx-auto mb-8 sm:mb-12">
+        <div className="scroll-reveal text-center max-w-xl mx-auto mb-8 sm:mb-12">
           <span className="text-[0.6875rem] sm:text-xs font-semibold text-secondary uppercase tracking-widest flex items-center justify-center gap-1.5 mb-1.5">
             <span className="material-symbols-outlined text-[1rem] text-[#8a7258]">bathtub</span>
             PHƯƠNG PHÁP NẤU NƯỚC TẮM DÂN GIAN
@@ -70,10 +70,10 @@ export const UsageGuidePage = () => {
         </div>
 
         {/* 5 Thẻ bước quy trình */}
-        <div className="eco-rise-3 bg-surface rounded-2xl border border-border-herbal p-6 sm:p-8 lg:p-10 shadow-xs mb-8">
+        <div className="scroll-reveal bg-surface rounded-2xl border border-border-herbal p-6 sm:p-8 lg:p-10 shadow-xs mb-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-5">
             {/* Bước 1 */}
-            <div className="bg-surface-container-lowest rounded-xl p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
+            <div className="scroll-reveal bg-surface-container-lowest rounded-xl p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
               <div className="flex items-center justify-between mb-3">
                 <span className="font-serif text-2xl font-bold text-tertiary">01</span>
                 <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
@@ -89,7 +89,7 @@ export const UsageGuidePage = () => {
             </div>
 
             {/* Bước 2 */}
-            <div className="bg-surface-container-lowest rounded-xl p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
+            <div className="scroll-reveal bg-surface-container-lowest rounded-xl p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
               <div className="flex items-center justify-between mb-3">
                 <span className="font-serif text-2xl font-bold text-tertiary">02</span>
                 <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
@@ -105,7 +105,7 @@ export const UsageGuidePage = () => {
             </div>
 
             {/* Bước 3 */}
-            <div className="bg-surface-container-lowest rounded-xl p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
+            <div className="scroll-reveal bg-surface-container-lowest rounded-xl p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
               <div className="flex items-center justify-between mb-3">
                 <span className="font-serif text-2xl font-bold text-tertiary">03</span>
                 <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
@@ -121,7 +121,7 @@ export const UsageGuidePage = () => {
             </div>
 
             {/* Bước 4 */}
-            <div className="bg-surface-container-lowest rounded-xl p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
+            <div className="scroll-reveal bg-surface-container-lowest rounded-xl p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
               <div className="flex items-center justify-between mb-3">
                 <span className="font-serif text-2xl font-bold text-tertiary">04</span>
                 <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
@@ -137,7 +137,7 @@ export const UsageGuidePage = () => {
             </div>
 
             {/* Bước 5 */}
-            <div className="bg-surface-container-lowest rounded-xl p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
+            <div className="scroll-reveal bg-surface-container-lowest rounded-xl p-5 border border-border-herbal/60 flex flex-col hover:border-primary transition-all duration-300 group">
               <div className="flex items-center justify-between mb-3">
                 <span className="font-serif text-2xl font-bold text-tertiary">05</span>
                 <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
@@ -156,8 +156,8 @@ export const UsageGuidePage = () => {
       </section>
 
       {/* 3. CÁC CÁCH ỨNG DỤNG KHÁC (XÔNG HƠI, TẮM SAU SINH, NGÂM CHÂN) */}
-      <section className="eco-rise-4 mb-14 sm:mb-20">
-        <div className="text-center max-w-xl mx-auto mb-8 sm:mb-12">
+      <section className="mb-14 sm:mb-20">
+        <div className="scroll-reveal text-center max-w-xl mx-auto mb-8 sm:mb-12">
           <span className="text-[0.6875rem] sm:text-xs font-semibold text-secondary uppercase tracking-widest flex items-center justify-center gap-1.5 mb-1.5">
             <span className="material-symbols-outlined text-[1rem] text-[#8a7258]">self_improvement</span>
             ĐA DẠNG MỤC ĐÍCH SỬ DỤNG
@@ -168,7 +168,7 @@ export const UsageGuidePage = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-surface rounded-2xl border border-border-herbal/70 p-6 sm:p-8 flex flex-col">
+          <div className="scroll-reveal bg-surface rounded-2xl border border-border-herbal/70 p-6 sm:p-8 flex flex-col">
             <div className="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center mb-4">
               <span className="material-symbols-outlined text-[1.75rem]">air</span>
             </div>
@@ -179,7 +179,7 @@ export const UsageGuidePage = () => {
             <span className="text-xs text-[#8a7258] font-semibold mt-auto">Khuyên dùng: Gừng, Lá sả, Lá bưởi</span>
           </div>
 
-          <div className="bg-surface rounded-2xl border border-border-herbal/70 p-6 sm:p-8 flex flex-col">
+          <div className="scroll-reveal bg-surface rounded-2xl border border-border-herbal/70 p-6 sm:p-8 flex flex-col">
             <div className="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center mb-4">
               <span className="material-symbols-outlined text-[1.75rem]">family_restroom</span>
             </div>
@@ -190,7 +190,7 @@ export const UsageGuidePage = () => {
             <span className="text-xs text-[#8a7258] font-semibold mt-auto">Khuyên dùng: Bài thuốc tổng hợp 7 vị, Lá trầu, Đinh lăng</span>
           </div>
 
-          <div className="bg-surface rounded-2xl border border-border-herbal/70 p-6 sm:p-8 flex flex-col">
+          <div className="scroll-reveal bg-surface rounded-2xl border border-border-herbal/70 p-6 sm:p-8 flex flex-col">
             <div className="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center mb-4">
               <span className="material-symbols-outlined text-[1.75rem]">footprint</span>
             </div>
@@ -204,7 +204,7 @@ export const UsageGuidePage = () => {
       </section>
 
       {/* 4. MẸO NHỎ DÂN GIAN & LƯU Ý AN TOÀN */}
-      <section className="bg-surface-container-low rounded-2xl border border-border-herbal/70 p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <section className="scroll-reveal bg-surface-container-low rounded-2xl border border-border-herbal/70 p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
         <div className="flex items-start gap-4">
           <div className="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center shrink-0 mt-0.5">
             <span className="material-symbols-outlined text-[1.25rem]">spa</span>
