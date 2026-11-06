@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCartStore } from '@/store/useCartStore';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -11,9 +11,12 @@ export const Header = () => {
   const cartBounceTick = useCartStore((state) => state.cartBounceTick);
   const { user, isAuthenticated } = useAuthStore();
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchOpen, setSearchOpen] = useState(false);
   const [activeNav, setActiveNav] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isCartBouncing, setIsCartBouncing] = useState(false);
+  const searchInputRef = useRef(null);
+  const searchContainerRef = useRef(null);
 
   // Hiệu ứng giỏ hàng rung lên 1 nhịp khi có món hàng rơi vào giỏ
   useEffect(() => {
@@ -26,9 +29,24 @@ export const Header = () => {
     }
   }, [cartBounceTick]);
 
+  // Đóng ô tìm kiếm khi click ra ngoài
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target)) {
+        setSearchOpen(false);
+      }
+    };
+    if (searchOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      setTimeout(() => searchInputRef.current?.focus(), 50);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [searchOpen]);
+
   // Tự động nhận diện tab active dựa theo URL và đóng mobile menu khi chuyển trang
   useEffect(() => {
     setMobileMenuOpen(false);
+    setSearchOpen(false);
 
     if (location.pathname === '/san-pham') {
       setActiveNav('san-pham');
@@ -51,6 +69,7 @@ export const Header = () => {
     e.preventDefault();
     if (searchTerm.trim()) {
       navigate(`/san-pham?keyword=${encodeURIComponent(searchTerm.trim())}`);
+      setSearchOpen(false);
     }
   };
 
@@ -71,26 +90,26 @@ export const Header = () => {
 
   return (
     <header className="fixed top-0 inset-x-0 z-50 bg-surface/95 backdrop-blur-md border-b border-border-herbal">
-      <div className="h-16 md:h-20 max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 flex items-center justify-between gap-3 sm:gap-4 xl:gap-8">
-        {/* Brand Logo & Title */}
+      <div className="h-16 md:h-20 max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 flex items-center justify-between gap-4">
+        {/* Khối Trái: Logo + Tên thương hiệu trên cùng 1 hàng, Slogan xếp ngay bên dưới */}
         <Link
           to="/"
           onClick={handleHomeClick}
-          className="flex items-center gap-2.5 sm:gap-3 shrink-0 group"
+          className="flex flex-col items-start shrink-0 group whitespace-nowrap"
         >
-          <BrandLogoIcon className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 text-[#5c5d53] group-hover:text-primary transition-all shrink-0" />
-          <div className="flex flex-col whitespace-nowrap">
-            <span className="font-serif text-base sm:text-lg md:text-xl font-bold text-primary tracking-tight">
+          <div className="flex items-center gap-2">
+            <BrandLogoIcon className="w-6 h-6 sm:w-7 sm:h-7 text-[#5c5d53] group-hover:text-primary transition-all shrink-0" />
+            <span className="font-serif text-base sm:text-lg md:text-xl font-bold text-primary tracking-tight leading-none">
               NgânHàshop
             </span>
-            <span className="text-[0.625rem] sm:text-[0.6875rem] font-semibold text-secondary tracking-widest uppercase">
-              Đơn giản, tinh tế, an lành
-            </span>
           </div>
+          <span className="mt-1.5 text-[0.625rem] sm:text-[0.6875rem] font-semibold text-secondary tracking-widest uppercase leading-none">
+            Đơn giản, tinh tế, an lành
+          </span>
         </Link>
 
-        {/* Navigation Links with 4 Distinct Routes (Desktop >= lg) */}
-        <nav className="hidden lg:flex items-center gap-5 xl:gap-8 text-body-sm font-medium shrink-0">
+        {/* Khối Giữa: Navigation Links căn giữa (Desktop >= lg) */}
+        <nav className="hidden lg:flex items-center justify-center gap-6 xl:gap-9 text-body-sm font-medium shrink-0">
           <Link
             to="/"
             onClick={handleHomeClick}
@@ -118,44 +137,73 @@ export const Header = () => {
           </Link>
         </nav>
 
-        {/* Right Controls: Search, Cart, Mobile/Tablet Menu */}
-        <div className="flex items-center gap-2 sm:gap-3 xl:gap-4 shrink-0">
-          {/* Quick Search on Tablet & Desktop */}
-          <form onSubmit={handleSearch} className="relative hidden md:block w-40 lg:w-52 xl:w-64">
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[1.125rem]">
-              search
-            </span>
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Tìm thảo mộc..."
-              className="w-full pl-9 pr-3 py-1.5 bg-surface-container-low border border-border-herbal rounded text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary transition-colors"
-            />
-          </form>
+        {/* Khối Phải: Icon Tìm kiếm, Giỏ hàng + Số lượng ngang hàng, Menu Mobile */}
+        <div className="flex items-center gap-2 sm:gap-3.5 shrink-0">
+          {/* Nút Kính lúp Tìm kiếm (Mở rộng gọn gàng khi nhấn) */}
+          <div ref={searchContainerRef} className="relative flex items-center">
+            {searchOpen ? (
+              <form
+                onSubmit={handleSearch}
+                className="flex items-center bg-surface-container-low border border-border-herbal rounded-full px-3 py-1 w-44 sm:w-56 xl:w-64 transition-all shadow-xs"
+              >
+                <span className="material-symbols-outlined text-outline text-[1.125rem] mr-1.5 shrink-0">
+                  search
+                </span>
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Escape' && setSearchOpen(false)}
+                  placeholder="Tìm thảo mộc..."
+                  className="w-full bg-transparent text-body-sm text-on-surface placeholder:text-outline focus:outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={() => setSearchOpen(false)}
+                  className="text-outline hover:text-primary ml-1 flex items-center"
+                  aria-label="Đóng tìm kiếm"
+                >
+                  <span className="material-symbols-outlined text-[1rem]">close</span>
+                </button>
+              </form>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setSearchOpen(true)}
+                aria-label="Tìm kiếm thảo mộc"
+                title="Tìm kiếm thảo mộc"
+                className="p-1.5 rounded-full hover:bg-surface-container-low transition-colors text-primary flex items-center justify-center cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[1.375rem] sm:text-[1.5rem]">
+                  search
+                </span>
+              </button>
+            )}
+          </div>
 
-          {/* Cổng Quản Trị Nội Bộ (Trang riêng biệt, không dùng popup che màn hình) */}
+          {/* Cổng Quản Trị Nội Bộ (Trang đăng nhập / quản trị admin) */}
           <Link
             to={isAuthenticated ? '/admin' : '/admin/login'}
             aria-label="Cổng quản trị nội bộ"
-            className="relative p-2 rounded hover:bg-surface-container-low transition-colors text-primary shrink-0 group cursor-pointer"
+            className="relative p-1.5 rounded-full hover:bg-surface-container-low transition-colors text-primary flex items-center justify-center shrink-0 group cursor-pointer"
             title={isAuthenticated ? `Quản trị viên: ${user?.name || user?.email}` : 'Cổng Đăng Nhập Quản Trị Nội Bộ'}
           >
-            <span className="material-symbols-outlined text-[1.625rem] sm:text-[1.75rem] group-hover:text-[#8a7258] transition-colors">
+            <span className="material-symbols-outlined text-[1.375rem] sm:text-[1.5rem] group-hover:text-[#8a7258] transition-colors">
               {isAuthenticated ? 'admin_panel_settings' : 'person'}
             </span>
             {isAuthenticated && (
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-green-600 rounded-full ring-2 ring-surface shadow-xs" />
+              <span className="absolute top-1 right-1 w-2 h-2 bg-green-600 rounded-full ring-2 ring-surface shadow-xs" />
             )}
           </Link>
 
-          {/* Cart Icon with Dynamic Badge & Shake Animation */}
+          {/* Giỏ hàng: Icon túi xách + Badge số lượng nằm ngang bên phải như ảnh mẫu */}
           <Link
             to="/gio-hang"
             id="header-cart-btn"
             data-cart-btn
             aria-label="Giỏ hàng"
-            className={`relative p-2 rounded hover:bg-surface-container-low transition-colors text-primary shrink-0 ${
+            className={`relative flex items-center gap-2 px-1.5 py-1.5 rounded-full hover:bg-surface-container-low transition-colors text-primary shrink-0 ${
               isCartBouncing ? 'animate-cart-shake' : ''
             }`}
           >
@@ -164,7 +212,7 @@ export const Header = () => {
               <span className="absolute inset-0 m-auto w-8 h-8 rounded-full border-2 border-[#cbb07c] animate-cart-ripple pointer-events-none" />
             )}
             <span
-              className={`material-symbols-outlined text-[1.625rem] sm:text-[1.75rem] transition-colors ${
+              className={`material-symbols-outlined text-[1.375rem] sm:text-[1.5rem] transition-colors ${
                 isCartBouncing ? 'text-[#b89667]' : ''
               }`}
             >
@@ -173,8 +221,8 @@ export const Header = () => {
             {totalItems > 0 && (
               <span
                 key={`badge-${totalItems}-${cartBounceTick}`}
-                className={`absolute top-1 right-1 flex items-center justify-center min-w-[1.25rem] h-[1.25rem] px-1 text-[0.6875rem] font-bold text-on-tertiary bg-tertiary-container rounded-full shadow-sm ${
-                  isCartBouncing ? 'animate-badge-pop' : 'animate-pulse'
+                className={`flex items-center justify-center min-w-[1.5rem] h-[1.5rem] px-1.5 text-[0.75rem] font-bold text-on-tertiary bg-tertiary-container rounded-full shadow-sm tabular-nums ${
+                  isCartBouncing ? 'animate-badge-pop' : ''
                 }`}
               >
                 {totalItems}
@@ -186,10 +234,10 @@ export const Header = () => {
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-primary hover:bg-surface-container rounded transition-colors focus:outline-none shrink-0"
+            className="lg:hidden p-1.5 text-primary hover:bg-surface-container rounded transition-colors focus:outline-none shrink-0"
             aria-label={mobileMenuOpen ? 'Đóng menu' : 'Mở menu'}
           >
-            <span className="material-symbols-outlined text-[1.75rem]">
+            <span className="material-symbols-outlined text-[1.625rem]">
               {mobileMenuOpen ? 'close' : 'menu'}
             </span>
           </button>

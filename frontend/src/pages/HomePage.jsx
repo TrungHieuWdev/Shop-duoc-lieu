@@ -138,19 +138,23 @@ export const HomePage = () => {
         {/* Khối Nội Dung Bên Trái (Đã tinh gọn chữ tối đa theo phong cách tối giản cao cấp B ECO) */}
         <div className="relative z-10 max-w-[1536px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-16 w-full py-8 sm:py-20 flex flex-col justify-center items-start text-left">
           {/* Nhãn phụ tinh tế */}
-          <span className="eco-rise text-[0.625rem] sm:text-xs font-semibold text-[#cbb07c] uppercase tracking-[0.2em] sm:tracking-[0.3em] mb-2.5 sm:mb-4 flex items-center gap-1.5 sm:gap-2 drop-shadow-sm">
-            <span className="material-symbols-outlined text-[0.875rem] sm:text-[1rem]">spa</span>
-            TINH CHỌN THẢO DƯỢC • TRỌN VẸN HƯƠNG TỰ NHIÊN
+          <span className="eco-rise text-xs sm:text-sm font-semibold text-[#cbb07c] uppercase tracking-wider mb-2 sm:mb-3 drop-shadow-sm">
+            TINH CHỌN THẢO DƯỢC • HƯƠNG VỊ TỰ NHIÊN
           </span>
 
-          {/* Tên thương hiệu lớn phong cách B ECO */}
-          <h1 className="eco-rise-1 font-serif text-3xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold tracking-[0.14em] sm:tracking-[0.25em] text-[#fbf9f2] drop-shadow-lg leading-tight mb-2 sm:mb-3 whitespace-nowrap">
-            N G Â N &nbsp;H À
+          {/* Tên thương hiệu lớn */}
+          <h1 className="eco-rise-1 font-serif text-3xl sm:text-5xl md:text-6xl font-bold tracking-normal text-[#fbf9f2] drop-shadow-lg leading-tight mb-2 sm:mb-3 whitespace-nowrap">
+            NGÂN HÀ
           </h1>
 
           {/* Slogan màu vàng rơm mộc mạc */}
-          <p className="eco-rise-2 font-serif text-sm sm:text-xl lg:text-2xl text-[#d8c9aa] font-medium tracking-wide mb-6 sm:mb-10 drop-shadow-sm">
+          <p className="eco-rise-2 text-base sm:text-xl lg:text-2xl text-[#cbb07c] font-bold tracking-normal mb-2.5 sm:mb-3.5 drop-shadow-sm">
             Gom hương thảo dược – Gói trọn an nhiên
+          </p>
+
+          {/* Đoạn mô tả ngắn */}
+          <p className="eco-rise-2 text-xs sm:text-base text-[#fbf9f2]/85 font-normal tracking-normal leading-relaxed max-w-2xl mb-6 sm:mb-8 drop-shadow-sm">
+            Khám phá các sản phẩm thảo dược khô được tuyển chọn, đóng gói tiện lợi cho nhu cầu nấu tắm và xông tại nhà.
           </p>
 
           {/* Cặp Nút Hành Động (Dual CTA) chuẩn phong cách B ECO */}
@@ -158,9 +162,9 @@ export const HomePage = () => {
             {/* Nút chính: Màu vàng rơm đất ấm */}
             <Link
               to="/san-pham"
-              className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 bg-[#cbb07c] hover:bg-[#dfc492] text-[#14261a] font-bold text-xs sm:text-sm tracking-widest uppercase rounded-lg sm:rounded shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 group cursor-pointer"
+              className="w-full sm:w-auto px-5 sm:px-6 py-3 sm:py-3.5 bg-[#cbb07c] hover:bg-[#dfc492] text-[#14261a] font-bold text-xs sm:text-sm tracking-normal uppercase rounded-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 group cursor-pointer"
             >
-              <span>MUA NGAY</span>
+              <span>KHÁM PHÁ SẢN PHẨM</span>
               <span className="material-symbols-outlined text-base group-hover:translate-x-1 transition-transform">
                 arrow_forward
               </span>
@@ -169,9 +173,9 @@ export const HomePage = () => {
             {/* Nút phụ: Khung viền mỏng trong suốt kính mờ dẫn sang trang Cách Dùng */}
             <Link
               to="/cach-dung"
-              className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 border border-white/40 hover:border-white bg-black/25 hover:bg-white/10 text-white font-medium text-xs sm:text-sm tracking-widest uppercase rounded-lg sm:rounded backdrop-blur-sm transition-all hover:-translate-y-0.5 flex items-center justify-center cursor-pointer"
+              className="w-full sm:w-auto px-5 sm:px-6 py-3 sm:py-3.5 border border-white/40 hover:border-white bg-black/25 hover:bg-white/10 text-white font-bold text-xs sm:text-sm tracking-normal uppercase rounded-lg backdrop-blur-sm transition-all hover:-translate-y-0.5 flex items-center justify-center cursor-pointer"
             >
-              HƯỚNG DẪN SỬ DỤNG
+              TÌM HIỂU CÁCH DÙNG
             </Link>
           </div>
         </div>
