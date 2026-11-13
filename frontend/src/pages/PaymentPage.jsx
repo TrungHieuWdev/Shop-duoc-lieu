@@ -25,10 +25,10 @@ export const PaymentPage = () => {
   const finalAmount = paymentInfo?.amount || matchedOrder?.total || 0;
 
   // Lấy thông tin ngân hàng thụ hưởng từ cấu hình Admin cài đặt
-  const bankName = settings?.bank_name || 'MBBank (Quân Đội)';
-  const bankAccount = settings?.bank_account || '0983124567';
+  const bankName = settings?.bank_name || 'Vietcombank (Ngoại Thương)';
+  const bankAccount = settings?.bank_account || '1033519890';
   const accountName = settings?.account_name || 'TIỆM THẢO DƯỢC NGÂN HÀ';
-  const bankId = settings?.bank_id || 'MB';
+  const bankId = settings?.bank_id || 'VCB';
 
   // Tạo URL VietQR Napas247 động theo cài đặt Admin
   const qrUrl = getVietQrUrl({

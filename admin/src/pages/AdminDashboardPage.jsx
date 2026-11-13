@@ -443,7 +443,7 @@ export const AdminDashboardPage = () => {
              - Đầy đủ 5 Tab: Tổng Quan 2026, Phiếu Kiểm Kho, Hàng Hóa, Hóa Đơn, Cài Đặt (VietQR & Ship)
              - Hoàn toàn Rounded-None, sắc nét chuẩn ERP
           ========================================================================= */}
-      <header className="bg-[#1d3527] border-b border-[#2a4d38] text-white sticky top-16 md:top-20 z-40 shadow-sm">
+      <header className="bg-[#1d3527] border-b border-[#2a4d38] text-white sticky top-0 z-40 shadow-sm">
         <div className="max-w-[1700px] mx-auto px-2 sm:px-6 flex items-center justify-between h-12 sm:h-13">
           {/* Navigation Tabs (5 Tabs chính) */}
           <nav className="flex items-center gap-1.5 overflow-x-auto scrollbar-none flex-nowrap py-1">
@@ -637,14 +637,16 @@ export const AdminDashboardPage = () => {
               )}
             </div>
 
-            <Link
-              to="/"
+            <a
+              href="https://nganhashop.pages.dev"
+              target="_blank"
+              rel="noopener noreferrer"
               className="px-3 py-1.5 bg-[#2a4d38] hover:bg-[#345e45] text-[#d4b986] border border-[#d4b986]/40 font-bold text-xs rounded-lg transition-all flex items-center gap-1.5 shadow-xs"
               title="Mở giao diện khách hàng mua sắm"
             >
               <span className="material-symbols-outlined text-sm">storefront</span>
               <span className="hidden sm:inline">Bán Hàng</span>
-            </Link>
+            </a>
 
             <div className="hidden md:flex items-center gap-2 pl-2 border-l border-white/20">
               <div className="w-6 h-6 bg-[#d4b986]/30 text-[#f5eedd] flex items-center justify-center font-bold text-xs rounded-full">

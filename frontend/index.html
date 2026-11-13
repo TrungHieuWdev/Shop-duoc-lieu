@@ -9,16 +9,22 @@
     <title>Ngân Hà Shop - Quà Tặng Từ Thiên Nhiên</title>
     <meta name="description" content="Ngân Hà chuyên các sản phẩm bài thuốc thảo dược xông tắm cổ truyền 7 vị và dược liệu phơi khô tự nhiên: đinh lăng, gừng sẻ, lá trầu, ngải cứu, sả chanh, lá bưởi, hoa hồng." />
 
+    <!-- Preconnect Supabase & VietQR để giảm độ trễ kết nối trên PC và di động -->
+    <link rel="preconnect" href="https://ybipnjawlcvzswnuhvgr.supabase.co" crossorigin />
+    <link rel="dns-prefetch" href="https://img.vietqr.io" />
+
     <!-- Preload Hero Banner Image (LCP Optimization) -->
     <link rel="preload" as="image" href="/images/hero-cinematic-b-eco.jpg" fetchpriority="high" />
 
-    <!-- Google Fonts Preconnect & Optimized Subsets with display=swap -->
+    <!-- Google Fonts Preconnect & Non-blocking Stylesheets (Tối ưu tốc độ hiển thị FCP/LCP) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700;1,800&family=Manrope:wght@500;600;700&family=Noto+Serif:wght@500;600;700&family=Vollkorn:wght@600;700;800&display=swap" rel="stylesheet" />
-
-    <!-- Google Material Symbols Outlined (display=swap) -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700;1,800&family=Manrope:wght@500;600;700&family=Noto+Serif:wght@500;600;700&family=Vollkorn:wght@600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700;1,800&family=Manrope:wght@500;600;700&family=Noto+Serif:wght@500;600;700&family=Vollkorn:wght@600;700;800&display=swap" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet" />
+    </noscript>
   </head>
   <body class="bg-surface text-on-surface font-sans antialiased selection:bg-primary-fixed selection:text-primary">
     <div id="root"></div>

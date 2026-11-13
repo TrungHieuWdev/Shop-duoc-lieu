@@ -179,9 +179,9 @@ const getSavedAuditLogs = () => {
 
 // Cài đặt mặc định của hệ thống
 const DEFAULT_SETTINGS = {
-  bank_id: 'MB', // Mã ngân hàng VietQR (e.g. MB, VCB, TCB, ACB, BIDV, ICB, VPB, TPB, STB, VIB)
-  bank_name: 'MBBank (Quân Đội)',
-  bank_account: '0983124567', // Số tài khoản ngân hàng
+  bank_id: 'VCB', // Mã ngân hàng VietQR (e.g. VCB, MB, TCB, ACB, BIDV, ICB, VPB, TPB, STB, VIB)
+  bank_name: 'Vietcombank (Ngoại Thương)',
+  bank_account: '1033519890', // Số tài khoản ngân hàng
   account_name: 'TIỆM THẢO DƯỢC NGÂN HÀ', // Tên chủ tài khoản
   admin_email: 'hieunedz@gmail.com', // Gmail chủ tiệm để nhận thông tin đơn hàng đi đơn
   shop_sender_email: 'nganhashop995@gmail.com', // Email của shop dùng để gửi thông báo đến chủ shop
@@ -196,6 +196,12 @@ const getSavedSettings = () => {
     if (!raw) return DEFAULT_SETTINGS;
     const parsed = JSON.parse(raw);
     const merged = { ...DEFAULT_SETTINGS, ...parsed };
+    // Tự động xóa tài khoản mẫu cũ 0983124567 nếu trình duyệt còn lưu cache cũ
+    if (!merged.bank_account || merged.bank_account === '0983124567') {
+      merged.bank_id = DEFAULT_SETTINGS.bank_id;
+      merged.bank_name = DEFAULT_SETTINGS.bank_name;
+      merged.bank_account = DEFAULT_SETTINGS.bank_account;
+    }
     // Tự động nâng cấp nếu đang lưu email mẫu cũ
     if (!merged.admin_email || merged.admin_email === 'tiemthaomocnganha@gmail.com') {
       merged.admin_email = 'hieunedz@gmail.com';
@@ -279,38 +285,54 @@ export const useAdminStore = create((set, get) => ({
   auditLogs: getSavedAuditLogs(),
   settings: getSavedSettings(),
 
-  // Đồng bộ sản phẩm và cài đặt công khai từ Supabase (khi đã cấu hình)
-  hydratePublicData: async () => {
-    if (!isSupabaseConfigured || !supabase) return;
-    try {
-      const [prodRes, setRes] = await Promise.all([
-        supabase.from('products').select('*').order('id', { ascending: true }),
-        supabase.from('shop_settings').select('*').eq('id', 1).maybeSingle(),
-      ]);
-
-      if (Array.isArray(prodRes.data) && prodRes.data.length > 0) {
-        const ordered = [...prodRes.data];
-        const topIdx = ordered.findIndex(
-          (p) => p.slug === 'thao-duoc-duong-nu' || (p.name && p.name.trim().toLowerCase() === 'thảo dược dưỡng nữ')
-        );
-        if (topIdx > 0) {
-          const [top] = ordered.splice(topIdx, 1);
-          ordered.unshift(top);
-        }
-        set({ products: ordered });
-      }
-
-      if (setRes.data) {
-        const mergedSettings = { ...DEFAULT_SETTINGS, ...setRes.data };
+  // Đồng bộ sản phẩm và cài đặt công khai từ Supabase (gộp request trùng để tải nhanh trên mobile & PC)
+  hydratePublicData: (() => {
+    let inflight = null;
+    return async () => {
+      if (!isSupabaseConfigured || !supabase) return;
+      if (inflight) return inflight;
+      inflight = (async () => {
         try {
-          localStorage.setItem('nganha_shop_settings', JSON.stringify(mergedSettings));
-        } catch {}
-        set({ settings: mergedSettings });
-      }
-    } catch {
-      // Giữ dữ liệu mặc định nếu mạng gián đoạn
-    }
-  },
+          const [prodRes, setRes] = await Promise.all([
+            supabase
+              .from('products')
+              .select('id, name, slug, category_slug, category_name, unit, price, original_price, stock, status, thumbnail_url')
+              .order('id', { ascending: true }),
+            supabase
+              .from('shop_settings')
+              .select('id, bank_id, bank_name, bank_account, account_name, admin_email, shop_sender_email, zalo_phone, default_shipping_fee, free_shipping_threshold')
+              .eq('id', 1)
+              .maybeSingle(),
+          ]);
+
+          if (Array.isArray(prodRes.data) && prodRes.data.length > 0) {
+            const ordered = [...prodRes.data];
+            const topIdx = ordered.findIndex(
+              (p) => p.slug === 'thao-duoc-duong-nu' || (p.name && p.name.trim().toLowerCase() === 'thảo dược dưỡng nữ')
+            );
+            if (topIdx > 0) {
+              const [top] = ordered.splice(topIdx, 1);
+              ordered.unshift(top);
+            }
+            set({ products: ordered });
+          }
+
+          if (setRes.data) {
+            const mergedSettings = { ...DEFAULT_SETTINGS, ...setRes.data };
+            try {
+              localStorage.setItem('nganha_shop_settings', JSON.stringify(mergedSettings));
+            } catch {}
+            set({ settings: mergedSettings });
+          }
+        } catch {
+          // Giữ dữ liệu mặc định nếu mạng gián đoạn
+        } finally {
+          inflight = null;
+        }
+      })();
+      return inflight;
+    };
+  })(),
 
   // Cập nhật cài đặt ngân hàng & phí ship
   updateSettings: (newSettings) => {

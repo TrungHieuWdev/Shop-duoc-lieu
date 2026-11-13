@@ -31,9 +31,9 @@ const DEFAULT_PRODUCTS = [
 ];
 
 const DEFAULT_SETTINGS = {
-  bank_id: 'MB',
-  bank_name: 'MBBank (Quân Đội)',
-  bank_account: '0983124567',
+  bank_id: 'VCB',
+  bank_name: 'Vietcombank (Ngoại Thương)',
+  bank_account: '1033519890',
   account_name: 'TIỆM THẢO DƯỢC NGÂN HÀ',
   admin_email: 'hieunedz@gmail.com',
   shop_sender_email: 'nganhashop995@gmail.com',

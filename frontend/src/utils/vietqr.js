@@ -30,8 +30,8 @@ export const getVietQrUrl = ({
   accountName,
   template = 'qr_only',
 }) => {
-  const cleanBank = (bankId || 'MB').trim();
-  const cleanAcc = (bankAccount || '0983124567').replace(/\s+/g, '');
+  const cleanBank = (bankId || 'VCB').trim();
+  const cleanAcc = (bankAccount || '1033519890').replace(/\s+/g, '');
   const cleanAmount = Math.max(0, parseInt(amount, 10) || 0);
   const cleanDes = encodeURIComponent(orderCode || 'THANH TOAN NGAN HA');
   const cleanName = encodeURIComponent((accountName || 'TIEM THAO MOC NGAN HA').toUpperCase());
