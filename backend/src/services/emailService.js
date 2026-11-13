@@ -16,9 +16,9 @@ const formatMoney = (amount) => {
     .replace('₫', 'đ');
 };
 
-export const getGoogleTransporter = () => {
-  const smtpUser = process.env.SMTP_USER;
-  const smtpPass = process.env.SMTP_PASS;
+export const getGoogleTransporter = (customUser, customPass) => {
+  const smtpUser = (customUser && String(customUser).trim()) || process.env.SMTP_USER;
+  const smtpPass = (customPass && String(customPass).trim()) || process.env.SMTP_PASS;
 
   if (!smtpUser || !smtpPass || smtpUser === 'your_store_system_email@gmail.com') {
     return null;
@@ -28,19 +28,22 @@ export const getGoogleTransporter = () => {
   const smtpPort = Number(process.env.SMTP_PORT) || 465;
   const isSecure = smtpPort === 465;
 
-  return nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port: smtpPort,
-    secure: isSecure,
-    auth: {
-      user: smtpUser.trim(),
-      pass: smtpPass.trim().replace(/\s+/g, ''), // Xóa bỏ khoảng trắng nếu copy từ Google
-    },
-    // Tăng timeout kết nối để tránh mạng chập chờn
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 15000,
-  });
+  return {
+    smtpUser: smtpUser.trim(),
+    transporter: nodemailer.createTransport({
+      host: process.env.SMTP_HOST || 'smtp.gmail.com',
+      port: smtpPort,
+      secure: isSecure,
+      auth: {
+        user: smtpUser.trim(),
+        pass: smtpPass.trim().replace(/\s+/g, ''), // Xóa bỏ khoảng trắng nếu copy từ Google
+      },
+      // Tăng timeout kết nối để tránh mạng chập chờn
+      connectionTimeout: 10000,
+      greetingTimeout: 10000,
+      socketTimeout: 15000,
+    }),
+  };
 };
 
 /**
@@ -223,7 +226,14 @@ const sentOrdersDeduplicationCache = new Map();
 /**
  * Gửi email thông báo đơn hàng qua Google SMTP
  */
-export const sendOrderEmailViaGoogleSmtp = async ({ order, recipientEmail, subject, textBody }) => {
+export const sendOrderEmailViaGoogleSmtp = async ({
+  order,
+  recipientEmail,
+  senderEmail,
+  senderAppPassword,
+  subject,
+  textBody,
+}) => {
   const orderCode = order?.order_code;
 
   // 1. Kiểm tra chống gửi trùng lặp (Deduplication Guard)
@@ -243,13 +253,13 @@ export const sendOrderEmailViaGoogleSmtp = async ({ order, recipientEmail, subje
     }
   }
 
-  const transporter = getGoogleTransporter();
+  const mailer = getGoogleTransporter(senderEmail, senderAppPassword);
 
   // Luôn ưu tiên hòm thư thực tế của chủ shop trong .env, bỏ qua email mẫu 'tiemthaomocnganha@gmail.com'
   const isDummyEmail = !recipientEmail || recipientEmail === 'tiemthaomocnganha@gmail.com';
   const targetEmail = !isDummyEmail
     ? recipientEmail
-    : (process.env.STORE_OWNER_EMAIL || process.env.SMTP_USER || 'tiemthaomocnganha@gmail.com');
+    : (process.env.STORE_OWNER_EMAIL || process.env.SMTP_USER || 'hieunedz@gmail.com');
 
   const safeSubject = String(
     subject || `[ĐƠN HÀNG MỚI #${order?.order_code || ''}] Tiếp nhận đơn hàng mới`
@@ -257,21 +267,21 @@ export const sendOrderEmailViaGoogleSmtp = async ({ order, recipientEmail, subje
     .replace(/[\r\n]+/g, ' ')
     .slice(0, 150);
 
-  // Nếu chưa cấu hình Google SMTP trong .env
-  if (!transporter) {
+  // Nếu chưa cấu hình Google SMTP trong Admin hoặc .env
+  if (!mailer) {
     console.log(
-      `[GOOGLE SMTP] Chưa cấu hình SMTP_USER hoặc SMTP_PASS trong file backend/.env. Ghi nhận log mô phỏng tới: ${targetEmail}`
+      `[GOOGLE SMTP] Chưa cấu hình SMTP_USER/SMTP_PASS (Admin hoặc backend/.env). Chờ fallback FormSubmit tới: ${targetEmail}`
     );
     return {
       success: true,
       configured: false,
       message:
-        'Hệ thống đã ghi nhận đơn hàng. Để nhận email tự động thật, vui lòng cấu hình tài khoản Gmail và Mật khẩu ứng dụng 16 ký tự trong file backend/.env.',
+        'Chưa cấu hình Google SMTP (Email gửi & Mật khẩu ứng dụng). Hệ thống sẽ chuyển sang kênh dự phòng.',
     };
   }
 
   const htmlContent = buildOrderHtmlTemplate(order);
-  const fromEmail = process.env.SMTP_USER;
+  const fromEmail = mailer.smtpUser;
 
   const mailOptions = {
     from: `"Tiệm Thảo Dược Ngân Hà" <${fromEmail}>`,
@@ -282,8 +292,8 @@ export const sendOrderEmailViaGoogleSmtp = async ({ order, recipientEmail, subje
     html: htmlContent,
   };
 
-  const info = await transporter.sendMail(mailOptions);
-  console.log(`[GOOGLE SMTP SUCCESS] Đã gửi thành công thư tới ${targetEmail}. MessageId: ${info.messageId}`);
+  const info = await mailer.transporter.sendMail(mailOptions);
+  console.log(`[GOOGLE SMTP SUCCESS] Đã gửi từ ${fromEmail} tới ${targetEmail}. MessageId: ${info.messageId}`);
 
   // Đánh dấu đơn hàng đã gửi thành công vào cache chống trùng
   if (orderCode) {
@@ -294,7 +304,7 @@ export const sendOrderEmailViaGoogleSmtp = async ({ order, recipientEmail, subje
     success: true,
     configured: true,
     messageId: info.messageId,
-    message: `Đã gửi thông báo đơn hàng thành công đến Gmail: ${targetEmail}`,
+    message: `Đã gửi thông báo đơn hàng từ ${fromEmail} đến Gmail chủ shop: ${targetEmail}`,
   };
 };
 
@@ -302,8 +312,8 @@ export const sendOrderEmailViaGoogleSmtp = async ({ order, recipientEmail, subje
  * Kiểm tra xác thực tài khoản Google SMTP
  */
 export const verifyGoogleSmtp = async () => {
-  const transporter = getGoogleTransporter();
-  if (!transporter) {
+  const mailer = getGoogleTransporter();
+  if (!mailer) {
     return {
       success: false,
       configured: false,
@@ -312,11 +322,11 @@ export const verifyGoogleSmtp = async () => {
   }
 
   try {
-    await transporter.verify();
+    await mailer.transporter.verify();
     return {
       success: true,
       configured: true,
-      message: `Kết nối thành công đến dịch vụ Google SMTP (${process.env.SMTP_USER}).`,
+      message: `Kết nối thành công đến dịch vụ Google SMTP (${mailer.smtpUser}).`,
     };
   } catch (error) {
     console.error('[GOOGLE SMTP VERIFY FAILED]', error.message);

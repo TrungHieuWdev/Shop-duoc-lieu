@@ -4,8 +4,8 @@ import { create } from 'zustand';
 const DEFAULT_PRODUCTS = [
   {
     id: 9,
-    name: 'Thảo Dược Dược Nữ',
-    slug: 'thao-duoc-duoc-nu',
+    name: 'Thảo Dược Dưỡng Nữ',
+    slug: 'thao-duoc-duong-nu',
     category_slug: 'bai-thuoc-xong-tam',
     category_name: 'Bài Thuốc Xông Tắm',
     unit: '1 bịch (5 gói nhỏ)',
@@ -183,6 +183,7 @@ const DEFAULT_SETTINGS = {
   bank_account: '0983124567', // Số tài khoản ngân hàng
   account_name: 'TIỆM THẢO DƯỢC NGÂN HÀ', // Tên chủ tài khoản
   admin_email: 'hieunedz@gmail.com', // Gmail chủ tiệm để nhận thông tin đơn hàng đi đơn
+  shop_sender_email: 'nganhashop995@gmail.com', // Email của shop dùng để gửi thông báo đến chủ shop
   zalo_phone: '0901378425', // Số điện thoại Zalo chủ cửa hàng
   default_shipping_fee: 30000, // Phí ship mặc định
   free_shipping_threshold: 350000, // Ngưỡng miễn phí ship
@@ -197,6 +198,9 @@ const getSavedSettings = () => {
     // Tự động nâng cấp nếu đang lưu email mẫu cũ
     if (!merged.admin_email || merged.admin_email === 'tiemthaomocnganha@gmail.com') {
       merged.admin_email = 'hieunedz@gmail.com';
+    }
+    if (!merged.shop_sender_email) {
+      merged.shop_sender_email = 'nganhashop995@gmail.com';
     }
     // Tự động nâng cấp nếu đang lưu SĐT Zalo cũ
     if (!merged.zalo_phone || merged.zalo_phone === '0987654321' || merged.zalo_phone === '0374276634') {
@@ -230,11 +234,18 @@ const getSavedProducts = () => {
 
     for (const p of parsed) {
       if (!p || !p.name) continue;
-      const normName = p.name.trim().toLowerCase();
-      if ((p.slug && seenSlugs.has(p.slug)) || seenNames.has(normName)) continue;
-      if (p.slug) seenSlugs.add(p.slug);
+      // Nâng cấp tên/slug cũ "Thảo Dược Dược Nữ" -> "Thảo Dược Dưỡng Nữ"
+      const rawNormName = p.name.trim().toLowerCase();
+      const normalizedProduct =
+        p.slug === 'thao-duoc-duoc-nu' || rawNormName === 'thảo dược dược nữ'
+          ? { ...p, name: 'Thảo Dược Dưỡng Nữ', slug: 'thao-duoc-duong-nu' }
+          : p;
+
+      const normName = normalizedProduct.name.trim().toLowerCase();
+      if ((normalizedProduct.slug && seenSlugs.has(normalizedProduct.slug)) || seenNames.has(normName)) continue;
+      if (normalizedProduct.slug) seenSlugs.add(normalizedProduct.slug);
       seenNames.add(normName);
-      deduped.push(p);
+      deduped.push(normalizedProduct);
     }
 
     for (const def of DEFAULT_PRODUCTS) {
@@ -246,9 +257,9 @@ const getSavedProducts = () => {
       }
     }
 
-    // Đưa sản phẩm mới "Thảo Dược Dược Nữ" lên vị trí đầu tiên
+    // Đưa sản phẩm mới "Thảo Dược Dưỡng Nữ" lên vị trí đầu tiên
     const topIdx = deduped.findIndex(
-      (p) => p.slug === 'thao-duoc-duoc-nu' || p.name.trim().toLowerCase() === 'thảo dược dược nữ'
+      (p) => p.slug === 'thao-duoc-duong-nu' || p.name.trim().toLowerCase() === 'thảo dược dưỡng nữ'
     );
     if (topIdx > 0) {
       const [topItem] = deduped.splice(topIdx, 1);

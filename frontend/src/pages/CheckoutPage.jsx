@@ -128,8 +128,9 @@ export const CheckoutPage = () => {
       // Ghi nhận đơn hàng vào hệ thống quản lý an toàn
       addOrder(newOrder);
 
-      // Tự động kích hoạt thông báo đơn hàng gửi đến Gmail của chủ shop
-      const adminEmail = settings?.admin_email || 'tiemthaomocnganha@gmail.com';
+      // Tự động kích hoạt thông báo đơn hàng gửi đến Gmail chủ shop đã cài đặt trong Admin
+      const latestAdminEmail = useAdminStore.getState().settings?.admin_email;
+      const adminEmail = latestAdminEmail || settings?.admin_email || 'hieunedz@gmail.com';
       notifyAdminNewOrder(newOrder, adminEmail);
 
       // Gọi backend nếu có (với dữ liệu đã làm sạch triệt để)

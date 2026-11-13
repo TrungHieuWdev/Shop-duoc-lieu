@@ -9,8 +9,8 @@ import { useAdminStore } from '@/store/useAdminStore';
 const FEATURED_PRODUCTS = [
   {
     id: 9,
-    name: 'Thảo Dược Dược Nữ',
-    slug: 'thao-duoc-duoc-nu',
+    name: 'Thảo Dược Dưỡng Nữ',
+    slug: 'thao-duoc-duong-nu',
     category_name: 'Bài Thuốc Xông Tắm',
     unit: '1 bịch (5 gói nhỏ)',
     price: 60000,
@@ -227,7 +227,7 @@ export const HomePage = () => {
                 NGUỒN GỐC & DƯỢC TÍNH
               </span>
               <h3 className="font-serif text-xl sm:text-2xl font-bold text-primary mb-2 sm:mb-3 group-hover:text-secondary transition-colors">
-                Về Thảo Dược Bản Địa
+                Về Thảo Dược
               </h3>
               <p className="text-xs sm:text-sm text-on-surface-variant leading-relaxed mb-5 sm:mb-6">
                 Tìm hiểu công dụng và dược tính tự nhiên của 7 vị thuốc xông tắm cổ truyền: Đinh lăng, Gừng sẻ, Lá trầu không, Ngải cứu, Sả chanh, Lá bưởi và Hoa hồng phơi khô.

@@ -105,8 +105,8 @@ const ALL_PRODUCTS = [
     id: 9,
     category_slug: 'bai-thuoc-xong-tam',
     category_name: 'Bài Thuốc Xông Tắm',
-    name: 'Thảo Dược Dược Nữ',
-    slug: 'thao-duoc-duoc-nu',
+    name: 'Thảo Dược Dưỡng Nữ',
+    slug: 'thao-duoc-duong-nu',
     unit: '1 bịch (5 gói nhỏ)',
     price: 60000,
     original_price: 75000,
@@ -131,9 +131,9 @@ export const ProductsPage = () => {
     const matchKeyword = !keyword || prod.name.toLowerCase().includes(keyword.toLowerCase());
     return matchCategory && matchKeyword;
   }).sort((a, b) => {
-    // Luôn ưu tiên đưa sản phẩm mới "Thảo Dược Dược Nữ" và Bài thuốc 7 vị lên hàng đầu
+    // Luôn ưu tiên đưa sản phẩm mới "Thảo Dược Dưỡng Nữ" và Bài thuốc 7 vị lên hàng đầu
     const getPriority = (item) => {
-      if (item.slug === 'thao-duoc-duoc-nu' || (item.name && item.name.trim().toLowerCase() === 'thảo dược dược nữ')) return 0;
+      if (item.slug === 'thao-duoc-duong-nu' || (item.name && item.name.trim().toLowerCase() === 'thảo dược dưỡng nữ')) return 0;
       if (item.id === 1 || (item.slug && item.slug.includes('bai-thuoc'))) return 1;
       return 2;
     };
@@ -216,11 +216,10 @@ export const ProductsPage = () => {
               <button
                 key={cat.slug}
                 onClick={() => handleCategoryChange(cat.slug)}
-                className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
-                  selectedCategory === cat.slug
+                className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${selectedCategory === cat.slug
                     ? 'bg-primary text-on-primary shadow-xs'
                     : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container border border-border-herbal/60'
-                }`}
+                  }`}
               >
                 {cat.label}
               </button>

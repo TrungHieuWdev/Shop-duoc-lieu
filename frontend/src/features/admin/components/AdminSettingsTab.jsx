@@ -21,6 +21,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
       (settings?.admin_email && settings?.admin_email !== 'tiemthaomocnganha@gmail.com')
         ? settings.admin_email
         : 'hieunedz@gmail.com',
+    shop_sender_email: settings?.shop_sender_email || 'nganhashop995@gmail.com',
     zalo_phone: settings?.zalo_phone || '0901378425',
     default_shipping_fee: settings?.default_shipping_fee || 30000,
     free_shipping_threshold: settings?.free_shipping_threshold || 350000,
@@ -68,10 +69,14 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
     };
 
     try {
-      await sendAutomaticOrderEmail(testOrder, formData.admin_email);
+      const result = await sendAutomaticOrderEmail(testOrder, formData.admin_email, {
+        senderEmail: formData.shop_sender_email,
+      });
       setTestResult({
-        success: true,
-        message: `Đã phát lệnh gửi thông báo đơn hàng thử nghiệm đến: ${formData.admin_email}.`,
+        success: Boolean(result?.success),
+        message:
+          result?.message ||
+          `Đã phát lệnh gửi thông báo đơn hàng thử nghiệm đến: ${formData.admin_email}.`,
       });
       // Làm mới danh sách log
       const raw = localStorage.getItem('nganha_admin_email_logs') || '[]';
@@ -122,6 +127,8 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
     e.preventDefault();
     const normalizedSettings = {
       ...formData,
+      admin_email: String(formData.admin_email || '').trim(),
+      shop_sender_email: String(formData.shop_sender_email || '').trim() || 'nganhashop995@gmail.com',
       zalo_phone: String(formData.zalo_phone || '').replace(/\D/g, ''),
       default_shipping_fee: Number(formData.default_shipping_fee) || 0,
       free_shipping_threshold: Number(formData.free_shipping_threshold) || 0,
@@ -141,6 +148,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
             <div className="bg-[#faf8f3] p-2.5 border border-[#ded7ca] space-y-1">
               <div>• Ngân hàng thụ hưởng: <strong>{normalizedSettings.bank_name}</strong></div>
               <div>• Số tài khoản: <strong className="font-mono">{normalizedSettings.bank_account}</strong> ({normalizedSettings.account_name})</div>
+              <div>• Email của shop (gửi đi): <strong className="text-primary">{normalizedSettings.shop_sender_email || 'Mặc định hệ thống'}</strong></div>
               <div>• Gmail nhận đơn để đi đơn: <strong className="text-secondary">{normalizedSettings.admin_email}</strong></div>
               <div>• Số điện thoại Zalo chủ shop: <strong className="font-mono text-[#0068ff]">{normalizedSettings.zalo_phone || 'Chưa thiết lập'}</strong></div>
               <div>• Phí ship mặc định: <strong>{formatCurrency(normalizedSettings.default_shipping_fee)}</strong></div>
@@ -268,7 +276,29 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
             <div className="space-y-3 text-xs">
               <div>
                 <label className="block text-[11px] font-bold text-primary uppercase tracking-wider mb-1">
-                  Địa Chỉ Gmail / Email Nhận Đơn Hàng <span className="text-red-600">*</span>
+                  Email Của Shop (Email Gửi Thông Báo Đi) <span className="text-red-600">*</span>
+                </label>
+                <div className="relative">
+                  <input
+                    type="email"
+                    required
+                    value={formData.shop_sender_email}
+                    onChange={(e) => setFormData({ ...formData, shop_sender_email: e.target.value })}
+                    placeholder="VD: nganhashop995@gmail.com"
+                    className="w-full pl-8 pr-3 py-2 bg-[#faf8f3] border border-border-herbal rounded-xl text-xs font-semibold text-primary focus:outline-none focus:border-primary"
+                  />
+                  <span className="material-symbols-outlined text-outline text-sm absolute left-2.5 top-2.5">
+                    outgoing_mail
+                  </span>
+                </div>
+                <p className="text-[11px] text-on-surface-variant mt-1 leading-relaxed">
+                  Email đại diện của shop dùng để gửi thông báo đơn hàng mới sang email chủ shop bên dưới (mặc định: <strong className="text-primary">nganhashop995@gmail.com</strong>).
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold text-primary uppercase tracking-wider mb-1">
+                  Địa Chỉ Gmail / Email Chủ Shop Nhận Đơn Hàng <span className="text-red-600">*</span>
                 </label>
                 <div className="relative">
                   <input
@@ -284,7 +314,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
                   </span>
                 </div>
                 <p className="text-[11px] text-on-surface-variant mt-1.5 leading-relaxed">
-                  Khi khách đặt đơn hoặc hoàn tất thanh toán, hệ thống sẽ tự động gửi toàn bộ thông tin đơn (Tên khách, SĐT, Địa chỉ, Danh sách các món thảo dược, Phí ship và Tổng tiền) về hòm thư này để tiệm chuẩn bị đóng gói và đi đơn ngay.
+                  Khi khách đặt đơn hoặc hoàn tất thanh toán, hệ thống sẽ tự động gửi toàn bộ thông tin đơn (Tên khách, SĐT, Địa chỉ, Danh sách các món thảo dược, Phí ship và Tổng tiền) từ email shop về hòm thư chủ shop này để tiệm chuẩn bị đóng gói và đi đơn ngay.
                 </p>
               </div>
 

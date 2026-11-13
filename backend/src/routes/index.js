@@ -19,7 +19,7 @@ router.get('/health', (req, res) => {
 // Endpoint tự động gửi email thông báo đơn hàng cho chủ shop qua Google SMTP
 router.post('/notifications/send-order-email', strictActionLimiter, async (req, res) => {
   try {
-    const { order, recipientEmail, subject, body } = req.body;
+    const { order, recipientEmail, senderEmail, senderAppPassword, subject, body } = req.body;
 
     // Kiểm tra tính hợp lệ của dữ liệu đơn hàng
     if (!order || typeof order !== 'object' || !order.order_code) {
@@ -32,6 +32,8 @@ router.post('/notifications/send-order-email', strictActionLimiter, async (req, 
     const result = await sendOrderEmailViaGoogleSmtp({
       order,
       recipientEmail,
+      senderEmail,
+      senderAppPassword,
       subject,
       textBody: body,
     });

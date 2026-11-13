@@ -17,7 +17,7 @@ export const OrderSuccessPage = () => {
   // Tìm đơn hàng từ store phòng trường hợp backend offline hoặc mock
   const fallbackOrder = orders.find((o) => o.order_code === orderCode);
   const displayOrder = order || fallbackOrder;
-  const adminEmail = settings?.admin_email || 'tiemthaomocnganha@gmail.com';
+  const adminEmail = settings?.admin_email || 'hieunedz@gmail.com';
 
   // Đơn hàng đã được tự động thông báo qua Google SMTP tại bước Đặt hàng (CheckoutPage)
 

@@ -109,9 +109,9 @@ const MOCK_DETAILS = {
     usage: 'Dùng 15 - 20g thả vào nồi nước xông, bồn tắm nước ấm hoặc hãm với nước sôi thưởng trà.',
     image_url: '/images/herbs/hoa-hong.jpg',
   },
-  'thao-duoc-duoc-nu': {
+  'thao-duoc-duong-nu': {
     id: 9,
-    name: 'Thảo Dược Dược Nữ',
+    name: 'Thảo Dược Dưỡng Nữ',
     category_name: 'Bài Thuốc Xông Tắm',
     unit: '1 bịch (5 gói nhỏ)',
     price: 60000,
@@ -130,7 +130,8 @@ export const ProductDetailPage = () => {
   const addItem = useCartStore((state) => state.addItem);
   const imgRef = useRef(null);
 
-  const product = MOCK_DETAILS[slug] || MOCK_DETAILS['bai-thuoc-xong-tam-tong-hop-7-vi-thao-duoc'];
+  const normalizedSlug = slug === 'thao-duoc-duoc-nu' ? 'thao-duoc-duong-nu' : slug;
+  const product = MOCK_DETAILS[normalizedSlug] || MOCK_DETAILS['bai-thuoc-xong-tam-tong-hop-7-vi-thao-duoc'];
 
   const [quantity, setQuantity] = useState(1);
   const [toastVisible, setToastVisible] = useState(false);
