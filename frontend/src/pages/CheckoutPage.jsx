@@ -6,6 +6,7 @@ import { formatCurrency } from '@/utils/formatCurrency';
 import { notifyAdminNewOrder } from '@/utils/orderNotification';
 import { sanitizeInput, isValidVietnamesePhone, isValidEmail, checkClientThrottle } from '@/utils/security';
 import { evaluateFreeshipVoucher } from '@/utils/shippingVouchers';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import api from '@/services/api';
 
 export const CheckoutPage = () => {
@@ -98,11 +99,10 @@ export const CheckoutPage = () => {
     try {
       setIsSubmitting(true);
 
-      // Tạo mã đơn hàng duy nhất
-      const realOrderCode = `NH-${Date.now().toString().slice(-6)}`;
-      const newOrder = {
-        id: realOrderCode,
-        order_code: realOrderCode,
+      // Tạo mã đơn hàng duy nhất (mặc định local, sẽ được server RPC ghi đè nếu dùng Supabase)
+      let finalOrder = {
+        id: `NH-${Date.now().toString().slice(-6)}`,
+        order_code: `NH-${Date.now().toString().slice(-6)}`,
         created_at: new Date().toISOString(),
         customer_name: cleanName,
         customer_phone: cleanPhone,
@@ -117,6 +117,7 @@ export const CheckoutPage = () => {
         total: total,
         items: items.map((item) => ({
           id: item.id,
+          slug: item.slug,
           name: sanitizeInput(item.name, 150),
           unit: sanitizeInput(item.unit, 50),
           price: Number(item.price) || 0,
@@ -125,13 +126,37 @@ export const CheckoutPage = () => {
         })),
       };
 
-      // Ghi nhận đơn hàng vào hệ thống quản lý an toàn
-      addOrder(newOrder);
+      // Lớp 4: Nếu đã kết nối Supabase, gửi qua RPC server-side để tính lại giá & chống spam
+      if (isSupabaseConfigured && supabase) {
+        const { data: rpcOrder, error: rpcErr } = await supabase.rpc('create_secure_order', {
+          p_customer_name: cleanName,
+          p_customer_phone: cleanPhone,
+          p_customer_address: cleanAddress,
+          p_customer_email: cleanEmail || null,
+          p_customer_note: cleanNote || null,
+          p_voucher_code: appliedVoucher || null,
+          p_items: items.map((item) => ({
+            id: item.id,
+            slug: item.slug,
+            quantity: Math.max(1, Number(item.quantity) || 1),
+          })),
+        });
+        if (rpcErr) {
+          setErrorMessage(rpcErr.message || 'Không thể tạo đơn hàng. Vui lòng thử lại.');
+          return;
+        }
+        if (rpcOrder && rpcOrder.order_code) {
+          finalOrder = { ...finalOrder, ...rpcOrder, id: rpcOrder.order_code };
+        }
+      }
+
+      // Ghi nhận đơn hàng vào bộ nhớ phiên để hiển thị trang thanh toán VietQR
+      addOrder(finalOrder);
 
       // Tự động kích hoạt thông báo đơn hàng gửi đến Gmail chủ shop đã cài đặt trong Admin
       const latestAdminEmail = useAdminStore.getState().settings?.admin_email;
       const adminEmail = latestAdminEmail || settings?.admin_email || 'hieunedz@gmail.com';
-      notifyAdminNewOrder(newOrder, adminEmail);
+      notifyAdminNewOrder(finalOrder, adminEmail);
 
       // Gọi backend nếu có (với dữ liệu đã làm sạch triệt để)
       try {
@@ -156,7 +181,7 @@ export const CheckoutPage = () => {
       }
 
       // CHUYỂN NGAY SANG MÀN HÌNH QUÉT MÃ VIETQR (KHÔNG BỎ QUA MÃ QR!)
-      navigate(`/thanh-toan/${realOrderCode}`);
+      navigate(`/thanh-toan/${finalOrder.order_code}`);
     } catch (err) {
       console.error('Error creating order:', err);
       setErrorMessage('Không thể tạo đơn hàng. Vui lòng thử lại.');

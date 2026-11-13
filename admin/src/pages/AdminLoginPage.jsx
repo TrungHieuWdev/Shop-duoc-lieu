@@ -8,10 +8,11 @@ const LOCKOUT_DURATION_MS = 15 * 60 * 1000; // Khóa 15 phút nếu nhập sai q
 
 export const AdminLoginPage = () => {
   const navigate = useNavigate();
-  const { user, isAuthenticated, login, logout } = useAuthStore();
+  const { user, isAuthenticated, mfaRequired, login, verifyMfa, logout } = useAuthStore();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [otpCode, setOtpCode] = useState('');
   const [honeypot, setHoneypot] = useState(''); // Bẫy Honeypot chống bot tự động điền form
   const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -88,14 +89,16 @@ export const AdminLoginPage = () => {
     // 4. Cơ chế làm trễ ngẫu nhiên (Timing-attack mitigation) để vô hiệu hóa script dò mật khẩu hàng loạt
     await new Promise((resolve) => setTimeout(resolve, 750));
 
-    const res = login(cleanEmail, cleanPassword);
+    const res = await login(cleanEmail, cleanPassword);
     setIsLoading(false);
 
     if (res.success) {
       // Đăng nhập thành công -> Xóa bộ đếm sai
       localStorage.removeItem('nganha_admin_lockout');
       setFailedAttempts(0);
-      navigate('/admin');
+      navigate('/');
+    } else if (res.mfaRequired) {
+      setErrorMsg('');
     } else {
       const nextAttempts = failedAttempts + 1;
       setFailedAttempts(nextAttempts);
@@ -164,7 +167,7 @@ export const AdminLoginPage = () => {
 
               <div className="flex flex-col gap-2.5">
                 <Link
-                  to="/admin"
+                  to="/"
                   className="w-full py-2.5 px-4 bg-[#1d3527] hover:bg-[#274835] text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5"
                 >
                   <span className="material-symbols-outlined text-base">dashboard</span>
@@ -198,6 +201,49 @@ export const AdminLoginPage = () => {
                 </div>
               )}
 
+              {mfaRequired ? (
+                <form
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    setErrorMsg('');
+                    setIsLoading(true);
+                    const res = await verifyMfa(otpCode);
+                    setIsLoading(false);
+                    if (res.success) {
+                      navigate('/');
+                    } else {
+                      setErrorMsg(res.message || 'Mã xác thực 2FA không hợp lệ.');
+                    }
+                  }}
+                  className="space-y-4"
+                >
+                  <div className="p-3 bg-surface-container border border-border-herbal text-xs text-primary">
+                    Nhập mã <strong>6 chữ số</strong> từ ứng dụng Google Authenticator / Authy của bạn để hoàn tất đăng nhập 2 lớp (2FA).
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-primary mb-1">
+                      Mã Xác Thực 2FA (6 số) <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={6}
+                      required
+                      value={otpCode}
+                      onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
+                      placeholder="000000"
+                      className="w-full px-3 py-2.5 bg-white border border-border-herbal rounded-xl text-center font-mono text-lg tracking-[0.4em] font-bold text-primary focus:outline-none focus:border-primary"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={isLoading || otpCode.length < 6}
+                    className="w-full py-2.5 bg-[#1d3527] hover:bg-[#274835] text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer disabled:opacity-50"
+                  >
+                    {isLoading ? 'Đang xác thực 2FA...' : 'Xác Nhận Mã 2FA & Vào Quản Trị'}
+                  </button>
+                </form>
+              ) : (
               <form onSubmit={handleSubmit} className="space-y-3.5 sm:space-y-4">
                 {/* Bẫy Honeypot ẩn (chỉ bot quét web mới điền vào ô này) */}
                 <div style={{ display: 'none' }} aria-hidden="true">
@@ -287,20 +333,14 @@ export const AdminLoginPage = () => {
                   )}
                 </button>
               </form>
+              )}
             </div>
           )}
 
-          {/* Chân trang card - Lối quay về cửa hàng */}
+          {/* Chân trang card */}
           <div className="mt-6 sm:mt-8 pt-4 sm:pt-5 border-t border-[#eae4d9] flex flex-col items-center gap-1.5 sm:gap-2 text-center">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-1.5 text-xs text-[#8a7258] hover:text-primary font-medium transition-colors"
-            >
-              <span className="material-symbols-outlined text-sm">arrow_back</span>
-              <span>Quay lại trang chủ bán lẻ (Khách hàng)</span>
-            </Link>
             <p className="text-[10px] text-outline">
-              Bản quyền nội bộ © 2026 Tiệm Thảo Dược Ngân Hà. Mọi quyền được bảo lưu.
+              Cổng quản trị độc lập • Bảo mật 4 lớp © 2026 Tiệm Thảo Dược Ngân Hà.
             </p>
           </div>
         </div>

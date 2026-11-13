@@ -1,0 +1,220 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: auto;
+    background-color: #fbf9f2;
+    color: #1b1c18;
+    overflow-x: clip;
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif;
+    font-variant-numeric: lining-nums tabular-nums;
+    font-feature-settings: "lnum" 1, "tnum" 1;
+    overflow-x: clip;
+  }
+
+  h1, h2, h3, h4, h5, h6, .font-serif {
+    font-family: 'Vollkorn', 'Noto Serif', Georgia, serif;
+    font-variant-numeric: lining-nums tabular-nums;
+    font-feature-settings: "lnum" 1, "tnum" 1;
+  }
+}
+
+/* Tùy chỉnh thanh cuộn tinh tế mộc mạc */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fbf9f2;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c2c8c1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #737973;
+}
+
+/* Ẩn thanh cuộn trên điện thoại cho các tab vuốt ngang */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes loading-bar {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+
+
+/* ==========================================================================
+   B-ECO EDITORIAL REVEAL SYSTEM (HIỆU ỨNG VĂN BẢN & HÌNH ẢNH NỔI TỪ DƯỚI LÊN)
+   Chuẩn phong cách tạp chí nghệ thuật cao cấp của e-co.shop/shop
+   ========================================================================== */
+
+@keyframes ecoRiseUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ecoImageReveal {
+  0% {
+    opacity: 0;
+    transform: scale(1.05) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Các lớp xuất hiện so le (Staggered Delays) */
+.eco-rise {
+  animation: ecoRiseUp 750ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform, opacity;
+}
+
+.eco-rise-1 {
+  animation: ecoRiseUp 750ms cubic-bezier(0.16, 1, 0.3, 1) 80ms both;
+  will-change: transform, opacity;
+}
+
+.eco-rise-2 {
+  animation: ecoRiseUp 750ms cubic-bezier(0.16, 1, 0.3, 1) 160ms both;
+  will-change: transform, opacity;
+}
+
+.eco-rise-3 {
+  animation: ecoRiseUp 750ms cubic-bezier(0.16, 1, 0.3, 1) 240ms both;
+  will-change: transform, opacity;
+}
+
+.eco-rise-4 {
+  animation: ecoRiseUp 750ms cubic-bezier(0.16, 1, 0.3, 1) 320ms both;
+  will-change: transform, opacity;
+}
+
+.eco-image-rise {
+  animation: ecoImageReveal 850ms cubic-bezier(0.16, 1, 0.3, 1) 100ms both;
+  will-change: transform, opacity;
+}
+
+/* Hiệu ứng hiện lên chữ và bố cục khi khách hàng lướt xuống (Scroll-Triggered Reveal chuẩn B ECO) */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 780ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 780ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Hiệu ứng giỏ hàng rung lên 1 nhịp lắc lư (Cart Jiggle / Pendulum Swing) */
+@keyframes cart-shake {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  15% {
+    transform: scale(1.28) rotate(-16deg);
+  }
+  30% {
+    transform: scale(1.24) rotate(14deg);
+  }
+  45% {
+    transform: scale(1.15) rotate(-8deg);
+  }
+  60% {
+    transform: scale(1.08) rotate(6deg);
+  }
+  75% {
+    transform: scale(1.03) rotate(-2deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.animate-cart-shake {
+  animation: cart-shake 580ms cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform-origin: 50% 10%;
+}
+
+/* Hiệu ứng số lượng giỏ hàng nảy nở và nổi bật màu vàng rơm B ECO khi hàng rơi vào */
+@keyframes badge-pop {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.5);
+    background-color: #dfc492;
+    color: #14261a;
+    box-shadow: 0 0 12px rgba(203, 176, 124, 0.85);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-badge-pop {
+  animation: badge-pop 450ms cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+/* Vòng sóng vàng B ECO lan tỏa từ tâm giỏ hàng khi thảo dược rơi trúng đích */
+@keyframes cart-ripple {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.animate-cart-ripple {
+  animation: cart-ripple 500ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+

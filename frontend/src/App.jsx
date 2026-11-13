@@ -1,12 +1,19 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { AppRoutes } from './routes/AppRoutes';
 import { ScrollToTop } from './components/common/ScrollToTop';
 import { NetworkBanner } from './components/common/NetworkBanner';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { LoadingScreen } from './components/common/LoadingScreen';
+import { useAdminStore } from './store/useAdminStore';
 
 export const App = () => {
+  const hydratePublicData = useAdminStore((s) => s.hydratePublicData);
+
+  useEffect(() => {
+    hydratePublicData?.();
+  }, [hydratePublicData]);
+
   return (
     <ErrorBoundary>
       <BrowserRouter>

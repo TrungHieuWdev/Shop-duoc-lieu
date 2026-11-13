@@ -636,8 +636,8 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
                     confirmText: 'Xác Nhận Đổi Mật Khẩu',
                     variant: 'primary',
                     icon: 'lock_reset',
-                    onConfirm: () => {
-                      const res = changePassword(passwordForm.currentPassword, passwordForm.newPassword);
+                    onConfirm: async () => {
+                      const res = await changePassword(passwordForm.currentPassword, passwordForm.newPassword);
                       setPasswordStatus(res);
                       if (res.success) {
                         setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' });

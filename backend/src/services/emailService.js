@@ -53,24 +53,27 @@ export const buildOrderHtmlTemplate = (order) => {
   const itemsRows = (order.items || [])
     .map(
       (it, idx) => `
-      <tr style="border-bottom: 1px solid #eae5db;">
-        <td style="padding: 10px 8px; font-size: 13px; color: #1d3527;">
+      <tr style="border-bottom: 1px solid #e5e7eb;">
+        <td style="padding: 10px 8px; font-size: 13px; color: #111827;">
           <strong>${idx + 1}. ${it.name}</strong>
-          <div style="font-size: 11px; color: #7d8b80;">Quy cách: ${it.unit || 'Gói/Túi'}</div>
+          <div style="font-size: 11px; color: #6b7280; margin-top: 2px;">Quy cách: ${it.unit || 'Gói/Túi'}</div>
         </td>
-        <td style="padding: 10px 8px; text-align: center; font-size: 13px; font-weight: bold; color: #1d3527;">
+        <td style="padding: 10px 8px; text-align: center; font-size: 13px; font-weight: 600; color: #111827;">
           ${it.quantity}
         </td>
-        <td style="padding: 10px 8px; text-align: right; font-size: 13px; color: #554d42;">
+        <td style="padding: 10px 8px; text-align: right; font-size: 13px; color: #374151;">
           ${formatMoney(it.price)}
         </td>
-        <td style="padding: 10px 8px; text-align: right; font-size: 13px; font-weight: bold; color: #1d3527;">
+        <td style="padding: 10px 8px; text-align: right; font-size: 13px; font-weight: 600; color: #111827;">
           ${formatMoney((it.price || 0) * (it.quantity || 1))}
         </td>
       </tr>
     `
     )
     .join('');
+
+  const isPaid = order.payment_status === 'PAID';
+  const paymentMethodLabel = order.payment_method === 'VIETQR' ? 'VIETQR' : 'COD';
 
   return `
     <!DOCTYPE html>
@@ -79,41 +82,41 @@ export const buildOrderHtmlTemplate = (order) => {
       <meta charset="utf-8">
       <title>Đơn Hàng Mới #${order.order_code}</title>
     </head>
-    <body style="margin: 0; padding: 20px 0; background-color: #f5f2eb; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
-      <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 620px; background-color: #ffffff; border: 1px solid #ded7ca; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+    <body style="margin: 0; padding: 20px 0; background-color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #111827;">
+      <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 620px; background-color: #ffffff; border: 1px solid #d1d5db;">
         
         <!-- HEADER THƯƠNG HIỆU -->
         <tr>
-          <td style="background-color: #1d3527; padding: 24px 24px 20px; text-align: center; border-bottom: 3px solid #d4b986;">
-            <div style="font-size: 20px; font-weight: bold; color: #d4b986; letter-spacing: 1px; text-transform: uppercase;">
-              🌿 TIỆM THẢO DƯỢC NGÂN HÀ
+          <td style="padding: 22px 24px 18px; text-align: center; border-bottom: 2px solid #111827;">
+            <div style="font-size: 18px; font-weight: 700; color: #111827; letter-spacing: 0.5px; text-transform: uppercase;">
+              TIỆM THẢO DƯỢC NGÂN HÀ
             </div>
-            <div style="font-size: 12px; color: #d6dfd3; margin-top: 4px; letter-spacing: 0.5px;">
+            <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">
               Đơn giản • Tinh tế • An lành
             </div>
-            <div style="margin-top: 14px; display: inline-block; background-color: rgba(212, 185, 134, 0.2); border: 1px solid #d4b986; padding: 6px 14px; border-radius: 20px; color: #ffffff; font-size: 12px; font-weight: bold;">
-              🔔 CÓ ĐƠN ĐẶT HÀNG MỚI CẦN ĐI ĐƠN
+            <div style="margin-top: 12px; display: inline-block; border: 1px solid #111827; padding: 5px 14px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; color: #111827; text-transform: uppercase;">
+              CÓ ĐƠN ĐẶT HÀNG MỚI CẦN ĐI ĐƠN
             </div>
           </td>
         </tr>
 
         <!-- THÔNG TIN CHÍNH ĐƠN HÀNG -->
         <tr>
-          <td style="padding: 24px 24px 16px;">
-            <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #faf8f5; border: 1px solid #eae5db; border-radius: 6px; padding: 14px 16px;">
+          <td style="padding: 20px 24px 16px;">
+            <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 12px 16px;">
               <tr>
-                <td style="font-size: 13px; color: #554d42; padding-bottom: 6px;">
-                  Mã đơn hàng: <strong style="font-size: 15px; color: #1d3527; font-family: monospace;">#${order.order_code}</strong>
+                <td style="font-size: 13px; color: #374151; padding-bottom: 6px;">
+                  Mã đơn hàng: <strong style="font-size: 14px; color: #111827; font-family: monospace;">#${order.order_code}</strong>
                 </td>
-                <td style="text-align: right; font-size: 12px; color: #7d8b80;">
+                <td style="text-align: right; font-size: 12px; color: #6b7280;">
                   ${order.created_at ? new Date(order.created_at).toLocaleString('vi-VN') : new Date().toLocaleString('vi-VN')}
                 </td>
               </tr>
               <tr>
-                <td colspan="2" style="font-size: 12px; color: #554d42;">
+                <td colspan="2" style="font-size: 12px; color: #374151;">
                   Trạng thái thanh toán: 
-                  <strong style="color: ${order.payment_status === 'PAID' ? '#166534' : '#b45309'}; background: ${order.payment_status === 'PAID' ? '#dcfce7' : '#fef3c7'}; padding: 2px 8px; border-radius: 4px; display: inline-block;">
-                    ${order.payment_status === 'PAID' ? '✓ ĐÃ THANH TOÁN (VIETQR NAPAS247)' : '• CHỜ THANH TOÁN (COD / CHUYỂN KHOẢN)'}
+                  <strong style="border: 1px solid #d1d5db; background: #ffffff; padding: 2px 8px; display: inline-block; color: #111827;">
+                    ${isPaid ? `ĐÃ THANH TOÁN (${paymentMethodLabel})` : `CHỜ THANH TOÁN (${paymentMethodLabel})`}
                   </strong>
                 </td>
               </tr>
@@ -123,50 +126,51 @@ export const buildOrderHtmlTemplate = (order) => {
 
         <!-- KHỐI THÔNG TIN KHÁCH HÀNG -->
         <tr>
-          <td style="padding: 0 24px 16px;">
-            <div style="font-size: 13px; font-weight: bold; color: #1d3527; text-transform: uppercase; border-bottom: 2px solid #1d3527; padding-bottom: 6px; margin-bottom: 10px;">
-              👤 1. Người Nhận Hàng &amp; Địa Chỉ Giao
+          <td style="padding: 0 24px 18px;">
+            <div style="font-size: 12px; font-weight: 700; color: #111827; text-transform: uppercase; border-bottom: 1.5px solid #111827; padding-bottom: 6px; margin-bottom: 10px;">
+              1. Người Nhận Hàng &amp; Địa Chỉ Giao
             </div>
-            <table width="100%" cellpadding="4" cellspacing="0" style="font-size: 13px; color: #333333;">
+            <table width="100%" cellpadding="4" cellspacing="0" style="font-size: 13px; color: #111827;">
               <tr>
-                <td width="30%" style="color: #666666;">Họ và tên:</td>
-                <td><strong style="color: #1d3527;">${order.customer_name}</strong></td>
+                <td width="30%" style="color: #6b7280;">Họ và tên:</td>
+                <td><strong>${order.customer_name}</strong></td>
               </tr>
               <tr>
-                <td style="color: #666666;">Số điện thoại:</td>
+                <td style="color: #6b7280;">Số điện thoại:</td>
                 <td>
-                  <a href="tel:${order.customer_phone}" style="color: #2d7d46; font-weight: bold; text-decoration: none; font-size: 14px;">
-                    📞 ${order.customer_phone} (Bấm để gọi ngay)
+                  <a href="tel:${order.customer_phone}" style="color: #111827; font-weight: 700; text-decoration: none;">
+                    ${order.customer_phone}
                   </a>
                 </td>
               </tr>
               ${order.customer_email ? `
               <tr>
-                <td style="color: #666666;">Email khách:</td>
+                <td style="color: #6b7280;">Email khách:</td>
                 <td>${order.customer_email}</td>
               </tr>` : ''}
               <tr>
-                <td style="color: #666666;">Địa chỉ giao hàng:</td>
-                <td><strong style="color: #1d3527;">${order.customer_address}</strong></td>
+                <td style="color: #6b7280;">Địa chỉ giao hàng:</td>
+                <td><strong>${order.customer_address}</strong></td>
               </tr>
+              ${order.customer_note ? `
               <tr>
-                <td style="color: #666666;">Ghi chú dặn dò:</td>
-                <td style="color: #b45309; font-style: italic;">${order.customer_note || 'Không có ghi chú thêm'}</td>
-              </tr>
+                <td style="color: #6b7280;">Ghi chú dặn dò:</td>
+                <td>${order.customer_note}</td>
+              </tr>` : ''}
             </table>
           </td>
         </tr>
 
         <!-- BẢNG DANH SÁCH DƯỢC LIỆU -->
         <tr>
-          <td style="padding: 0 24px 16px;">
-            <div style="font-size: 13px; font-weight: bold; color: #1d3527; text-transform: uppercase; border-bottom: 2px solid #1d3527; padding-bottom: 6px; margin-bottom: 10px;">
-              📦 2. Danh Sách Thảo Dược Cần Soạn Đi Đơn (${order.items?.length || 0} món)
+          <td style="padding: 0 24px 18px;">
+            <div style="font-size: 12px; font-weight: 700; color: #111827; text-transform: uppercase; border-bottom: 1.5px solid #111827; padding-bottom: 6px; margin-bottom: 10px;">
+              2. Danh Sách Sản Phẩm Cần Soạn (${order.items?.length || 0} món)
             </div>
             <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
               <thead>
-                <tr style="background-color: #faf8f5; border-bottom: 2px solid #ded7ca; font-size: 12px; color: #7d8b80; text-transform: uppercase;">
-                  <th align="left" style="padding: 8px;">Tên Vị Dược Liệu</th>
+                <tr style="background-color: #f9fafb; border-bottom: 1.5px solid #d1d5db; font-size: 11px; color: #4b5563; text-transform: uppercase;">
+                  <th align="left" style="padding: 8px;">Tên Sản Phẩm</th>
                   <th align="center" style="padding: 8px;">SL</th>
                   <th align="right" style="padding: 8px;">Đơn Giá</th>
                   <th align="right" style="padding: 8px;">Thành Tiền</th>
@@ -181,37 +185,27 @@ export const buildOrderHtmlTemplate = (order) => {
 
         <!-- TỔNG KẾT TIỀN -->
         <tr>
-          <td style="padding: 0 24px 24px;">
-            <table width="100%" cellpadding="6" cellspacing="0" style="background-color: #faf8f5; border: 1px solid #eae5db; border-radius: 6px; font-size: 13px;">
+          <td style="padding: 0 24px 22px;">
+            <table width="100%" cellpadding="6" cellspacing="0" style="background-color: #f9fafb; border: 1px solid #e5e7eb; font-size: 13px;">
               <tr>
-                <td style="color: #666666;">Tiền hàng tạm tính:</td>
-                <td align="right" style="font-weight: bold; color: #1d3527;">${formatMoney(order.subtotal || 0)}</td>
+                <td style="color: #4b5563;">Tiền hàng tạm tính:</td>
+                <td align="right" style="font-weight: 600; color: #111827;">${formatMoney(order.subtotal || 0)}</td>
               </tr>
               <tr>
-                <td style="color: #666666;">Tiền phí giao hàng:</td>
-                <td align="right" style="color: #554d42;">
-                  ${order.shipping_fee > 0 ? formatMoney(order.shipping_fee) : '<span style="color: #166534; font-weight: bold;">Miễn phí (Freeship)</span>'}
+                <td style="color: #4b5563;">Tiền phí giao hàng:</td>
+                <td align="right" style="color: #374151;">
+                  ${order.shipping_fee > 0 ? formatMoney(order.shipping_fee) : 'Miễn phí (Freeship)'}
                 </td>
               </tr>
-              <tr style="border-top: 2px solid #ded7ca;">
-                <td style="font-size: 15px; font-weight: bold; color: #1d3527; padding-top: 10px;">
+              <tr style="border-top: 1.5px solid #d1d5db;">
+                <td style="font-size: 14px; font-weight: 700; color: #111827; padding-top: 10px;">
                   TỔNG CỘNG THU:
                 </td>
-                <td align="right" style="font-size: 18px; font-weight: bold; color: #b45309; padding-top: 10px;">
+                <td align="right" style="font-size: 16px; font-weight: 700; color: #111827; padding-top: 10px;">
                   ${formatMoney(order.total || 0)}
                 </td>
               </tr>
             </table>
-          </td>
-        </tr>
-
-        <!-- FOOTER & NHẮC NHỞ -->
-        <tr>
-          <td style="background-color: #faf8f5; padding: 18px 24px; text-align: center; border-top: 1px solid #eae5db; font-size: 12px; color: #7d8b80; line-height: 1.6;">
-            <div>💡 <em>Chủ shop vui lòng kiểm tra số lượng dược liệu trong kho, đóng gói túi zip cẩn thận và liên hệ bưu cục/shipper giao hàng.</em></div>
-            <div style="margin-top: 6px; font-size: 11px; color: #a89f91;">
-              Hệ thống thông báo tự động từ Website Tiệm Thảo Dược Ngân Hà © 2026.
-            </div>
           </td>
         </tr>
       </table>

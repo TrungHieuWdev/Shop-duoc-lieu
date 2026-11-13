@@ -2,6 +2,159 @@ import { formatCurrency } from './formatCurrency';
 import api from '../services/api';
 import { useAdminStore } from '../store/useAdminStore';
 
+const escapeHtml = (val) =>
+  String(val ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+
+/**
+ * Tạo giao diện HTML Email hóa đơn chuẩn Tiệm Thảo Dược Ngân Hà (giống mẫu Backend SMTP)
+ * Dùng cho kênh EmailJS trên web tĩnh (nganhashop.pages.dev) hoặc xem trước.
+ */
+export const buildOrderHtmlTemplate = (order) => {
+  const orderTime = order.created_at
+    ? new Date(order.created_at).toLocaleString('vi-VN')
+    : new Date().toLocaleString('vi-VN');
+
+  const itemsRows = (order.items || [])
+    .map(
+      (it, idx) => `
+      <tr style="border-bottom: 1px solid #e5e7eb;">
+        <td style="padding: 10px 8px; font-size: 13px; color: #111827;">
+          <strong>${idx + 1}. ${escapeHtml(it.name)}</strong>
+          <div style="font-size: 11px; color: #6b7280; margin-top: 2px;">Quy cách: ${escapeHtml(it.unit || 'Gói/Túi')}</div>
+        </td>
+        <td style="padding: 10px 8px; text-align: center; font-size: 13px; font-weight: 600; color: #111827;">
+          ${Number(it.quantity) || 1}
+        </td>
+        <td style="padding: 10px 8px; text-align: right; font-size: 13px; color: #374151;">
+          ${formatCurrency(it.price || 0)}
+        </td>
+        <td style="padding: 10px 8px; text-align: right; font-size: 13px; font-weight: 600; color: #111827;">
+          ${formatCurrency((Number(it.price) || 0) * (Number(it.quantity) || 1))}
+        </td>
+      </tr>`
+    )
+    .join('');
+
+  const isPaid = order.payment_status === 'PAID';
+  const paymentMethodLabel = order.payment_method === 'VIETQR' ? 'VIETQR' : 'COD';
+
+  return `
+    <div style="margin: 0; padding: 20px 10px; background-color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #111827;">
+      <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 620px; background-color: #ffffff; border: 1px solid #d1d5db;">
+        <tr>
+          <td style="padding: 22px 24px 18px; text-align: center; border-bottom: 2px solid #111827;">
+            <div style="font-size: 18px; font-weight: 700; color: #111827; letter-spacing: 0.5px; text-transform: uppercase;">
+              TIỆM THẢO DƯỢC NGÂN HÀ
+            </div>
+            <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">
+              Đơn giản • Tinh tế • An lành
+            </div>
+            <div style="margin-top: 12px; display: inline-block; border: 1px solid #111827; padding: 5px 14px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; color: #111827; text-transform: uppercase;">
+              CÓ ĐƠN ĐẶT HÀNG MỚI CẦN ĐI ĐƠN
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 20px 24px 16px;">
+            <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 12px 16px;">
+              <tr>
+                <td style="font-size: 13px; color: #374151; padding-bottom: 6px;">
+                  Mã đơn hàng: <strong style="font-size: 14px; color: #111827; font-family: monospace;">#${escapeHtml(order.order_code)}</strong>
+                </td>
+                <td style="text-align: right; font-size: 12px; color: #6b7280;">
+                  ${escapeHtml(orderTime)}
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="font-size: 12px; color: #374151;">
+                  Trạng thái thanh toán:
+                  <strong style="border: 1px solid #d1d5db; background: #ffffff; padding: 2px 8px; display: inline-block; color: #111827;">
+                    ${isPaid ? `ĐÃ THANH TOÁN (${paymentMethodLabel})` : `CHỜ THANH TOÁN (${paymentMethodLabel})`}
+                  </strong>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 0 24px 18px;">
+            <div style="font-size: 12px; font-weight: 700; color: #111827; text-transform: uppercase; border-bottom: 1.5px solid #111827; padding-bottom: 6px; margin-bottom: 10px;">
+              1. Người Nhận Hàng &amp; Địa Chỉ Giao
+            </div>
+            <table width="100%" cellpadding="4" cellspacing="0" style="font-size: 13px; color: #111827;">
+              <tr>
+                <td width="30%" style="color: #6b7280;">Họ và tên:</td>
+                <td><strong>${escapeHtml(order.customer_name)}</strong></td>
+              </tr>
+              <tr>
+                <td style="color: #6b7280;">Số điện thoại:</td>
+                <td>
+                  <a href="tel:${escapeHtml(order.customer_phone)}" style="color: #111827; font-weight: 700; text-decoration: none;">
+                    ${escapeHtml(order.customer_phone)}
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <td style="color: #6b7280;">Địa chỉ giao hàng:</td>
+                <td><strong>${escapeHtml(order.customer_address)}</strong></td>
+              </tr>
+              ${order.customer_note && String(order.customer_note).trim() ? `
+              <tr>
+                <td style="color: #6b7280;">Ghi chú dặn dò:</td>
+                <td>${escapeHtml(order.customer_note)}</td>
+              </tr>` : ''}
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 0 24px 18px;">
+            <div style="font-size: 12px; font-weight: 700; color: #111827; text-transform: uppercase; border-bottom: 1.5px solid #111827; padding-bottom: 6px; margin-bottom: 10px;">
+              2. Danh Sách Sản Phẩm Cần Soạn (${order.items?.length || 0} món)
+            </div>
+            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+              <thead>
+                <tr style="background-color: #f9fafb; border-bottom: 1.5px solid #d1d5db; font-size: 11px; color: #4b5563; text-transform: uppercase;">
+                  <th align="left" style="padding: 8px;">Tên Sản Phẩm</th>
+                  <th align="center" style="padding: 8px;">SL</th>
+                  <th align="right" style="padding: 8px;">Đơn Giá</th>
+                  <th align="right" style="padding: 8px;">Thành Tiền</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${itemsRows}
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 0 24px 22px;">
+            <table width="100%" cellpadding="6" cellspacing="0" style="background-color: #f9fafb; border: 1px solid #e5e7eb; font-size: 13px;">
+              <tr>
+                <td style="color: #4b5563;">Tiền hàng tạm tính:</td>
+                <td align="right" style="font-weight: 600; color: #111827;">${formatCurrency(order.subtotal || 0)}</td>
+              </tr>
+              <tr>
+                <td style="color: #4b5563;">Tiền phí giao hàng:</td>
+                <td align="right" style="color: #374151;">
+                  ${order.shipping_fee > 0 ? formatCurrency(order.shipping_fee) : 'Miễn phí (Freeship)'}
+                </td>
+              </tr>
+              <tr style="border-top: 1.5px solid #d1d5db;">
+                <td style="font-size: 14px; font-weight: 700; color: #111827; padding-top: 10px;">TỔNG CỘNG THU:</td>
+                <td align="right" style="font-size: 16px; font-weight: 700; color: #111827; padding-top: 10px;">${formatCurrency(order.total || 0)}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </div>
+  `;
+};
+
 /**
  * Tạo nội dung thông tin đơn hàng chi tiết để gửi đến Gmail của chủ shop
  */
@@ -202,7 +355,52 @@ export const sendAutomaticOrderEmail = async (order, targetEmail, senderOptions 
     };
   }
 
-  // 3. Fallback qua FormSubmit khi Backend offline hoặc chưa cấu hình SMTP
+  // 3. Thử gửi HTML đầy đủ qua EmailJS (nếu đã cấu hình VITE_EMAILJS_* trên Pages)
+  const emailJsService = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+  const emailJsTemplate = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+  const emailJsPublicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+  if (emailJsService && emailJsTemplate && emailJsPublicKey) {
+    try {
+      const emailJsRes = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          service_id: emailJsService,
+          template_id: emailJsTemplate,
+          user_id: emailJsPublicKey,
+          template_params: {
+            to_email: adminEmail,
+            reply_to: senderEmail,
+            subject,
+            html_content: buildOrderHtmlTemplate(order),
+          },
+        }),
+      });
+      if (emailJsRes.ok) {
+        sessionStorage.setItem(dedupKey, Date.now().toString());
+        localStorage.setItem(dedupKey, Date.now().toString());
+        saveEmailDispatchLog({
+          order_code: order.order_code,
+          sent_from: senderEmail,
+          sent_to: adminEmail,
+          sent_at: new Date().toISOString(),
+          customer_name: order.customer_name,
+          total: order.total,
+          status: 'SENT_HTML',
+          channel: 'EmailJS',
+        });
+        return {
+          success: true,
+          channel: 'EmailJS',
+          adminEmail,
+          message: `Đã gửi hóa đơn HTML đầy đủ qua EmailJS tới: ${adminEmail}`,
+        };
+      }
+    } catch (e) {}
+  }
+
+  // 4. Fallback qua FormSubmit khi Backend offline hoặc chưa cấu hình SMTP / EmailJS
   try {
     const orderTime = order.created_at
       ? new Date(order.created_at).toLocaleString('vi-VN')
@@ -226,16 +424,19 @@ export const sendAutomaticOrderEmail = async (order, targetEmail, senderOptions 
       _subject: subject,
       _template: 'table',
       _captcha: 'false',
-      'Mã Đơn & Thời Gian': `#${order.order_code} • ${orderTime}`,
-      'Người Nhận & SĐT': `${order.customer_name} — ${order.customer_phone}`,
+      'Mã Đơn Hàng': `#${order.order_code} (${orderTime})`,
+      'Trạng Thái Thanh Toán': `${paymentState} (${paymentLabel})`,
+      '1. Người Nhận Hàng': `${order.customer_name} — ${order.customer_phone}`,
       'Địa Chỉ Giao Hàng': order.customer_address,
-      'Chi Tiết Sản Phẩm': conciseItems || 'Không có sản phẩm',
-      'Tạm Tính & Phí Ship': `Tiền hàng: ${formatCurrency(order.subtotal || 0)} | Phí ship: ${shipLabel}`,
-      'Tổng Thanh Toán': `${formatCurrency(order.total || 0)} (${paymentLabel} • ${paymentState})`,
+      [`2. Danh Sách Sản Phẩm (${order.items?.length || 0} món)`]:
+        conciseItems || 'Không có sản phẩm',
+      'Tiền Hàng Tạm Tính': formatCurrency(order.subtotal || 0),
+      'Phí Giao Hàng': shipLabel,
+      'TỔNG CỘNG THU': formatCurrency(order.total || 0),
     };
 
     if (order.customer_note && String(order.customer_note).trim()) {
-      formPayload['Ghi Chú Khách Hàng'] = String(order.customer_note).trim();
+      formPayload['Ghi Chú Dặn Dò'] = String(order.customer_note).trim();
     }
 
     if (senderEmail) {

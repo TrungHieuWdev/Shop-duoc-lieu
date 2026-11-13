@@ -12,7 +12,7 @@ import { AdminConfirmModal } from '@/features/admin/components/AdminConfirmModal
 
 export const AdminDashboardPage = () => {
   const navigate = useNavigate();
-  const { user, isAuthenticated, logout } = useAuthStore();
+  const { user, isAuthenticated, isInitializing, logout } = useAuthStore();
   const {
     products,
     orders,
@@ -97,6 +97,14 @@ export const AdminDashboardPage = () => {
   const [selectedLogCodes, setSelectedLogCodes] = useState([]);
 
   // Auth gate
+  if (isInitializing) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#fbf9f2] text-xs font-semibold text-primary">
+        Đang kiểm tra phiên bảo mật quản trị...
+      </div>
+    );
+  }
+
   if (!isAuthenticated) {
     return (
       <div className="max-w-md mx-auto my-16 p-8 bg-[#faf8f3] rounded-none border border-[#ded7ca] text-center shadow-md eco-rise-1">
@@ -104,25 +112,19 @@ export const AdminDashboardPage = () => {
           <span className="material-symbols-outlined text-[1.875rem]">lock</span>
         </div>
         <span className="text-[10px] font-bold text-[#8a7258] uppercase tracking-[0.22em] block mb-1">
-          HỆ THỐNG NỘI BỘ
+          HỆ THỐNG NỘI BỘ ĐỘC LẬP
         </span>
         <h2 className="font-serif text-2xl font-bold text-primary mb-2">Yêu Cầu Quyền Quản Trị</h2>
         <p className="text-xs text-on-surface-variant mb-6 leading-relaxed">
-          Khu vực quản trị kho hàng và hóa đơn chỉ dành cho nhân sự nội bộ Tiệm Thảo Dược Ngân Hà. Vui lòng đăng nhập để tiếp tục.
+          Khu vực quản trị kho hàng và hóa đơn được bảo vệ bằng Supabase Auth + 2FA. Vui lòng đăng nhập để tiếp tục.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link
-            to="/admin/login"
+            to="/login"
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-primary hover:bg-primary-container text-on-primary text-xs font-bold uppercase tracking-wider rounded-none shadow-xs transition-all cursor-pointer"
           >
             <span>Đăng Nhập Nội Bộ</span>
             <span className="material-symbols-outlined text-base">login</span>
-          </Link>
-          <Link
-            to="/"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-surface hover:bg-surface-container border border-border-herbal text-primary text-xs font-semibold rounded-none transition-all"
-          >
-            <span>Về Cửa Hàng</span>
           </Link>
         </div>
       </div>
@@ -142,9 +144,9 @@ export const AdminDashboardPage = () => {
       variant: 'warning',
       confirmText: 'Đăng Xuất Ngay',
       message: 'Bạn có chắc chắn muốn đăng xuất khỏi trang quản trị Tiệm Thảo Dược Ngân Hà?',
-      onConfirm: () => {
-        logout();
-        navigate('/');
+      onConfirm: async () => {
+        await logout();
+        navigate('/login');
       },
     });
   };

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCartStore } from '@/store/useCartStore';
-import { useAuthStore } from '@/store/useAuthStore';
 import { BrandLogoIcon } from '@/components/common/BrandLogoIcon';
 
 export const Header = () => {
@@ -9,7 +8,6 @@ export const Header = () => {
   const location = useLocation();
   const totalItems = useCartStore((state) => state.getTotalItems());
   const cartBounceTick = useCartStore((state) => state.cartBounceTick);
-  const { user, isAuthenticated } = useAuthStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
   const [activeNav, setActiveNav] = useState('home');
@@ -202,21 +200,6 @@ export const Header = () => {
             </form>
           </div>
 
-          {/* Cổng Quản Trị Nội Bộ (Trang đăng nhập / quản trị admin) */}
-          <Link
-            to={isAuthenticated ? '/admin' : '/admin/login'}
-            aria-label="Cổng quản trị nội bộ"
-            className="relative p-1.5 rounded-full hover:bg-surface-container-low transition-colors text-primary flex items-center justify-center shrink-0 group cursor-pointer"
-            title={isAuthenticated ? `Quản trị viên: ${user?.name || user?.email}` : 'Cổng Đăng Nhập Quản Trị Nội Bộ'}
-          >
-            <span className="material-symbols-outlined text-[1.375rem] sm:text-[1.5rem] group-hover:text-[#8a7258] transition-colors">
-              {isAuthenticated ? 'admin_panel_settings' : 'person'}
-            </span>
-            {isAuthenticated && (
-              <span className="absolute top-1 right-1 w-2 h-2 bg-green-600 rounded-full ring-2 ring-surface shadow-xs" />
-            )}
-          </Link>
-
           {/* Giỏ hàng: Icon túi xách + Badge số lượng nằm ngang bên phải như ảnh mẫu */}
           <Link
             to="/gio-hang"
@@ -330,29 +313,6 @@ export const Header = () => {
             >
               <span>Cách dùng</span>
               {activeNav === 'cach-dung' && <span className="material-symbols-outlined text-sm">check</span>}
-            </Link>
-
-            {/* Mục tài khoản quản trị trong Drawer Mobile - dẫn đến trang riêng */}
-            <Link
-              to={isAuthenticated ? '/admin' : '/admin/login'}
-              onClick={() => setMobileMenuOpen(false)}
-              className="mt-2 pt-3 border-t border-border-herbal px-3 py-2.5 rounded font-medium text-body-sm transition-colors flex items-center justify-between text-on-surface hover:bg-surface-container w-full"
-            >
-              <div className="flex items-center gap-2.5">
-                <span className="material-symbols-outlined text-[1.25rem] text-[#8a7258]">
-                  {isAuthenticated ? 'admin_panel_settings' : 'lock_person'}
-                </span>
-                <span>{isAuthenticated ? 'Bảng Điều Khiển Quản Trị' : 'Cổng Quản Trị Nội Bộ'}</span>
-              </div>
-              {isAuthenticated ? (
-                <span className="text-[10px] bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded-full">
-                  Admin
-                </span>
-              ) : (
-                <span className="text-[10px] bg-amber-100 text-amber-800 font-semibold px-2 py-0.5 rounded-full">
-                  Nội bộ
-                </span>
-              )}
             </Link>
           </nav>
         </div>

@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 // Danh sách dược liệu mẫu ban đầu
 const DEFAULT_PRODUCTS = [
@@ -277,6 +278,35 @@ export const useAdminStore = create((set, get) => ({
   orders: getSavedOrders(),
   auditLogs: getSavedAuditLogs(),
   settings: getSavedSettings(),
+
+  // Đồng bộ sản phẩm và cài đặt công khai từ Supabase (khi đã cấu hình)
+  hydratePublicData: async () => {
+    if (!isSupabaseConfigured || !supabase) return;
+    try {
+      const [prodRes, setRes] = await Promise.all([
+        supabase.from('products').select('*').order('id', { ascending: true }),
+        supabase.from('shop_settings').select('*').eq('id', 1).maybeSingle(),
+      ]);
+
+      if (Array.isArray(prodRes.data) && prodRes.data.length > 0) {
+        const ordered = [...prodRes.data];
+        const topIdx = ordered.findIndex(
+          (p) => p.slug === 'thao-duoc-duong-nu' || (p.name && p.name.trim().toLowerCase() === 'thảo dược dưỡng nữ')
+        );
+        if (topIdx > 0) {
+          const [top] = ordered.splice(topIdx, 1);
+          ordered.unshift(top);
+        }
+        set({ products: ordered });
+      }
+
+      if (setRes.data) {
+        set({ settings: { ...DEFAULT_SETTINGS, ...setRes.data } });
+      }
+    } catch {
+      // Giữ dữ liệu mặc định nếu mạng gián đoạn
+    }
+  },
 
   // Cập nhật cài đặt ngân hàng & phí ship
   updateSettings: (newSettings) => {
