@@ -91,7 +91,7 @@ export const AuditSheetModal = ({ isOpen, onClose, products, onSaveAudit, reques
       total_diff_value: totalDiffValue,
       total_increase: totalIncrease,
       total_decrease: totalDecrease,
-      note: note.trim() || 'Kiểm kho định kỳ Tiệm Thảo Mộc Ngân Hà',
+      note: note.trim() || 'Kiểm kho định kỳ Tiệm Thảo Dược Ngân Hà',
       items: normalizedItems,
     };
 
@@ -150,7 +150,7 @@ export const AuditSheetModal = ({ isOpen, onClose, products, onSaveAudit, reques
                 </span>
               </h3>
               <p className="text-[11px] text-[#a3b899]">
-                Kiểm đếm thực tế và đối soát tồn kho sổ sách của Tiệm Thảo Mộc Ngân Hà
+                Kiểm đếm thực tế và đối soát tồn kho sổ sách của Tiệm Thảo Dược Ngân Hà
               </p>
             </div>
           </div>

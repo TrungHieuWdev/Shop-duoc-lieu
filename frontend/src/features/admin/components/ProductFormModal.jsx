@@ -164,7 +164,7 @@ export const ProductFormModal = ({ isOpen, onClose, productToEdit, onSave, reque
           <p className="text-xs text-on-surface-variant mt-0.5">
             {productToEdit
               ? `Cập nhật giá bán, số lượng tồn kho và thông tin của #${productToEdit.id}`
-              : 'Thêm thảo mộc mới vào danh mục bán lẻ của tiệm'}
+              : 'Thêm thảo dược mới vào danh mục bán lẻ của tiệm'}
           </p>
         </div>
 
@@ -179,7 +179,7 @@ export const ProductFormModal = ({ isOpen, onClose, productToEdit, onSave, reque
           {/* Tên sản phẩm */}
           <div>
             <label className="block text-xs font-semibold text-primary mb-1">
-              Tên dược liệu / Thảo mộc <span className="text-red-600">*</span>
+              Tên dược liệu / Thảo dược <span className="text-red-600">*</span>
             </label>
             <input
               type="text"

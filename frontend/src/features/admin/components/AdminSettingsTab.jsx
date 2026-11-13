@@ -16,11 +16,12 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
     bank_id: settings?.bank_id || 'MB',
     bank_name: settings?.bank_name || 'MBBank (Quân Đội)',
     bank_account: settings?.bank_account || '0983124567',
-    account_name: settings?.account_name || 'TIỆM THẢO MỘC NGÂN HÀ',
+    account_name: settings?.account_name || 'TIỆM THẢO DƯỢC NGÂN HÀ',
     admin_email:
       (settings?.admin_email && settings?.admin_email !== 'tiemthaomocnganha@gmail.com')
         ? settings.admin_email
         : 'hieunedz@gmail.com',
+    zalo_phone: settings?.zalo_phone || '0987654321',
     default_shipping_fee: settings?.default_shipping_fee || 30000,
     free_shipping_threshold: settings?.free_shipping_threshold || 350000,
   });
@@ -49,7 +50,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
       order_code: 'TEST-' + Math.floor(100000 + Math.random() * 900000),
       customer_name: 'Khách Hàng Thử Nghiệm',
       customer_phone: '0983124567',
-      customer_address: '123 Đường Thảo Mộc, Phường An Lành, TP.HCM',
+      customer_address: '123 Đường Thảo Dược, Phường An Lành, TP.HCM',
       customer_note: 'Đơn hàng kiểm tra gửi thông báo email',
       payment_method: 'VIETQR',
       payment_status: 'PAID',
@@ -121,13 +122,14 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
     e.preventDefault();
     const normalizedSettings = {
       ...formData,
+      zalo_phone: String(formData.zalo_phone || '').replace(/\D/g, ''),
       default_shipping_fee: Number(formData.default_shipping_fee) || 0,
       free_shipping_threshold: Number(formData.free_shipping_threshold) || 0,
     };
     if (requestConfirmation) {
       requestConfirmation({
         title: 'Xác Nhận Lưu Cài Đặt Hệ Thống',
-        subtitle: 'Cập Nhật Tài Khoản VietQR, Gmail & Phí Ship',
+        subtitle: 'Cập Nhật Tài Khoản VietQR, Gmail, Zalo & Phí Ship',
         icon: 'settings_suggest',
         variant: 'info',
         confirmText: 'Xác Nhận Lưu Cài Đặt',
@@ -140,6 +142,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
               <div>• Ngân hàng thụ hưởng: <strong>{normalizedSettings.bank_name}</strong></div>
               <div>• Số tài khoản: <strong className="font-mono">{normalizedSettings.bank_account}</strong> ({normalizedSettings.account_name})</div>
               <div>• Gmail nhận đơn để đi đơn: <strong className="text-secondary">{normalizedSettings.admin_email}</strong></div>
+              <div>• Số điện thoại Zalo chủ shop: <strong className="font-mono text-[#0068ff]">{normalizedSettings.zalo_phone || 'Chưa thiết lập'}</strong></div>
               <div>• Phí ship mặc định: <strong>{formatCurrency(normalizedSettings.default_shipping_fee)}</strong></div>
               <div>• Ngưỡng Freeship: <strong>{formatCurrency(normalizedSettings.free_shipping_threshold)}</strong></div>
             </div>
@@ -281,7 +284,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
                   </span>
                 </div>
                 <p className="text-[11px] text-on-surface-variant mt-1.5 leading-relaxed">
-                  Khi khách đặt đơn hoặc hoàn tất thanh toán, hệ thống sẽ tự động gửi toàn bộ thông tin đơn (Tên khách, SĐT, Địa chỉ, Danh sách các món thảo mộc, Phí ship và Tổng tiền) về hòm thư này để tiệm chuẩn bị đóng gói và đi đơn ngay.
+                  Khi khách đặt đơn hoặc hoàn tất thanh toán, hệ thống sẽ tự động gửi toàn bộ thông tin đơn (Tên khách, SĐT, Địa chỉ, Danh sách các món thảo dược, Phí ship và Tổng tiền) về hòm thư này để tiệm chuẩn bị đóng gói và đi đơn ngay.
                 </p>
               </div>
 
@@ -294,7 +297,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
                 <div className="text-[11px] text-on-surface-variant leading-relaxed space-y-1">
                   <p>1. Truy cập tài khoản Google của bạn tại <strong className="text-primary font-mono">myaccount.google.com</strong> &gt; mục <strong>Bảo mật</strong>.</p>
                   <p>2. Đảm bảo đã bật <strong>Xác minh 2 bước</strong>, sau đó chọn <strong>Mật khẩu ứng dụng (App Passwords)</strong>.</p>
-                  <p>3. Đặt tên <em>"Tiệm Thảo Mộc Ngân Hà"</em> để nhận <strong>mật khẩu 16 chữ cái</strong>.</p>
+                  <p>3. Đặt tên <em>"Tiệm Thảo Dược Ngân Hà"</em> để nhận <strong>mật khẩu 16 chữ cái</strong>.</p>
                   <p>4. Điền địa chỉ Gmail vào <code className="bg-white px-1 border border-border-herbal font-mono text-primary font-bold">SMTP_USER</code> và 16 ký tự vào <code className="bg-white px-1 border border-border-herbal font-mono text-primary font-bold">SMTP_PASS</code> trong file <code className="bg-white px-1 border border-border-herbal font-mono text-primary font-bold">backend/.env</code>.</p>
                 </div>
               </div>
@@ -317,7 +320,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
                   href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
                     formData.admin_email
                   )}&su=${encodeURIComponent('[ĐƠN HÀNG MẪU] Kiểm tra hòm thư')}&body=${encodeURIComponent(
-                    'Đây là thư kiểm tra kết nối từ hệ thống Tiệm Thảo Mộc Ngân Hà.'
+                    'Đây là thư kiểm tra kết nối từ hệ thống Tiệm Thảo Dược Ngân Hà.'
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -443,6 +446,56 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
             </div>
           </div>
 
+          {/* Card 3b: Cấu hình Số Điện Thoại Zalo Chủ Cửa Hàng */}
+          <div className="bg-white border border-border-herbal p-4 shadow-xs rounded-xl space-y-3">
+            <div className="border-b border-border-herbal pb-2 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-[#0068ff] text-base">chat</span>
+                <h3 className="font-serif text-sm font-bold text-primary uppercase tracking-wider">
+                  4. Số Điện Thoại Zalo Chủ Cửa Hàng
+                </h3>
+              </div>
+              <span className="text-[10px] bg-blue-50 text-[#0068ff] font-bold px-1.5 py-0.2 border border-blue-200">
+                Nút Zalo góc phải
+              </span>
+            </div>
+
+            <div className="space-y-2.5 text-xs">
+              <div>
+                <label className="block text-[11px] font-bold text-primary uppercase tracking-wider mb-1">
+                  Số Điện Thoại Zalo Liên Hệ <span className="text-red-600">*</span>
+                </label>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <div className="relative flex-1">
+                    <input
+                      type="tel"
+                      required
+                      value={formData.zalo_phone}
+                      onChange={(e) => setFormData({ ...formData, zalo_phone: e.target.value })}
+                      placeholder="VD: 0987654321"
+                      className="w-full pl-8 pr-3 py-2 bg-[#faf8f3] border border-border-herbal rounded-xl text-xs font-mono font-bold text-primary focus:outline-none focus:border-primary"
+                    />
+                    <span className="material-symbols-outlined text-outline text-sm absolute left-2.5 top-2.5">
+                      call
+                    </span>
+                  </div>
+                  <a
+                    href={`https://zalo.me/${String(formData.zalo_phone || '').replace(/\D/g, '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-3.5 py-2 bg-[#0068ff] hover:bg-[#0057d9] text-white font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-colors shrink-0"
+                  >
+                    <span className="material-symbols-outlined text-sm">open_in_new</span>
+                    <span>Mở Thử Zalo</span>
+                  </a>
+                </div>
+                <p className="text-[11px] text-on-surface-variant mt-1.5 leading-relaxed">
+                  Khách hàng khi bấm vào biểu tượng <strong>Zalo</strong> ở góc dưới bên phải sẽ được chuyển thẳng tới tài khoản Zalo của số điện thoại này (<code className="bg-white px-1 border border-border-herbal font-mono text-primary">https://zalo.me/{String(formData.zalo_phone || '').replace(/\D/g, '') || '...'}</code>).
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* Nút Submit */}
           <div className="pt-1">
             <button
@@ -450,7 +503,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
               className="w-full py-2.5 bg-[#2d7d46] hover:bg-[#25693a] text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <span className="material-symbols-outlined text-base">save</span>
-              <span>Lưu Cài Đặt Ngân Hàng, Gmail &amp; Phí Ship</span>
+              <span>Lưu Cài Đặt Ngân Hàng, Gmail, Zalo &amp; Phí Ship</span>
             </button>
           </div>
 
@@ -615,6 +668,10 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
               <div className="flex justify-between border-b border-border-herbal/50 py-1">
                 <span className="text-on-surface-variant">Gmail nhận đơn:</span>
                 <span className="font-semibold text-secondary truncate max-w-[180px]">{formData.admin_email}</span>
+              </div>
+              <div className="flex justify-between border-b border-border-herbal/50 py-1">
+                <span className="text-on-surface-variant">Zalo chủ shop:</span>
+                <span className="font-mono font-bold text-[#0068ff]">{String(formData.zalo_phone || '').replace(/\D/g, '') || '—'}</span>
               </div>
               <div className="flex justify-between items-center pt-1">
                 <span className="text-on-surface-variant">Số tiền quét thử:</span>

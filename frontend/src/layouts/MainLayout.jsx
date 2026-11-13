@@ -2,6 +2,7 @@ import React, { Suspense, useEffect, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Header } from './Header';
 import { Footer } from './Footer';
+import { FloatingZaloButton } from '@/components/common/FloatingZaloButton';
 
 const SubPageFallback = () => (
   <div className="min-h-[60vh] flex flex-col items-center justify-center py-20 opacity-80">
@@ -120,6 +121,7 @@ export const MainLayout = () => {
         </div>
       </main>
       <Footer />
+      <FloatingZaloButton />
     </div>
   );
 };

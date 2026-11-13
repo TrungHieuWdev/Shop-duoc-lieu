@@ -157,8 +157,8 @@ export const Header = () => {
                     setSearchOpen(true);
                   }
                 }}
-                aria-label="Tìm kiếm thảo mộc"
-                title="Tìm kiếm thảo mộc"
+                aria-label="Tìm kiếm thảo dược"
+                title="Tìm kiếm thảo dược"
                 className={`flex items-center justify-center shrink-0 cursor-pointer transition-colors ${
                   searchOpen ? 'text-outline hover:text-primary mr-1.5' : 'w-9 h-9 text-primary'
                 }`}
@@ -178,7 +178,7 @@ export const Header = () => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={(e) => e.key === 'Escape' && setSearchOpen(false)}
-                placeholder="Tìm thảo mộc..."
+                placeholder="Tìm thảo dược..."
                 tabIndex={searchOpen ? 0 : -1}
                 className={`bg-transparent text-body-sm text-on-surface placeholder:text-outline focus:outline-none transition-all duration-300 ${
                   searchOpen ? 'w-full opacity-100' : 'w-0 opacity-0 pointer-events-none'
@@ -276,7 +276,7 @@ export const Header = () => {
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Tìm kiếm thảo mộc..."
+              placeholder="Tìm kiếm thảo dược..."
               className="w-full pl-9 pr-3 py-2 bg-surface-container-low border border-border-herbal rounded text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary"
             />
           </form>

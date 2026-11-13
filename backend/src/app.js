@@ -68,7 +68,7 @@ app.use(
       if (isAllowed || (process.env.CORS_ORIGIN && origin === process.env.CORS_ORIGIN)) {
         return callback(null, true);
       }
-      return callback(new Error('Yêu cầu bị từ chối bởi chính sách CORS bảo mật Tiệm Thảo Mộc Ngân Hà.'));
+      return callback(new Error('Yêu cầu bị từ chối bởi chính sách CORS bảo mật Tiệm Thảo Dược Ngân Hà.'));
     },
     credentials: true,
   })
@@ -91,7 +91,7 @@ app.use('/api', apiLimiter, apiRouter);
 
 // Root route
 app.get('/', (req, res) => {
-  res.send('🌿 Tiệm Thảo Mộc Ngân Hà - Enterprise Secured API Server (2026 Edition)');
+  res.send('🌿 Tiệm Thảo Dược Ngân Hà - Enterprise Secured API Server (2026 Edition)');
 });
 
 // Xử lý 404

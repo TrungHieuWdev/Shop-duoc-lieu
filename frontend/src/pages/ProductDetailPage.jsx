@@ -13,9 +13,9 @@ const MOCK_DETAILS = {
     price: 50000,
     original_price: 65000,
     summary: 'Bài thuốc xông tắm dân gian tổng hợp đủ 7 vị thảo dược phơi khô: Đinh lăng, gừng sẻ, sả chanh, lá trầu không, ngải cứu nếp, lá bưởi thơm và hoa hồng.',
-    description: 'Được phối ngũ theo phương pháp cổ truyền từ 7 loại thảo mộc bản địa Việt Nam phơi khô tự nhiên. Nồi nước xông tỏa hương thơm thảo mộc ấm nồng dịu ngọt, giúp toát mồ hôi giải cảm lạnh, thông kinh hoạt lạc, làm ấm cơ thể cho mẹ sau sinh, dưỡng nhan sáng da và xua tan căng thẳng sau ngày làm việc mệt mỏi.',
+    description: 'Được phối ngũ theo phương pháp cổ truyền từ 7 loại thảo dược bản địa Việt Nam phơi khô tự nhiên. Nồi nước xông tỏa hương thơm thảo dược ấm nồng dịu ngọt, giúp toát mồ hôi giải cảm lạnh, thông kinh hoạt lạc, làm ấm cơ thể cho mẹ sau sinh, dưỡng nhan sáng da và xua tan căng thẳng sau ngày làm việc mệt mỏi.',
     ingredients: '1. Lá đinh lăng phơi khô • 2. Gừng sẻ thái lát phơi khô • 3. Lá sả chanh cắt khúc • 4. Lá trầu không phơi khô • 5. Lá ngải cứu nếp • 6. Lá bưởi già phơi khô • 7. Nụ và cánh hoa hồng phơi khô.',
-    usage: 'Rửa sơ thảo mộc qua nước sạch. Cho vào nồi cùng khoảng 10-15 lít nước cho 1 gói và để ngập đều toàn bộ thảo mộc, đun sôi rồi hạ nhỏ lửa khoảng 30 - 45 phút để dược chất và tinh dầu tỏa đều. Trùm chăn hoặc lều xông kín người trong 10 - 15 phút đến khi cơ thể toát mồ hôi nhẹ. Sau khi xông, lọc lấy nước cốt pha thêm nước sạch đến khi ấm vừa phải (38°C - 40°C) để lau người hoặc tắm dội nhẹ nhàng (không tắm nước lạnh ngay).',
+    usage: 'Rửa sơ thảo dược qua nước sạch. Cho vào nồi cùng khoảng 10-15 lít nước cho 1 gói và để ngập đều toàn bộ thảo dược, đun sôi rồi hạ nhỏ lửa khoảng 30 - 45 phút để dược chất và tinh dầu tỏa đều. Trùm chăn hoặc lều xông kín người trong 10 - 15 phút đến khi cơ thể toát mồ hôi nhẹ. Sau khi xông, lọc lấy nước cốt pha thêm nước sạch đến khi ấm vừa phải (38°C - 40°C) để lau người hoặc tắm dội nhẹ nhàng (không tắm nước lạnh ngay).',
     image_url: '/images/products/bai-thuoc-7-vi.jpg',
   },
   'la-dinh-lang-phoi-kho-200g': {
@@ -104,7 +104,7 @@ const MOCK_DETAILS = {
     price: 55000,
     original_price: 70000,
     summary: 'Nụ và cánh hoa hồng tự nhiên phơi khô, giàu chất chống oxy hóa dưỡng nhan.',
-    description: 'Hoa hồng thơm ngát phơi khô lưu giữ trọn vẹn hương hoa và vitamin. Rất tuyệt vời khi dùng pha nước tắm xông dưỡng ẩm mịn màng làn da, giảm căng thẳng thần kinh hoặc pha trà thảo mộc thanh lọc cơ thể.',
+    description: 'Hoa hồng thơm ngát phơi khô lưu giữ trọn vẹn hương hoa và vitamin. Rất tuyệt vời khi dùng pha nước tắm xông dưỡng ẩm mịn màng làn da, giảm căng thẳng thần kinh hoặc pha trà thảo dược thanh lọc cơ thể.',
     ingredients: '100% Nụ và cánh hoa hồng sạch tự nhiên phơi khô.',
     usage: 'Dùng 15 - 20g thả vào nồi nước xông, bồn tắm nước ấm hoặc hãm với nước sôi thưởng trà.',
     image_url: '/images/herbs/hoa-hong.jpg',
@@ -244,7 +244,7 @@ export const ProductDetailPage = () => {
           {/* Thành phần & Cách dùng */}
           <div className="border-t border-border-herbal pt-5 sm:pt-6 flex flex-col gap-3.5 sm:gap-4 text-xs sm:text-body-sm">
             <div>
-              <h3 className="font-serif font-bold text-primary mb-1">🌿 Thành Phần Thảo Mộc:</h3>
+              <h3 className="font-serif font-bold text-primary mb-1">🌿 Thành Phần Thảo Dược:</h3>
               <p className="text-on-surface-variant leading-relaxed">{product.ingredients}</p>
             </div>
             <div>

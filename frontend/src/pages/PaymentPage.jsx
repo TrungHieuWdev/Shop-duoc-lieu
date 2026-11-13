@@ -27,7 +27,7 @@ export const PaymentPage = () => {
   // Lấy thông tin ngân hàng thụ hưởng từ cấu hình Admin cài đặt
   const bankName = settings?.bank_name || 'MBBank (Quân Đội)';
   const bankAccount = settings?.bank_account || '0983124567';
-  const accountName = settings?.account_name || 'TIỆM THẢO MỘC NGÂN HÀ';
+  const accountName = settings?.account_name || 'TIỆM THẢO DƯỢC NGÂN HÀ';
   const bankId = settings?.bank_id || 'MB';
 
   // Tạo URL VietQR Napas247 động theo cài đặt Admin

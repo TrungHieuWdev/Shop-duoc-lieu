@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrandLogoIcon } from './BrandLogoIcon';
 
 const BOTANICAL_MESSAGES = [
-  'Đang chuẩn bị tinh chất thảo mộc...',
+  'Đang chuẩn bị tinh chất thảo dược...',
   'Chắt lọc hương thơm thuần khiết từ thiên nhiên...',
   'Gìn giữ trọn vẹn dược tính tự nhiên...',
   'Sắp hoàn tất, an lòng chờ đợi trong giây lát...',

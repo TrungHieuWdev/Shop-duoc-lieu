@@ -17,7 +17,7 @@ export const NotFoundPage = () => {
   };
 
   const quickLinks = [
-    { name: 'Thảo mộc xông tắm', icon: 'spa', to: '/san-pham?category=thao-moc-xong-tam' },
+    { name: 'Thảo dược xông tắm', icon: 'spa', to: '/san-pham?category=bai-thuoc-xong-tam' },
     { name: 'Gội đầu bồ kết', icon: 'shower', to: '/san-pham?category=cham-soc-toc-tu-nhien' },
     { name: 'Muối ngâm chân', icon: 'self_improvement', to: '/san-pham?category=muoi-ngam-chan-duoc-lieu' },
     { name: 'Xà bông sinh dược', icon: 'clean_hands', to: '/san-pham?category=xa-bong-sinh-duoc' },
@@ -56,7 +56,7 @@ export const NotFoundPage = () => {
 
         {/* Lời nhắn gửi an lành */}
         <p className="text-body-sm sm:text-body-md text-on-surface-variant max-w-lg mx-auto mb-6 leading-relaxed">
-          Đường dẫn bạn truy cập có thể đã được thay đổi hoặc sản phẩm thảo mộc đã chuyển sang ngăn lưu trữ khác. Đừng lo lắng, hãy cùng Ngân Hà tìm lại lối về nhé.
+          Đường dẫn bạn truy cập có thể đã được thay đổi hoặc sản phẩm thảo dược đã chuyển sang ngăn lưu trữ khác. Đừng lo lắng, hãy cùng Ngân Hà tìm lại lối về nhé.
         </p>
 
         {/* Đường kẻ thảo mộc uốn lượn */}
@@ -76,7 +76,7 @@ export const NotFoundPage = () => {
             type="text"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
-            placeholder="Tìm kiếm vị thảo mộc bạn cần..."
+            placeholder="Tìm kiếm vị thảo dược bạn cần..."
             className="flex-1 bg-transparent py-1.5 text-body-sm text-on-surface placeholder:text-outline focus:outline-none"
           />
           <button
@@ -90,7 +90,7 @@ export const NotFoundPage = () => {
         {/* Gợi ý lối tắt sản phẩm nhanh */}
         <div className="my-6">
           <p className="text-xs text-on-surface-variant/80 mb-3 font-medium">
-            Hoặc khám phá nhanh các bộ sưu tập thảo mộc được yêu thích:
+            Hoặc khám phá nhanh các bộ sưu tập thảo dược được yêu thích:
           </p>
           <div className="flex flex-wrap items-center justify-center gap-2 max-w-xl mx-auto">
             {quickLinks.map((link) => (

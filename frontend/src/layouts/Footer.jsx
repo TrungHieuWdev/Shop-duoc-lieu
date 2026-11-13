@@ -22,7 +22,7 @@ export const Footer = () => {
               </span>
             </div>
             <p className="text-xs sm:text-body-sm text-on-surface-variant leading-relaxed">
-              Giữ vẹn nguyên hồn thảo mộc bản địa Việt Nam. Thuần khiết, mộc mạc và an tâm cho sức khỏe gia đình bạn.
+              Giữ vẹn nguyên hồn thảo dược bản địa Việt Nam. Thuần khiết, mộc mạc và an tâm cho sức khỏe gia đình bạn.
             </p>
           </div>
 
@@ -32,7 +32,7 @@ export const Footer = () => {
             <ul className="flex flex-col gap-2 sm:gap-2.5 text-xs sm:text-body-sm text-on-surface-variant">
               <li className="flex items-start gap-2">
                 <span className="material-symbols-outlined text-secondary text-[1rem] mt-0.5">eco</span>
-                <span>100% thảo mộc bản địa Việt Nam</span>
+                <span>100% thảo dược bản địa Việt Nam</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="material-symbols-outlined text-secondary text-[1rem] mt-0.5">spa</span>
@@ -83,7 +83,7 @@ export const Footer = () => {
               </li>
               <li>
                 <Link to="/san-pham" className="hover:text-primary transition-colors">
-                  Sản phẩm thảo mộc
+                  Sản phẩm thảo dược
                 </Link>
               </li>
               <li>
@@ -108,7 +108,7 @@ export const Footer = () => {
         {/* Chân trang bản quyền */}
         <div className="border-t border-border-herbal mt-8 sm:mt-12 pt-5 sm:pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
           <p className="text-xs sm:text-body-sm text-on-surface-variant text-center sm:text-left">
-            © 2026 Ngân Hà Thảo Mộc. Tinh hoa dược liệu bản địa phơi khô tự nhiên.
+            © 2026 Ngân Hà Thảo Dược. Tinh hoa dược liệu bản địa phơi khô tự nhiên.
           </p>
           <div className="flex items-center flex-wrap justify-center gap-3 sm:gap-6 text-[0.6875rem] sm:text-[0.75rem] font-semibold text-secondary uppercase tracking-wider sm:tracking-widest">
             <span>Thuần Lành</span>

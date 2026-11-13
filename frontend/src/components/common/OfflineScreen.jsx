@@ -41,7 +41,7 @@ export const OfflineScreen = ({ onRetry }) => {
           Đường Truyền Tạm Gián Đoạn
         </h2>
         <p className="text-body-sm text-on-surface-variant max-w-md mx-auto mb-5 leading-relaxed">
-          Không thể kết nối đến máy chủ thảo mộc. Vui lòng kiểm tra lại sóng Wi-Fi hoặc dữ liệu 4G/5G trên thiết bị của bạn.
+          Không thể kết nối đến máy chủ thảo dược. Vui lòng kiểm tra lại sóng Wi-Fi hoặc dữ liệu 4G/5G trên thiết bị của bạn.
         </p>
 
         {/* Đường kẻ thảo mộc nghệ thuật */}

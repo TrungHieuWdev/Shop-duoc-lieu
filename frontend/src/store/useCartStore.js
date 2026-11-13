@@ -13,7 +13,19 @@ const getSavedCartItems = () => {
 
 export const useCartStore = create((set, get) => ({
   items: getSavedCartItems(),
+  appliedVoucherCode: localStorage.getItem('nganha_herbal_voucher') || '',
   cartBounceTick: 0,
+
+  // Lưu / xóa mã giảm giá vận chuyển đang áp dụng
+  setAppliedVoucherCode: (code) => {
+    const clean = String(code || '').trim().toUpperCase();
+    if (clean) {
+      localStorage.setItem('nganha_herbal_voucher', clean);
+    } else {
+      localStorage.removeItem('nganha_herbal_voucher');
+    }
+    set({ appliedVoucherCode: clean });
+  },
 
   // Kích hoạt rung giỏ hàng 1 nhịp khi hàng rơi vào giỏ
   triggerCartBounce: () => {
@@ -77,7 +89,8 @@ export const useCartStore = create((set, get) => ({
   // Xóa sạch giỏ hàng (sau khi thanh toán thành công)
   clearCart: () => {
     localStorage.removeItem('nganha_herbal_cart');
-    set({ items: [] });
+    localStorage.removeItem('nganha_herbal_voucher');
+    set({ items: [], appliedVoucherCode: '' });
   },
 
   // Tính tổng số món

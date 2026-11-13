@@ -168,8 +168,9 @@ const DEFAULT_SETTINGS = {
   bank_id: 'MB', // Mã ngân hàng VietQR (e.g. MB, VCB, TCB, ACB, BIDV, ICB, VPB, TPB, STB, VIB)
   bank_name: 'MBBank (Quân Đội)',
   bank_account: '0983124567', // Số tài khoản ngân hàng
-  account_name: 'TIỆM THẢO MỘC NGÂN HÀ', // Tên chủ tài khoản
+  account_name: 'TIỆM THẢO DƯỢC NGÂN HÀ', // Tên chủ tài khoản
   admin_email: 'hieunedz@gmail.com', // Gmail chủ tiệm để nhận thông tin đơn hàng đi đơn
+  zalo_phone: '0987654321', // Số điện thoại Zalo chủ cửa hàng
   default_shipping_fee: 30000, // Phí ship mặc định
   free_shipping_threshold: 350000, // Ngưỡng miễn phí ship
 };

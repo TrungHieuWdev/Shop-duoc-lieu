@@ -119,7 +119,7 @@ export const HomePage = () => {
         {/* Hình nền thảo dược điện ảnh chuẩn phong cách B ECO */}
         <img
           src="/images/hero-cinematic-b-eco.jpg"
-          alt="Ngân Hà Thảo Mộc - Gom hương thảo mộc, gói trọn an nhiên"
+          alt="Ngân Hà Thảo Dược - Gom hương thảo dược, gói trọn an nhiên"
           fetchPriority="high"
           decoding="async"
           className="absolute inset-0 w-full h-full object-cover object-[70%_center] sm:object-center opacity-95 transition-all duration-700 ease-out"
@@ -226,7 +226,7 @@ export const HomePage = () => {
               to="/ve-thao-duoc"
               className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-primary group-hover:translate-x-1 transition-all"
             >
-              <span>Khám phá 7 vị thảo mộc</span>
+              <span>Khám phá 7 vị thảo dược</span>
               <span className="material-symbols-outlined text-[1rem]">arrow_forward</span>
             </Link>
           </div>
@@ -241,7 +241,7 @@ export const HomePage = () => {
                 Cách Dùng Nấu Nước Tắm
               </h3>
               <p className="text-xs sm:text-sm text-on-surface-variant leading-relaxed mb-5 sm:mb-6">
-                Trọn bộ 5 bước nấu nước tắm thảo mộc đơn giản tại nhà, xông hơi giải cảm, xông tắm sau sinh và ngâm chân ấm kinh lạc dưỡng sinh cho cả gia đình.
+                Trọn bộ 5 bước nấu nước tắm thảo dược đơn giản tại nhà, xông hơi giải cảm, xông tắm sau sinh và ngâm chân ấm kinh lạc dưỡng sinh cho cả gia đình.
               </p>
             </div>
             <Link

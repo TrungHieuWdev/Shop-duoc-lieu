@@ -68,7 +68,7 @@ export const flyItemToCart = ({ sourceElement, imageUrl, onComplete }) => {
   if (imageUrl) {
     const img = document.createElement('img');
     img.src = imageUrl;
-    img.alt = 'Sản phẩm thảo mộc';
+    img.alt = 'Sản phẩm thảo dược';
     img.style.width = '100%';
     img.style.height = '100%';
     img.style.objectFit = 'cover';

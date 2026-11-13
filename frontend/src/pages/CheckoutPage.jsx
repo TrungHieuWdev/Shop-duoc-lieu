@@ -5,17 +5,19 @@ import { useAdminStore } from '@/store/useAdminStore';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { notifyAdminNewOrder } from '@/utils/orderNotification';
 import { sanitizeInput, isValidVietnamesePhone, isValidEmail, checkClientThrottle } from '@/utils/security';
+import { evaluateFreeshipVoucher } from '@/utils/shippingVouchers';
 import api from '@/services/api';
 
 export const CheckoutPage = () => {
   const navigate = useNavigate();
-  const { items, getSubtotal } = useCartStore();
+  const { items, appliedVoucherCode, getSubtotal } = useCartStore();
   const { settings, addOrder } = useAdminStore();
 
   const subtotal = getSubtotal();
   const freeThreshold = settings?.free_shipping_threshold || 350000;
   const baseShipping = settings?.default_shipping_fee || 30000;
-  const shippingFee = subtotal >= freeThreshold || subtotal === 0 ? 0 : baseShipping;
+  const voucherCheck = appliedVoucherCode ? evaluateFreeshipVoucher(appliedVoucherCode, subtotal) : { valid: false };
+  const shippingFee = subtotal >= freeThreshold || voucherCheck.valid || subtotal === 0 ? 0 : baseShipping;
   const total = subtotal + shippingFee;
 
   const [formData, setFormData] = useState({
@@ -164,19 +166,9 @@ export const CheckoutPage = () => {
 
   return (
     <div className="w-full max-w-[1536px] mx-auto px-3.5 sm:px-8 lg:px-12 xl:px-16 py-6 sm:py-12">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 sm:mb-8">
-        <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-primary">
-          Thông Tin Nhận Hàng &amp; Thanh Toán
-        </h1>
-        <button
-          type="button"
-          onClick={() => setShowBackConfirm(true)}
-          className="self-start sm:self-auto inline-flex items-center gap-2 px-4 py-2 bg-surface-container-low hover:bg-surface-container border border-border-herbal text-primary text-xs font-semibold uppercase tracking-wider rounded-none transition-colors cursor-pointer"
-        >
-          <span className="material-symbols-outlined text-[1rem]">arrow_back</span>
-          <span>Quay Lại Chỉnh Sửa Giỏ Hàng</span>
-        </button>
-      </div>
+      <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-primary mb-6 sm:mb-8">
+        Thông Tin Nhận Hàng &amp; Thanh Toán
+      </h1>
 
       {errorMessage && (
         <div className="mb-6 p-3.5 sm:p-4 rounded-xl bg-red-50 border border-red-300 text-red-900 text-xs sm:text-body-sm flex items-center gap-2.5">

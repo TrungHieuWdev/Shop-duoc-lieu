@@ -21,7 +21,7 @@ export const HerbsAboutPage = () => {
               Tinh hoa cỏ cây thuần Việt — Phơi khô giữ trọn tinh dầu
             </p>
             <p className="eco-rise-2 text-xs sm:text-sm text-on-surface-variant max-w-[52ch] leading-relaxed mb-5 sm:mb-6">
-              Tuyển chọn 7 vị thảo mộc xông tắm dân gian từ các vùng đất lành Việt Nam: Đinh lăng, Gừng sẻ, Lá trầu không, Ngải cứu, Sả chanh, Lá bưởi và Hoa hồng. Toàn bộ được phơi khô mộc mạc theo phương pháp thủ công, không hóa chất bảo quản, giữ trọn vẹn dược tính tự nhiên.
+              Tuyển chọn 7 vị thảo dược xông tắm dân gian từ các vùng đất lành Việt Nam: Đinh lăng, Gừng sẻ, Lá trầu không, Ngải cứu, Sả chanh, Lá bưởi và Hoa hồng. Toàn bộ được phơi khô mộc mạc theo phương pháp thủ công, không hóa chất bảo quản, giữ trọn vẹn dược tính tự nhiên.
             </p>
 
             <div className="eco-rise-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3">
@@ -44,7 +44,7 @@ export const HerbsAboutPage = () => {
           <div className="eco-image-rise relative min-h-[220px] sm:min-h-[340px] bg-surface-container overflow-hidden">
             <img
               src="/images/products/bai-thuoc-7-vi.jpg"
-              alt="7 Nia Thảo Mộc Phơi Khô"
+              alt="7 Nia Thảo Dược Phơi Khô"
               className="absolute inset-0 w-full h-full object-cover object-center"
             />
             <div className="absolute inset-y-0 left-0 hidden lg:block w-32 bg-gradient-to-r from-surface-container-low to-transparent"></div>
@@ -58,13 +58,13 @@ export const HerbsAboutPage = () => {
         <div className="scroll-reveal text-center max-w-xl mx-auto mb-8 sm:mb-12">
           <span className="text-[0.6875rem] sm:text-xs font-semibold text-secondary uppercase tracking-widest flex items-center justify-center gap-1.5 mb-1.5">
             <span className="material-symbols-outlined text-[1rem] text-[#8a7258]">local_florist</span>
-            7 VỊ THẢO MỘC CỔ TRUYỀN
+            7 VỊ THẢO DƯỢC CỔ TRUYỀN
           </span>
           <h2 className="font-serif text-2xl sm:text-3xl text-primary font-bold">
             Đặc Tính & Dược Liệu Từng Vị
           </h2>
           <p className="text-xs sm:text-sm text-on-surface-variant mt-1.5">
-            Mỗi loài thảo mộc đều mang một tính ấm, hương thơm và công dụng dưỡng sinh riêng biệt
+            Mỗi loài thảo dược đều mang một tính ấm, hương thơm và công dụng dưỡng sinh riêng biệt
           </p>
         </div>
 
@@ -134,7 +134,7 @@ export const HerbsAboutPage = () => {
             Cam Kết Từ Từng Chiếc Lá Nhỏ
           </h2>
           <p className="text-xs sm:text-sm text-on-surface-variant leading-relaxed mb-8">
-            Chúng tôi tin rằng cơ thể con người luôn có khả năng tự chữa lành và phục hồi kỳ diệu khi được nâng niu bằng những ngọn cỏ, cành lá thảo mộc thuần khiết của quê hương.
+            Chúng tôi tin rằng cơ thể con người luôn có khả năng tự chữa lành và phục hồi kỳ diệu khi được nâng niu bằng những ngọn cỏ, cành lá thảo dược thuần khiết của quê hương.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-left">

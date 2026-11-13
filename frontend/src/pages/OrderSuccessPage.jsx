@@ -77,7 +77,7 @@ export const OrderSuccessPage = () => {
           Đặt Hàng &amp; Thanh Toán Thành Công!
         </h1>
         <p className="text-xs sm:text-body-sm text-on-surface-variant max-w-lg mx-auto mb-6 sm:mb-8 leading-relaxed">
-          Cảm ơn bạn đã tin chọn các sản phẩm thảo mộc tự nhiên. Đơn hàng của bạn đã được chuyển đến chủ cửa hàng để chuẩn bị đóng gói và gửi hàng sớm nhất.
+          Cảm ơn bạn đã tin chọn các sản phẩm thảo dược tự nhiên. Đơn hàng của bạn đã được chuyển đến chủ cửa hàng để chuẩn bị đóng gói và gửi hàng sớm nhất.
         </p>
 
         {/* Thông tin hóa đơn đơn hàng */}
@@ -145,7 +145,7 @@ export const OrderSuccessPage = () => {
           to="/"
           className="inline-flex items-center gap-2 px-8 py-3.5 bg-primary hover:bg-primary-container text-on-primary font-medium rounded transition-colors shadow-sm"
         >
-          <span>Tiếp Tục Dạo Vườn Thảo Mộc</span>
+          <span>Tiếp tục mua thuốc</span>
           <span className="material-symbols-outlined text-[1.125rem]">arrow_forward</span>
         </Link>
       </div>

@@ -14,7 +14,7 @@ export const createOrderEmailContent = (order) => {
     )
     .join('\n');
 
-  const body = `Kính gửi Chủ Tiệm Thảo Mộc Ngân Hà,
+  const body = `Kính gửi Chủ Tiệm Thảo Dược Ngân Hà,
 
 Hệ thống vừa tiếp nhận 01 đơn hàng mới từ khách hàng. Dưới đây là thông tin chi tiết để shop chuẩn bị đóng gói và đi đơn ngay:
 
@@ -44,7 +44,7 @@ ${itemsList || '  (Chưa có danh sách mặt hàng)'}
 
 ==================================================
 Vui lòng kiểm tra kho và xuất dược liệu đóng gói túi zip gửi cho đơn vị vận chuyển sớm nhất!
-Tiệm Thảo Mộc Ngân Hà - Đơn giản, tinh tế, an lành.`;
+Tiệm Thảo Dược Ngân Hà - Đơn giản, tinh tế, an lành.`;
 
   return { subject, body };
 };

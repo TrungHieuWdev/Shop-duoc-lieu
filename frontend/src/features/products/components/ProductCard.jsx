@@ -55,7 +55,7 @@ export const ProductCard = ({ product, onAddToCartSuccess }) => {
       {/* Product Info */}
       <div className="pt-2.5 sm:pt-4 flex flex-col flex-1">
         <span className="text-[10px] sm:text-[0.6875rem] font-semibold text-secondary uppercase tracking-widest line-clamp-1">
-          {product.category_name || product.unit || 'Thảo Mộc Bản Địa'}
+          {product.category_name || product.unit || 'Thảo Dược Bản Địa'}
         </span>
         <Link to={`/san-pham/${product.slug}`}>
           <h3 className="font-serif text-xs sm:text-base font-bold text-primary mt-1 group-hover:text-secondary transition-colors line-clamp-2 min-h-[2rem] sm:min-h-[2.75rem] leading-tight">

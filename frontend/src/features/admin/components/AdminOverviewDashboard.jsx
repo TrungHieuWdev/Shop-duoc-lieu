@@ -34,7 +34,7 @@ export const AdminOverviewDashboard = ({ orders, products, onNavigateTab }) => {
         return od.toDateString() === d.toDateString();
       });
 
-      const dayRevenue = dayOrders.reduce((sum, o) => sum + (o.total || 0), 0);
+      const dayRevenue = dayOrders.reduce((sum, o) => sum + (Number(o.total) || 0), 0);
       // Ước tính giá vốn hàng bán ~45%
       const dayCogs = Math.round(dayRevenue * 0.45);
       const dayProfit = dayRevenue - dayCogs;
@@ -61,9 +61,13 @@ export const AdminOverviewDashboard = ({ orders, products, onNavigateTab }) => {
   const netMargin = totalRevenue > 0 ? Math.round((totalProfit / totalRevenue) * 100) : 0;
   const aov = totalOrders > 0 ? Math.round(totalRevenue / totalOrders) : 0;
 
-  // Tìm giá trị max để scale biểu đồ
-  const maxRevenue = Math.max(...chartData.map((d) => d.revenue), 1000000);
-  const maxOrders = Math.max(...chartData.map((d) => d.orders), 5);
+  // Tìm giá trị max để scale biểu đồ (chia mốc đẹp, tối thiểu 100.000đ khi có đơn nhỏ)
+  const rawMaxRevenue = Math.max(...chartData.map((d) => d.revenue), 0);
+  const maxRevenue =
+    rawMaxRevenue > 0
+      ? Math.max(100000, Math.ceil(rawMaxRevenue / 100000) * 100000)
+      : 1000000;
+  const maxOrders = Math.max(...chartData.map((d) => d.orders), 3);
 
   return (
     <div className="space-y-4 w-full">
@@ -215,111 +219,248 @@ export const AdminOverviewDashboard = ({ orders, products, onNavigateTab }) => {
           </div>
         </div>
 
-        {/* KHUNG BIỂU ĐỒ SVG INTERACTIVE TỰ CO GIÃN 100% RESPONSIVE */}
+        {/* KHUNG BIỂU ĐỒ SÓNG VUÔNG VỨT INTERACTIVE TỰ CO GIÃN 100% RESPONSIVE */}
         <div className="relative pt-4 pb-2">
           {viewMode === 'real' && orders.length === 0 ? (
-            <div className="py-14 text-center text-xs text-on-surface-variant flex flex-col items-center justify-center">
-              <span className="material-symbols-outlined text-4xl text-outline mb-2">bar_chart</span>
+            <div className="py-14 text-center text-xs text-on-surface-variant flex flex-col items-center justify-center border border-dashed border-border-herbal rounded-none bg-surface-soft/30">
+              <span className="material-symbols-outlined text-4xl text-outline mb-2">show_chart</span>
               <p className="font-bold text-primary text-sm">Chưa Phát Sinh Đơn Hàng Mới Trong Kho</p>
               <p className="text-[11px] max-w-md text-on-surface-variant mt-1 leading-relaxed">
-                Biểu đồ đang phản ánh chính xác dữ liệu thực tế (0 đơn). Bấm nút <strong>"Mô Phỏng 2026"</strong> ở trên để xem trực quan biểu đồ hoạt động khi có đơn hàng, hoặc thử đặt đơn trên gian hàng!
+                Biểu đồ đang phản ánh chính xác dữ liệu thực tế (0 đơn). Bấm nút <strong>"Mô Phỏng 2026"</strong> ở trên để xem trực quan biểu đồ sóng khi có đơn hàng, hoặc thử đặt đơn trên gian hàng!
               </p>
             </div>
-          ) : (
-            <div className="w-full overflow-x-auto scrollbar-none">
-              <div className="min-w-[580px] h-64 sm:h-72 relative flex flex-col justify-end">
-                {/* Lưới trục Y (Grid Lines) */}
-                <div className="absolute inset-0 flex flex-col justify-between pointer-events-none text-[10px] text-outline font-mono border-b border-border-herbal">
-                  <div className="border-b border-dashed border-border-herbal/60 pb-1 flex justify-between">
-                    <span>{formatCurrency(maxRevenue)}</span>
-                    <span>{maxOrders} đơn</span>
-                  </div>
-                  <div className="border-b border-dashed border-border-herbal/60 pb-1 flex justify-between">
-                    <span>{formatCurrency(Math.round(maxRevenue * 0.66))}</span>
-                    <span>{Math.round(maxOrders * 0.66)} đơn</span>
-                  </div>
-                  <div className="border-b border-dashed border-border-herbal/60 pb-1 flex justify-between">
-                    <span>{formatCurrency(Math.round(maxRevenue * 0.33))}</span>
-                    <span>{Math.round(maxOrders * 0.33)} đơn</span>
-                  </div>
-                  <div className="flex justify-between text-outline">
-                    <span>0 đ</span>
-                    <span>0 đơn</span>
-                  </div>
-                </div>
+          ) : (() => {
+            const svgW = 600;
+            const svgH = 220;
+            const count = chartData.length;
+            const getX = (idx) => (count > 1 ? (idx / (count - 1)) * svgW : svgW / 2);
+            const getYRev = (val) => svgH - (Math.min(Math.max(val, 0), maxRevenue) / maxRevenue) * svgH;
+            const getYOrd = (val) => svgH - (Math.min(Math.max(val, 0), maxOrders) / maxOrders) * svgH;
 
-                {/* Các cột hiển thị (Bar columns) */}
-                <div className="relative z-10 h-full flex items-end justify-between px-4 sm:px-8">
-                  {chartData.map((item, idx) => {
-                    const revHeightPercent = Math.max(8, Math.round((item.revenue / maxRevenue) * 85));
-                    const profitHeightPercent = Math.max(4, Math.round((item.profit / maxRevenue) * 85));
-                    const isHovered = activeHoverIdx === idx;
+            const revPoints = chartData.map((d, i) => `${getX(i)},${getYRev(d.revenue)}`).join(' ');
+            const revAreaPoints = count > 0
+              ? `${getX(0)},${svgH} ${revPoints} ${getX(count - 1)},${svgH}`
+              : '';
 
-                    return (
-                      <div
-                        key={idx}
-                        onMouseEnter={() => setActiveHoverIdx(idx)}
-                        onMouseLeave={() => setActiveHoverIdx(null)}
-                        className="flex-1 flex flex-col items-center justify-end h-full group cursor-pointer relative"
-                      >
-                        {/* Tooltip khi hover/chạm */}
-                        {isHovered && (
-                          <div className="absolute -top-16 z-30 bg-[#14261a] text-white p-2 shadow-xl border border-[#cbb07c] rounded-none text-xs whitespace-nowrap min-w-[150px] animate-fade-in pointer-events-none">
-                            <div className="font-bold text-[#cbb07c] border-b border-white/20 pb-1 mb-1 flex justify-between">
-                              <span>{item.label} ({item.date})</span>
-                              <span>{item.orders} đơn</span>
-                            </div>
-                            <div className="flex justify-between text-[11px]">
-                              <span className="text-[#a3b899]">Doanh thu:</span>
-                              <span className="font-bold">{formatCurrency(item.revenue)}</span>
-                            </div>
-                            <div className="flex justify-between text-[11px] text-green-300 font-bold">
-                              <span>Lãi thuần:</span>
-                              <span>+{formatCurrency(item.profit)}</span>
-                            </div>
-                          </div>
-                        )}
+            const profitPoints = chartData.map((d, i) => `${getX(i)},${getYRev(d.profit)}`).join(' ');
+            const profitAreaPoints = count > 0
+              ? `${getX(0)},${svgH} ${profitPoints} ${getX(count - 1)},${svgH}`
+              : '';
 
-                        {/* Cụm 2 cột: Cột Doanh Thu & Cột Lợi Nhuận Thuần */}
-                        <div className="flex items-end gap-1 sm:gap-1.5 h-full w-full justify-center">
-                          {/* Cột 1: Doanh thu (Xanh rừng đậm) */}
-                          <div
-                            style={{ height: `${revHeightPercent}%` }}
-                            className={`w-4 sm:w-6 bg-[#14261a] transition-all rounded-none ${
-                              isHovered ? 'bg-[#22442d]' : ''
-                            }`}
-                            title={`Doanh thu: ${formatCurrency(item.revenue)}`}
-                          ></div>
+            const orderPoints = chartData.map((d, i) => `${getX(i)},${getYOrd(d.orders)}`).join(' ');
 
-                          {/* Cột 2: Lợi nhuận thuần (Vàng rơm / Gold) */}
-                          <div
-                            style={{ height: `${profitHeightPercent}%` }}
-                            className={`w-4 sm:w-6 bg-[#cbb07c] transition-all rounded-none ${
-                              isHovered ? 'bg-[#dfc492]' : ''
-                            }`}
-                            title={`Lợi nhuận thuần: ${formatCurrency(item.profit)}`}
-                          ></div>
-                        </div>
+            return (
+              <div className="w-full overflow-x-auto scrollbar-none">
+                <div className="min-w-[600px] select-none">
+                  <div className="flex items-stretch">
+                    {/* Trục Y trái: Doanh thu */}
+                    <div className="w-20 sm:w-24 pr-2.5 h-56 sm:h-64 flex flex-col justify-between text-right text-[10px] text-outline font-mono shrink-0">
+                      <span className="-translate-y-1.5">{formatCurrency(maxRevenue)}</span>
+                      <span>{formatCurrency(Math.round(maxRevenue * 0.66))}</span>
+                      <span>{formatCurrency(Math.round(maxRevenue * 0.33))}</span>
+                      <span className="translate-y-1.5">0 đ</span>
+                    </div>
 
-                        {/* Điểm chỉ số đơn hàng mới (Line marker) */}
-                        <div
-                          style={{ bottom: `${Math.max(10, Math.round((item.orders / maxOrders) * 75))}%` }}
-                          className="absolute w-3 h-3 bg-amber-600 border-2 border-white rounded-none z-20 shadow-xs"
-                          title={`${item.orders} đơn hàng mới`}
-                        ></div>
+                    {/* Vùng vẽ biểu đồ sóng vuông vứt */}
+                    <div className="relative flex-1 h-56 sm:h-64 border-l border-b border-border-herbal bg-[#faf8f3]/50">
+                      {/* Lưới ngang nét đứt */}
+                      <div className="absolute inset-0 pointer-events-none">
+                        <div className="absolute top-0 inset-x-0 border-t border-dashed border-border-herbal/70" />
+                        <div className="absolute top-1/3 inset-x-0 border-t border-dashed border-border-herbal/70" />
+                        <div className="absolute top-2/3 inset-x-0 border-t border-dashed border-border-herbal/70" />
+                      </div>
 
-                        {/* Nhãn trục X */}
-                        <div className="pt-2 text-center text-xs font-semibold text-primary">
-                          <span className="block text-[11px] font-bold">{item.label}</span>
-                          <span className="block text-[9px] text-outline font-mono">{item.date}</span>
+                      {/* Lớp SVG Wave (Area + Polyline góc vuông vứt) */}
+                      <div className="absolute inset-0 px-4 sm:px-6">
+                        <div className="relative w-full h-full">
+                          <svg
+                            viewBox={`0 0 ${svgW} ${svgH}`}
+                            preserveAspectRatio="none"
+                            className="w-full h-full overflow-visible block"
+                          >
+                            <defs>
+                              <linearGradient id="revWaveGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor="#14261a" stopOpacity="0.22" />
+                                <stop offset="100%" stopColor="#14261a" stopOpacity="0.02" />
+                              </linearGradient>
+                              <linearGradient id="profitWaveGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor="#cbb07c" stopOpacity="0.35" />
+                                <stop offset="100%" stopColor="#cbb07c" stopOpacity="0.04" />
+                              </linearGradient>
+                            </defs>
+
+                            {revAreaPoints && (
+                              <polygon points={revAreaPoints} fill="url(#revWaveGrad)" />
+                            )}
+                            {profitAreaPoints && (
+                              <polygon points={profitAreaPoints} fill="url(#profitWaveGrad)" />
+                            )}
+
+                            {revPoints && (
+                              <polyline
+                                points={revPoints}
+                                fill="none"
+                                stroke="#14261a"
+                                strokeWidth="2.5"
+                                strokeLinejoin="miter"
+                                strokeLinecap="square"
+                                vectorEffect="non-scaling-stroke"
+                              />
+                            )}
+
+                            {profitPoints && (
+                              <polyline
+                                points={profitPoints}
+                                fill="none"
+                                stroke="#cbb07c"
+                                strokeWidth="2.5"
+                                strokeLinejoin="miter"
+                                strokeLinecap="square"
+                                vectorEffect="non-scaling-stroke"
+                              />
+                            )}
+
+                            {orderPoints && (
+                              <polyline
+                                points={orderPoints}
+                                fill="none"
+                                stroke="#d97706"
+                                strokeWidth="2"
+                                strokeDasharray="6 4"
+                                strokeLinejoin="miter"
+                                strokeLinecap="square"
+                                vectorEffect="non-scaling-stroke"
+                              />
+                            )}
+                          </svg>
+
+                          {/* Điểm nút vuông vứt + Vạch gióng dọc + Vùng tương tác */}
+                          {chartData.map((item, idx) => {
+                            const xPct = count > 1 ? (idx / (count - 1)) * 100 : 50;
+                            const revPct = (Math.min(Math.max(item.revenue, 0), maxRevenue) / maxRevenue) * 100;
+                            const profitPct = (Math.min(Math.max(item.profit, 0), maxRevenue) / maxRevenue) * 100;
+                            const orderPct = (Math.min(Math.max(item.orders, 0), maxOrders) / maxOrders) * 100;
+                            const isHovered = activeHoverIdx === idx;
+
+                            const tooltipAlignClass =
+                              idx === 0
+                                ? 'left-0'
+                                : idx === count - 1
+                                  ? 'right-0'
+                                  : 'left-1/2 -translate-x-1/2';
+
+                            return (
+                              <div
+                                key={idx}
+                                onMouseEnter={() => setActiveHoverIdx(idx)}
+                                onMouseLeave={() => setActiveHoverIdx(null)}
+                                onClick={() => setActiveHoverIdx(isHovered ? null : idx)}
+                                style={{ left: `${xPct}%` }}
+                                className="absolute inset-y-0 -translate-x-1/2 w-14 sm:w-16 cursor-pointer z-10"
+                              >
+                                {/* Vạch gióng dọc khi hover */}
+                                <div
+                                  className={`absolute inset-y-0 left-1/2 -translate-x-1/2 w-px transition-colors ${
+                                    isHovered ? 'bg-[#14261a]/45' : 'bg-border-herbal/30'
+                                  }`}
+                                />
+
+                                {/* Điểm nút vuông: Doanh thu */}
+                                <div
+                                  style={{ bottom: `${revPct}%` }}
+                                  className={`absolute left-1/2 -translate-x-1/2 translate-y-1/2 rounded-none border border-white transition-all ${
+                                    isHovered
+                                      ? 'w-3.5 h-3.5 bg-[#14261a] ring-2 ring-[#14261a]/25 z-30'
+                                      : 'w-2.5 h-2.5 bg-[#14261a] z-20'
+                                  }`}
+                                />
+
+                                {/* Điểm nút vuông: Lợi nhuận thuần */}
+                                <div
+                                  style={{ bottom: `${profitPct}%` }}
+                                  className={`absolute left-1/2 -translate-x-1/2 translate-y-1/2 rounded-none border border-white transition-all ${
+                                    isHovered
+                                      ? 'w-3.5 h-3.5 bg-[#cbb07c] ring-2 ring-[#cbb07c]/40 z-30'
+                                      : 'w-2.5 h-2.5 bg-[#cbb07c] z-20'
+                                  }`}
+                                />
+
+                                {/* Điểm nút vuông: Số đơn hàng mới */}
+                                <div
+                                  style={{ bottom: `${orderPct}%` }}
+                                  className={`absolute left-1/2 -translate-x-1/2 translate-y-1/2 rounded-none border border-white transition-all ${
+                                    isHovered
+                                      ? 'w-3 h-3 bg-amber-600 ring-2 ring-amber-500/35 z-30'
+                                      : 'w-2 h-2 bg-amber-600 z-20'
+                                  }`}
+                                />
+
+                                {/* Tooltip vuông vứt khi hover/chạm */}
+                                {isHovered && (
+                                  <div
+                                    className={`absolute top-2 ${tooltipAlignClass} z-40 bg-[#14261a] text-white p-2.5 shadow-xl border border-[#cbb07c] rounded-none text-xs whitespace-nowrap min-w-[168px] pointer-events-none`}
+                                  >
+                                    <div className="font-bold text-[#cbb07c] border-b border-white/20 pb-1 mb-1.5 flex justify-between gap-3">
+                                      <span>{item.label} ({item.date})</span>
+                                      <span>{item.orders} đơn</span>
+                                    </div>
+                                    <div className="flex justify-between gap-3 text-[11px] mb-0.5">
+                                      <span className="text-[#a3b899]">Doanh thu:</span>
+                                      <span className="font-bold font-mono">{formatCurrency(item.revenue)}</span>
+                                    </div>
+                                    <div className="flex justify-between gap-3 text-[11px] text-green-300 font-bold">
+                                      <span>Lãi thuần:</span>
+                                      <span className="font-mono">+{formatCurrency(item.profit)}</span>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
-                    );
-                  })}
+                    </div>
+
+                    {/* Trục Y phải: Số đơn hàng */}
+                    <div className="w-12 sm:w-14 pl-2.5 h-56 sm:h-64 flex flex-col justify-between text-left text-[10px] text-amber-700 font-mono shrink-0">
+                      <span className="-translate-y-1.5">{maxOrders} đơn</span>
+                      <span>{Math.round(maxOrders * 0.66)} đơn</span>
+                      <span>{Math.round(maxOrders * 0.33)} đơn</span>
+                      <span className="translate-y-1.5">0 đơn</span>
+                    </div>
+                  </div>
+
+                  {/* Nhãn trục X căn khớp 100% với các điểm sóng */}
+                  <div className="flex items-start mt-2.5">
+                    <div className="w-20 sm:w-24 pr-2.5 shrink-0" />
+                    <div className="flex-1 px-4 sm:px-6">
+                      <div className="relative h-8">
+                        {chartData.map((item, idx) => {
+                          const xPct = count > 1 ? (idx / (count - 1)) * 100 : 50;
+                          const isHovered = activeHoverIdx === idx;
+                          return (
+                            <div
+                              key={idx}
+                              style={{ left: `${xPct}%` }}
+                              onMouseEnter={() => setActiveHoverIdx(idx)}
+                              onMouseLeave={() => setActiveHoverIdx(null)}
+                              className={`absolute top-0 -translate-x-1/2 text-center cursor-pointer transition-colors ${
+                                isHovered ? 'text-[#14261a]' : 'text-primary'
+                              }`}
+                            >
+                              <span className="block text-[11px] font-bold whitespace-nowrap">{item.label}</span>
+                              <span className="block text-[9px] text-outline font-mono whitespace-nowrap">{item.date}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                    <div className="w-12 sm:w-14 pl-2.5 shrink-0" />
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
         </div>
       </div>
 

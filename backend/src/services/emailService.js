@@ -207,7 +207,7 @@ export const buildOrderHtmlTemplate = (order) => {
           <td style="background-color: #faf8f5; padding: 18px 24px; text-align: center; border-top: 1px solid #eae5db; font-size: 12px; color: #7d8b80; line-height: 1.6;">
             <div>💡 <em>Chủ shop vui lòng kiểm tra số lượng dược liệu trong kho, đóng gói túi zip cẩn thận và liên hệ bưu cục/shipper giao hàng.</em></div>
             <div style="margin-top: 6px; font-size: 11px; color: #a89f91;">
-              Hệ thống thông báo tự động từ Website Tiệm Thảo Mộc Ngân Hà © 2026.
+              Hệ thống thông báo tự động từ Website Tiệm Thảo Dược Ngân Hà © 2026.
             </div>
           </td>
         </tr>
@@ -274,11 +274,11 @@ export const sendOrderEmailViaGoogleSmtp = async ({ order, recipientEmail, subje
   const fromEmail = process.env.SMTP_USER;
 
   const mailOptions = {
-    from: `"Tiệm Thảo Mộc Ngân Hà" <${fromEmail}>`,
+    from: `"Tiệm Thảo Dược Ngân Hà" <${fromEmail}>`,
     to: targetEmail,
     replyTo: order?.customer_email || fromEmail,
     subject: safeSubject,
-    text: textBody || 'Thông báo đơn hàng mới từ Tiệm Thảo Mộc Ngân Hà',
+    text: textBody || 'Thông báo đơn hàng mới từ Tiệm Thảo Dược Ngân Hà',
     html: htmlContent,
   };
 

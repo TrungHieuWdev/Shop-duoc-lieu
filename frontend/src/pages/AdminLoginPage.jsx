@@ -138,7 +138,7 @@ export const AdminLoginPage = () => {
               <span className="material-symbols-outlined text-[1.625rem] sm:text-[1.875rem]">security</span>
             </div>
             <span className="text-[9px] sm:text-[10px] font-bold text-[#8a7258] uppercase tracking-[0.2em] sm:tracking-[0.22em] block mb-1">
-              TIỆM THẢO MỘC NGÂN HÀ
+              TIỆM THẢO DƯỢC NGÂN HÀ
             </span>
             <h1 className="font-serif text-xl sm:text-2xl font-bold text-primary tracking-tight">
               Đăng Nhập Quản Trị Hệ Thống
@@ -300,7 +300,7 @@ export const AdminLoginPage = () => {
               <span>Quay lại trang chủ bán lẻ (Khách hàng)</span>
             </Link>
             <p className="text-[10px] text-outline">
-              Bản quyền nội bộ © 2026 Tiệm Thảo Mộc Ngân Hà. Mọi quyền được bảo lưu.
+              Bản quyền nội bộ © 2026 Tiệm Thảo Dược Ngân Hà. Mọi quyền được bảo lưu.
             </p>
           </div>
         </div>

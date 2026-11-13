@@ -108,7 +108,7 @@ export const AdminDashboardPage = () => {
         </span>
         <h2 className="font-serif text-2xl font-bold text-primary mb-2">Yêu Cầu Quyền Quản Trị</h2>
         <p className="text-xs text-on-surface-variant mb-6 leading-relaxed">
-          Khu vực quản trị kho hàng và hóa đơn chỉ dành cho nhân sự nội bộ Tiệm Thảo Mộc Ngân Hà. Vui lòng đăng nhập để tiếp tục.
+          Khu vực quản trị kho hàng và hóa đơn chỉ dành cho nhân sự nội bộ Tiệm Thảo Dược Ngân Hà. Vui lòng đăng nhập để tiếp tục.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link
@@ -141,7 +141,7 @@ export const AdminDashboardPage = () => {
       icon: 'logout',
       variant: 'warning',
       confirmText: 'Đăng Xuất Ngay',
-      message: 'Bạn có chắc chắn muốn đăng xuất khỏi trang quản trị Tiệm Thảo Mộc Ngân Hà?',
+      message: 'Bạn có chắc chắn muốn đăng xuất khỏi trang quản trị Tiệm Thảo Dược Ngân Hà?',
       onConfirm: () => {
         logout();
         navigate('/');

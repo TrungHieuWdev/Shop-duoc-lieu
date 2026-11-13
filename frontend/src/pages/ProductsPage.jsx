@@ -176,7 +176,7 @@ export const ProductsPage = () => {
           <div className="eco-image-rise relative min-h-[200px] sm:min-h-[300px] bg-surface-container overflow-hidden">
             <img
               src="/images/products/bai-thuoc-7-vi.jpg"
-              alt="7 Nia Thảo Mộc Phơi Khô"
+              alt="7 Nia Thảo Dược Phơi Khô"
               className="absolute inset-0 w-full h-full object-cover object-center"
             />
             {/* Lớp gradient hòa tan ảnh vào khối chữ bên trái */}
