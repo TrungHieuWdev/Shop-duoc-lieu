@@ -13,7 +13,7 @@ export const PaymentPage = () => {
   const token = searchParams.get('token');
   const navigate = useNavigate();
   const clearCart = useCartStore((state) => state.clearCart);
-  const { settings, orders, updateOrderStatus } = useAdminStore();
+  const { settings, orders, updateOrderStatus, hydratePublicData } = useAdminStore();
 
   const [paymentInfo, setPaymentInfo] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -39,9 +39,10 @@ export const PaymentPage = () => {
     orderCode: orderCode || 'THANH_TOAN',
   });
 
-  // 1. Tải thông tin thanh toán & mã VietQR
+  // 1. Tải thông tin thanh toán & đồng bộ mới nhất tài khoản ngân hàng từ Supabase (PC & Di động)
   useEffect(() => {
     let isMounted = true;
+    hydratePublicData?.();
 
     const fetchPaymentDetails = async () => {
       try {
@@ -131,9 +132,6 @@ export const PaymentPage = () => {
         <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-primary">
           Quét Mã Để Hoàn Tất Đơn Hàng Của Bạn
         </h1>
-        <p className="text-xs sm:text-body-sm text-on-surface-variant max-w-lg mx-auto mt-2 leading-relaxed">
-          Mở ứng dụng ngân hàng bất kỳ để quét mã QR dưới đây. Hệ thống tự động nhận diện giao dịch sau khi chuyển khoản thành công.
-        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-8 items-start bg-surface-container-lowest rounded-none p-3.5 sm:p-6 lg:p-8 border border-border-herbal shadow-xs">

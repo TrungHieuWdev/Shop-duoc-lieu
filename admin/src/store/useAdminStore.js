@@ -83,7 +83,7 @@ export const useAdminStore = create((set, get) => ({
     const updated = { ...get().settings, ...newSettings };
     set({ settings: updated });
     if (isSupabaseConfigured && supabase) {
-      await supabase
+      const { error } = await supabase
         .from('shop_settings')
         .upsert({
           id: 1,
@@ -98,6 +98,10 @@ export const useAdminStore = create((set, get) => ({
           free_shipping_threshold: Number(updated.free_shipping_threshold) || 0,
           updated_at: new Date().toISOString(),
         });
+      if (error) {
+        console.error('Lỗi lưu shop_settings lên Supabase:', error);
+        throw new Error(error.message || 'Không thể lưu cài đặt lên Supabase.');
+      }
     }
     return updated;
   },

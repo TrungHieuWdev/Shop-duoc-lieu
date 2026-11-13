@@ -259,16 +259,23 @@ const saveEmailDispatchLog = (logEntry) => {
  * - Tự động fallback qua FormSubmit khi Backend offline hoặc chưa cấu hình SMTP
  * - Ghi nhận chính xác trạng thái gửi thực tế vào lịch sử admin
  */
+const inFlightOrderEmails = new Set();
+
 export const sendAutomaticOrderEmail = async (order, targetEmail, senderOptions = {}) => {
   if (!order || !order.order_code) {
     return { success: false, message: 'Thiếu thông tin mã đơn hàng.' };
   }
 
-  // 1. Chống gửi trùng lặp (Deduplication Guard): Một mã đơn hàng chỉ gửi email 1 lần duy nhất!
+  // 1. Chống gửi trùng lặp (Deduplication Guard + In-flight Lock): Một mã đơn hàng chỉ gửi email 1 lần duy nhất!
   const dedupKey = `nganha_email_dispatched_${order.order_code}`;
-  if (sessionStorage.getItem(dedupKey) || localStorage.getItem(dedupKey)) {
+  if (
+    inFlightOrderEmails.has(order.order_code) ||
+    sessionStorage.getItem(dedupKey) ||
+    localStorage.getItem(dedupKey)
+  ) {
     return { success: true, deduplicated: true, message: 'Đơn hàng đã được gửi email trước đó.' };
   }
+  inFlightOrderEmails.add(order.order_code);
 
   const storeSettings = useAdminStore.getState()?.settings || {};
   const adminEmail = (targetEmail && targetEmail !== 'tiemthaomocnganha@gmail.com')
@@ -364,6 +371,7 @@ export const sendAutomaticOrderEmail = async (order, targetEmail, senderOptions 
     try {
       const emailJsRes = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
         method: 'POST',
+        keepalive: true,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           service_id: emailJsService,
@@ -445,6 +453,7 @@ export const sendAutomaticOrderEmail = async (order, targetEmail, senderOptions 
 
     const formRes = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(adminEmail)}`, {
       method: 'POST',
+      keepalive: true,
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -500,6 +509,8 @@ export const sendAutomaticOrderEmail = async (order, targetEmail, senderOptions 
       };
     }
   } catch (e) { }
+
+  inFlightOrderEmails.delete(order.order_code);
 
   saveEmailDispatchLog({
     order_code: order.order_code,

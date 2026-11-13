@@ -301,7 +301,11 @@ export const useAdminStore = create((set, get) => ({
       }
 
       if (setRes.data) {
-        set({ settings: { ...DEFAULT_SETTINGS, ...setRes.data } });
+        const mergedSettings = { ...DEFAULT_SETTINGS, ...setRes.data };
+        try {
+          localStorage.setItem('nganha_shop_settings', JSON.stringify(mergedSettings));
+        } catch {}
+        set({ settings: mergedSettings });
       }
     } catch {
       // Giữ dữ liệu mặc định nếu mạng gián đoạn

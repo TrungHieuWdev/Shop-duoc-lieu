@@ -52,7 +52,12 @@ export const OrderSuccessPage = () => {
       }
     };
 
-    if (orderCode && token && token !== 'success') {
+    const isLocalHost =
+      typeof window !== 'undefined' &&
+      ['localhost', '127.0.0.1'].includes(window.location.hostname);
+    const hasBackendApi = Boolean(import.meta.env.VITE_API_BASE_URL) || isLocalHost;
+
+    if (hasBackendApi && orderCode && token && token !== 'success' && !fallbackOrder) {
       fetchOrder();
     } else {
       setLoading(false);
