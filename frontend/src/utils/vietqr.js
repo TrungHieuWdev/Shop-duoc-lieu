@@ -22,14 +22,21 @@ export const VIETQR_BANKS = [
  * Sử dụng dịch vụ VietQR QuickLink chuẩn:
  * https://img.vietqr.io/image/<BANK_ID>-<ACCOUNT_NO>-<TEMPLATE>.png?amount=<AMOUNT>&addInfo=<CONTENT>&accountName=<ACCOUNT_NAME>
  */
-export const getVietQrUrl = ({ bankId, bankAccount, amount, orderCode, accountName }) => {
+export const getVietQrUrl = ({
+  bankId,
+  bankAccount,
+  amount,
+  orderCode,
+  accountName,
+  template = 'qr_only',
+}) => {
   const cleanBank = (bankId || 'MB').trim();
   const cleanAcc = (bankAccount || '0983124567').replace(/\s+/g, '');
   const cleanAmount = Math.max(0, parseInt(amount, 10) || 0);
   const cleanDes = encodeURIComponent(orderCode || 'THANH TOAN NGAN HA');
   const cleanName = encodeURIComponent((accountName || 'TIEM THAO MOC NGAN HA').toUpperCase());
 
-  // Template compact2: Hiển thị đầy đủ logo Napas247, logo ngân hàng, số tiền và nội dung
-  return `https://img.vietqr.io/image/${cleanBank}-${cleanAcc}-compact2.png?amount=${cleanAmount}&addInfo=${cleanDes}&accountName=${cleanName}`;
+  // Mặc định dùng template qr_only: chỉ hiện mã QR phóng to sắc nét, không kèm chữ VietQR hay số tiền bên dưới
+  return `https://img.vietqr.io/image/${cleanBank}-${cleanAcc}-${template}.png?amount=${cleanAmount}&addInfo=${cleanDes}&accountName=${cleanName}`;
 };
 

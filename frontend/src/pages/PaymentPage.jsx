@@ -88,9 +88,10 @@ export const PaymentPage = () => {
         if (res.success && res.data && res.data.payment_status === 'PAID') {
           setPaymentStatus('PAID');
           clearInterval(intervalId);
+          const paidAt = new Date().toISOString();
           const paidOrder = matchedOrder
-            ? { ...matchedOrder, order_status: 'CONFIRMED', payment_status: 'PAID' }
-            : { order_code: orderCode, total: finalAmount, order_status: 'CONFIRMED', payment_status: 'PAID' };
+            ? { ...matchedOrder, order_status: 'CONFIRMED', payment_status: 'PAID', paid_at: paidAt, created_at: paidAt }
+            : { order_code: orderCode, total: finalAmount, order_status: 'CONFIRMED', payment_status: 'PAID', paid_at: paidAt, created_at: paidAt };
           const adminEmail = settings?.admin_email || 'hieunedz@gmail.com';
           notifyAdminNewOrder(paidOrder, adminEmail);
           clearCart();
@@ -128,23 +129,30 @@ export const PaymentPage = () => {
           Thanh Toán Đơn Hàng #{orderCode}
         </span>
         <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-primary">
-          Quét Mã VietQR Chuyển Khoản Ngân Hàng
+          Quét Mã Để Hoàn Tất Đơn Hàng Của Bạn
         </h1>
         <p className="text-xs sm:text-body-sm text-on-surface-variant max-w-lg mx-auto mt-2 leading-relaxed">
           Mở ứng dụng ngân hàng bất kỳ để quét mã QR dưới đây. Hệ thống tự động nhận diện giao dịch sau khi chuyển khoản thành công.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-start bg-surface-container-lowest rounded-none p-4 sm:p-6 lg:p-8 border border-border-herbal shadow-xs">
-        {/* Khung hiển thị mã VietQR */}
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-8 items-start bg-surface-container-lowest rounded-none p-3.5 sm:p-6 lg:p-8 border border-border-herbal shadow-xs">
+        {/* Khung hiển thị mã QR phóng to (không chữ VietQR, chỉ hiện chủ tài khoản & số tài khoản) */}
         <div className="md:col-span-6 flex flex-col items-center justify-center p-4 sm:p-6 bg-surface-container-low rounded-none border border-border-herbal/70">
-          <div className="w-56 h-56 sm:w-68 sm:h-68 bg-white p-3 rounded-none shadow-xs border border-border-herbal flex items-center justify-center">
-            <img src={qrUrl} alt={`Mã VietQR đơn hàng ${orderCode}`} className="w-full h-full object-contain" />
-          </div>
-
-          <div className="mt-3.5 sm:mt-4 flex items-center gap-2 text-[11px] sm:text-xs font-semibold text-secondary bg-surface px-3 py-1.5 rounded-none border border-border-herbal">
-            <span className="w-2 h-2 rounded-full bg-emerald-600 animate-ping"></span>
-            <span>Mã VietQR chuẩn Napas247 • Tự động điền số tiền &amp; nội dung</span>
+          <div className="w-full max-w-[280px] sm:max-w-[310px] bg-white p-3 sm:p-4 rounded-none shadow-xs border border-border-herbal flex flex-col items-center">
+            <img
+              src={qrUrl}
+              alt={`Mã QR thanh toán đơn hàng ${orderCode}`}
+              className="w-56 h-56 sm:w-64 sm:h-64 object-contain"
+            />
+            <div className="mt-3 pt-2.5 border-t border-border-herbal/50 w-full text-center">
+              <p className="text-xs sm:text-sm font-bold text-primary uppercase tracking-wide break-words">
+                {accountName}
+              </p>
+              <p className="text-sm sm:text-base font-sans font-bold text-primary tracking-wider tabular-nums mt-0.5">
+                {bankAccount}
+              </p>
+            </div>
           </div>
 
           {/* Nút xác nhận thanh toán nhanh */}
@@ -152,17 +160,18 @@ export const PaymentPage = () => {
             type="button"
             onClick={() => {
               updateOrderStatus(orderCode, 'CONFIRMED', 'PAID');
+              const paidAt = new Date().toISOString();
               const paidOrder = matchedOrder
-                ? { ...matchedOrder, order_status: 'CONFIRMED', payment_status: 'PAID' }
-                : { order_code: orderCode, total: finalAmount, order_status: 'CONFIRMED', payment_status: 'PAID' };
+                ? { ...matchedOrder, order_status: 'CONFIRMED', payment_status: 'PAID', paid_at: paidAt, created_at: paidAt }
+                : { order_code: orderCode, total: finalAmount, order_status: 'CONFIRMED', payment_status: 'PAID', paid_at: paidAt, created_at: paidAt };
               const adminEmail = settings?.admin_email || 'hieunedz@gmail.com';
               notifyAdminNewOrder(paidOrder, adminEmail);
               clearCart();
               navigate(`/dat-hang-thanh-cong/${orderCode}?token=${token || 'success'}`);
             }}
-            className="mt-4 w-full py-2.5 bg-green-700 hover:bg-green-800 text-white font-bold text-xs uppercase tracking-wider rounded-none shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+            className="mt-4 w-full max-w-[280px] sm:max-w-[310px] py-3 sm:py-2.5 px-3 bg-green-700 hover:bg-green-800 text-white font-bold text-xs sm:text-[13px] uppercase tracking-wider rounded-none shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
           >
-            <span className="material-symbols-outlined text-base">verified</span>
+            <span className="material-symbols-outlined text-base shrink-0">verified</span>
             <span>Xác Nhận Đã Chuyển Khoản Thành Công</span>
           </button>
         </div>
@@ -236,10 +245,6 @@ export const PaymentPage = () => {
                 {copiedField === 'content' ? 'Đã chép ✓' : 'Sao chép'}
               </button>
             </div>
-          </div>
-
-          <div className="mt-1 p-2.5 rounded-none bg-surface-container-low text-xs text-on-surface-variant leading-relaxed border border-border-herbal/40">
-            💡 <strong>Mẹo:</strong> Quét mã VietQR trên điện thoại sẽ tự động điền đúng Số tài khoản, Ngân hàng, Số tiền và Nội dung {orderCode} mà không cần nhập tay.
           </div>
         </div>
       </div>

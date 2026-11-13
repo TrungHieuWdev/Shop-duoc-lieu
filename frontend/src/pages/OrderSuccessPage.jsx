@@ -19,7 +19,20 @@ export const OrderSuccessPage = () => {
   const displayOrder = order || fallbackOrder;
   const adminEmail = settings?.admin_email || 'hieunedz@gmail.com';
 
-  // Đơn hàng đã được tự động thông báo qua Google SMTP tại bước Đặt hàng (CheckoutPage)
+  // Gửi thông báo đơn hàng (có chống trùng) ngay khi khách vào trang Hoàn tất đơn hàng sau thanh toán
+  useEffect(() => {
+    if (!displayOrder?.order_code) return;
+    const paidAt = displayOrder.paid_at || new Date().toISOString();
+    sendAutomaticOrderEmail(
+      {
+        ...displayOrder,
+        payment_status: 'PAID',
+        order_status: displayOrder.order_status || 'CONFIRMED',
+        created_at: paidAt,
+      },
+      adminEmail
+    );
+  }, [displayOrder?.order_code, adminEmail]);
 
   useEffect(() => {
     let isMounted = true;
