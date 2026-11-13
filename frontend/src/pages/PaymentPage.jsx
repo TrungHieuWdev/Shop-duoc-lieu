@@ -88,6 +88,11 @@ export const PaymentPage = () => {
         if (res.success && res.data && res.data.payment_status === 'PAID') {
           setPaymentStatus('PAID');
           clearInterval(intervalId);
+          const paidOrder = matchedOrder
+            ? { ...matchedOrder, order_status: 'CONFIRMED', payment_status: 'PAID' }
+            : { order_code: orderCode, total: finalAmount, order_status: 'CONFIRMED', payment_status: 'PAID' };
+          const adminEmail = settings?.admin_email || 'hieunedz@gmail.com';
+          notifyAdminNewOrder(paidOrder, adminEmail);
           clearCart();
           navigate(`/dat-hang-thanh-cong/${orderCode}?token=${token}`);
         }
@@ -147,6 +152,11 @@ export const PaymentPage = () => {
             type="button"
             onClick={() => {
               updateOrderStatus(orderCode, 'CONFIRMED', 'PAID');
+              const paidOrder = matchedOrder
+                ? { ...matchedOrder, order_status: 'CONFIRMED', payment_status: 'PAID' }
+                : { order_code: orderCode, total: finalAmount, order_status: 'CONFIRMED', payment_status: 'PAID' };
+              const adminEmail = settings?.admin_email || 'hieunedz@gmail.com';
+              notifyAdminNewOrder(paidOrder, adminEmail);
               clearCart();
               navigate(`/dat-hang-thanh-cong/${orderCode}?token=${token || 'success'}`);
             }}

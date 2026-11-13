@@ -82,8 +82,8 @@ export const buildOrderHtmlTemplate = (order) => {
       <meta charset="utf-8">
       <title>Đơn Hàng Mới #${order.order_code}</title>
     </head>
-    <body style="margin: 0; padding: 20px 0; background-color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #111827;">
-      <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 620px; background-color: #ffffff; border: 1px solid #d1d5db;">
+    <body style="margin: 0; padding: 20px 0; background-color: #f3f4f6; font-family: 'Segoe UI', Arial, Helvetica, sans-serif; line-height: 1.6; color: #111827;">
+      <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 620px; background-color: #ffffff; border: 1px solid #d1d5db; font-family: 'Segoe UI', Arial, Helvetica, sans-serif;">
         
         <!-- HEADER THƯƠNG HIỆU -->
         <tr>
@@ -106,7 +106,7 @@ export const buildOrderHtmlTemplate = (order) => {
             <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 12px 16px;">
               <tr>
                 <td style="font-size: 13px; color: #374151; padding-bottom: 6px;">
-                  Mã đơn hàng: <strong style="font-size: 14px; color: #111827; font-family: monospace;">#${order.order_code}</strong>
+                  Mã đơn hàng: <strong style="font-size: 15px; color: #111827; letter-spacing: 0.3px;">#${order.order_code}</strong>
                 </td>
                 <td style="text-align: right; font-size: 12px; color: #6b7280;">
                   ${order.created_at ? new Date(order.created_at).toLocaleString('vi-VN') : new Date().toLocaleString('vi-VN')}

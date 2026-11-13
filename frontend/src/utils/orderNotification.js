@@ -43,8 +43,8 @@ export const buildOrderHtmlTemplate = (order) => {
   const paymentMethodLabel = order.payment_method === 'VIETQR' ? 'VIETQR' : 'COD';
 
   return `
-    <div style="margin: 0; padding: 20px 10px; background-color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #111827;">
-      <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 620px; background-color: #ffffff; border: 1px solid #d1d5db;">
+    <div style="margin: 0; padding: 20px 10px; background-color: #f3f4f6; font-family: 'Segoe UI', Arial, Helvetica, sans-serif; line-height: 1.6; color: #111827;">
+      <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 620px; background-color: #ffffff; border: 1px solid #d1d5db; font-family: 'Segoe UI', Arial, Helvetica, sans-serif;">
         <tr>
           <td style="padding: 22px 24px 18px; text-align: center; border-bottom: 2px solid #111827;">
             <div style="font-size: 18px; font-weight: 700; color: #111827; letter-spacing: 0.5px; text-transform: uppercase;">
@@ -63,7 +63,7 @@ export const buildOrderHtmlTemplate = (order) => {
             <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; border: 1px solid #e5e7eb; padding: 12px 16px;">
               <tr>
                 <td style="font-size: 13px; color: #374151; padding-bottom: 6px;">
-                  Mã đơn hàng: <strong style="font-size: 14px; color: #111827; font-family: monospace;">#${escapeHtml(order.order_code)}</strong>
+                  Mã đơn hàng: <strong style="font-size: 15px; color: #111827; letter-spacing: 0.3px;">#${escapeHtml(order.order_code)}</strong>
                 </td>
                 <td style="text-align: right; font-size: 12px; color: #6b7280;">
                   ${escapeHtml(orderTime)}

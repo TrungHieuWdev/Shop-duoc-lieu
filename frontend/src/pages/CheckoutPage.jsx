@@ -3,7 +3,6 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useCartStore } from '@/store/useCartStore';
 import { useAdminStore } from '@/store/useAdminStore';
 import { formatCurrency } from '@/utils/formatCurrency';
-import { notifyAdminNewOrder } from '@/utils/orderNotification';
 import { sanitizeInput, isValidVietnamesePhone, isValidEmail, checkClientThrottle } from '@/utils/security';
 import { evaluateFreeshipVoucher } from '@/utils/shippingVouchers';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
@@ -151,12 +150,8 @@ export const CheckoutPage = () => {
       }
 
       // Ghi nhận đơn hàng vào bộ nhớ phiên để hiển thị trang thanh toán VietQR
+      // Lưu ý: Email thông báo chủ shop chỉ gửi khi khách xác nhận đã thanh toán ở PaymentPage
       addOrder(finalOrder);
-
-      // Tự động kích hoạt thông báo đơn hàng gửi đến Gmail chủ shop đã cài đặt trong Admin
-      const latestAdminEmail = useAdminStore.getState().settings?.admin_email;
-      const adminEmail = latestAdminEmail || settings?.admin_email || 'hieunedz@gmail.com';
-      notifyAdminNewOrder(finalOrder, adminEmail);
 
       // Gọi backend nếu có (với dữ liệu đã làm sạch triệt để)
       try {

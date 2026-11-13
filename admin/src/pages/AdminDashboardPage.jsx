@@ -96,41 +96,6 @@ export const AdminDashboardPage = () => {
   // Checkbox selection state
   const [selectedLogCodes, setSelectedLogCodes] = useState([]);
 
-  // Auth gate
-  if (isInitializing) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#fbf9f2] text-xs font-semibold text-primary">
-        Đang kiểm tra phiên bảo mật quản trị...
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return (
-      <div className="max-w-md mx-auto my-16 p-8 bg-[#faf8f3] rounded-none border border-[#ded7ca] text-center shadow-md eco-rise-1">
-        <div className="w-14 h-14 mx-auto bg-[#14261a] text-[#cbb07c] flex items-center justify-center mb-4 shadow-sm rounded-none">
-          <span className="material-symbols-outlined text-[1.875rem]">lock</span>
-        </div>
-        <span className="text-[10px] font-bold text-[#8a7258] uppercase tracking-[0.22em] block mb-1">
-          HỆ THỐNG NỘI BỘ ĐỘC LẬP
-        </span>
-        <h2 className="font-serif text-2xl font-bold text-primary mb-2">Yêu Cầu Quyền Quản Trị</h2>
-        <p className="text-xs text-on-surface-variant mb-6 leading-relaxed">
-          Khu vực quản trị kho hàng và hóa đơn được bảo vệ bằng Supabase Auth + 2FA. Vui lòng đăng nhập để tiếp tục.
-        </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-          <Link
-            to="/login"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-primary hover:bg-primary-container text-on-primary text-xs font-bold uppercase tracking-wider rounded-none shadow-xs transition-all cursor-pointer"
-          >
-            <span>Đăng Nhập Nội Bộ</span>
-            <span className="material-symbols-outlined text-base">login</span>
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   const showToast = (msg) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3500);
@@ -173,7 +138,7 @@ export const AdminDashboardPage = () => {
 
   // 2. Quản lý Hàng Hóa (Products)
   const filteredProducts = useMemo(() => {
-    return products.filter((p) => {
+    return (products || []).filter((p) => {
       if (searchName && !p.name.toLowerCase().includes(searchName.toLowerCase())) {
         return false;
       }
@@ -192,7 +157,7 @@ export const AdminDashboardPage = () => {
 
   // 3. Quản lý Hóa Đơn (Orders)
   const filteredOrders = useMemo(() => {
-    return orders.filter((o) => {
+    return (orders || []).filter((o) => {
       if (searchCode && !o.order_code.toLowerCase().includes(searchCode.toLowerCase())) {
         return false;
       }
@@ -208,6 +173,41 @@ export const AdminDashboardPage = () => {
       return true;
     });
   }, [orders, searchCode, searchName, orderStatusFilter]);
+
+  // Auth gate (đặt sau toàn bộ React Hooks để tránh lỗi Rules of Hooks khi F5)
+  if (isInitializing) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#fbf9f2] text-xs font-semibold text-primary">
+        Đang kiểm tra phiên bảo mật quản trị...
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="max-w-md mx-auto my-16 p-8 bg-[#faf8f3] rounded-none border border-[#ded7ca] text-center shadow-md eco-rise-1">
+        <div className="w-14 h-14 mx-auto bg-[#14261a] text-[#cbb07c] flex items-center justify-center mb-4 shadow-sm rounded-none">
+          <span className="material-symbols-outlined text-[1.875rem]">lock</span>
+        </div>
+        <span className="text-[10px] font-bold text-[#8a7258] uppercase tracking-[0.22em] block mb-1">
+          HỆ THỐNG NỘI BỘ ĐỘC LẬP
+        </span>
+        <h2 className="font-serif text-2xl font-bold text-primary mb-2">Yêu Cầu Quyền Quản Trị</h2>
+        <p className="text-xs text-on-surface-variant mb-6 leading-relaxed">
+          Khu vực quản trị kho hàng và hóa đơn được bảo vệ bằng Supabase Auth + 2FA. Vui lòng đăng nhập để tiếp tục.
+        </p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <Link
+            to="/login"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-primary hover:bg-primary-container text-on-primary text-xs font-bold uppercase tracking-wider rounded-none shadow-xs transition-all cursor-pointer"
+          >
+            <span>Đăng Nhập Nội Bộ</span>
+            <span className="material-symbols-outlined text-base">login</span>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   // Toggle row expand
   const toggleRowExpand = (code) => {

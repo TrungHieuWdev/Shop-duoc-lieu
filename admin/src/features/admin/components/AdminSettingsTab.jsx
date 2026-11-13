@@ -34,6 +34,24 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
   const [emailLogs, setEmailLogs] = useState([]);
 
   useEffect(() => {
+    if (!settings) return;
+    setFormData({
+      bank_id: settings.bank_id || 'MB',
+      bank_name: settings.bank_name || 'MBBank (Quân Đội)',
+      bank_account: settings.bank_account || '0983124567',
+      account_name: settings.account_name || 'TIỆM THẢO DƯỢC NGÂN HÀ',
+      admin_email:
+        settings.admin_email && settings.admin_email !== 'tiemthaomocnganha@gmail.com'
+          ? settings.admin_email
+          : 'hieunedz@gmail.com',
+      shop_sender_email: settings.shop_sender_email || 'nganhashop995@gmail.com',
+      zalo_phone: settings.zalo_phone || '0901378425',
+      default_shipping_fee: settings.default_shipping_fee ?? 30000,
+      free_shipping_threshold: settings.free_shipping_threshold ?? 350000,
+    });
+  }, [settings]);
+
+  useEffect(() => {
     try {
       const raw = localStorage.getItem('nganha_admin_email_logs') || '[]';
       setEmailLogs(JSON.parse(raw));
