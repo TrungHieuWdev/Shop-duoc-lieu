@@ -88,15 +88,9 @@ export const OrderSuccessPage = () => {
           <span className="material-symbols-outlined text-[2.5rem] sm:text-[3rem]">check_circle</span>
         </div>
 
-        <span className="text-[10px] sm:text-xs font-semibold text-secondary uppercase tracking-widest block mb-1.5 sm:mb-2">
-          Giao Dịch Đã Xác Nhận Tự Động
-        </span>
-        <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-primary mb-2.5 sm:mb-3">
-          Đặt Hàng &amp; Thanh Toán Thành Công!
+        <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-primary mb-6 sm:mb-8 uppercase tracking-wide">
+          ĐƠN HÀNG ĐÃ ĐƯỢC XÁC NHẬN
         </h1>
-        <p className="text-xs sm:text-body-sm text-on-surface-variant max-w-lg mx-auto mb-6 sm:mb-8 leading-relaxed">
-          Cảm ơn bạn đã tin chọn các sản phẩm thảo dược tự nhiên. Đơn hàng của bạn đã được chuyển đến chủ cửa hàng để chuẩn bị đóng gói và gửi hàng sớm nhất.
-        </p>
 
         {/* Thông tin hóa đơn đơn hàng */}
         <div className="bg-surface-container-low rounded-xl p-4 sm:p-6 border border-border-herbal/70 text-left mb-6 sm:mb-8">

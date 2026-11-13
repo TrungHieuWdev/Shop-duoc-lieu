@@ -235,37 +235,20 @@ export const CheckoutPage = () => {
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-primary mb-1">
-                  Số điện thoại di động <span className="text-error">*</span>
-                </label>
-                <input
-                  type="tel"
-                  name="customer_phone"
-                  value={formData.customer_phone}
-                  onChange={handleChange}
-                  placeholder="0987 654 321"
-                  required
-                  maxLength={15}
-                  className="w-full px-3.5 py-2.5 bg-surface-container-low border border-border-herbal rounded-none text-base sm:text-body-sm text-on-surface focus:outline-none focus:border-primary transition-colors font-medium"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-primary mb-1">
-                  Email nhận thông báo (Không bắt buộc)
-                </label>
-                <input
-                  type="email"
-                  name="customer_email"
-                  value={formData.customer_email}
-                  onChange={handleChange}
-                  placeholder="hoa.nguyen@example.com"
-                  maxLength={100}
-                  className="w-full px-3.5 py-2.5 bg-surface-container-low border border-border-herbal rounded-none text-base sm:text-body-sm text-on-surface focus:outline-none focus:border-primary transition-colors font-medium"
-                />
-              </div>
+            <div>
+              <label className="block text-xs font-semibold text-primary mb-1">
+                Số điện thoại di động <span className="text-error">*</span>
+              </label>
+              <input
+                type="tel"
+                name="customer_phone"
+                value={formData.customer_phone}
+                onChange={handleChange}
+                placeholder="0987 654 321"
+                required
+                maxLength={15}
+                className="w-full px-3.5 py-2.5 bg-surface-container-low border border-border-herbal rounded-none text-base sm:text-body-sm text-on-surface focus:outline-none focus:border-primary transition-colors font-medium"
+              />
             </div>
 
             <div>

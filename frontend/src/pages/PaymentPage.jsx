@@ -39,22 +39,29 @@ export const PaymentPage = () => {
     orderCode: orderCode || 'THANH_TOAN',
   });
 
-  // 1. Tải thông tin thanh toán & đồng bộ mới nhất tài khoản ngân hàng từ Supabase (PC & Di động)
+  // 1. Tải thông tin thanh toán & đồng bộ mới nhất tài khoản ngân hàng từ Supabase (PC, Tablet & Di động)
   useEffect(() => {
     let isMounted = true;
-    hydratePublicData?.();
 
-    const fetchPaymentDetails = async () => {
+    const isLocalHost =
+      typeof window !== 'undefined' &&
+      ['localhost', '127.0.0.1'].includes(window.location.hostname);
+    const hasBackendApi = Boolean(import.meta.env.VITE_API_BASE_URL) || isLocalHost;
+
+    const initPayment = async () => {
       try {
-        const res = await api.post('/api/payments/create', {
-          order_code: orderCode,
-          access_token: token,
-        });
-        if (isMounted && res.success && res.data) {
-          setPaymentInfo(res.data);
-          if (res.data.payment_status === 'PAID') {
-            clearCart();
-            navigate(`/dat-hang-thanh-cong/${orderCode}?token=${token}`);
+        await hydratePublicData?.();
+        if (hasBackendApi && orderCode && token) {
+          const res = await api.post('/api/payments/create', {
+            order_code: orderCode,
+            access_token: token,
+          });
+          if (isMounted && res.success && res.data) {
+            setPaymentInfo(res.data);
+            if (res.data.payment_status === 'PAID') {
+              clearCart();
+              navigate(`/dat-hang-thanh-cong/${orderCode}?token=${token}`);
+            }
           }
         }
       } catch (err) {
@@ -64,12 +71,7 @@ export const PaymentPage = () => {
       }
     };
 
-    if (orderCode && token) {
-      fetchPaymentDetails();
-    } else {
-      // Offline / Local Store Mode: Hiện mã VietQR ngay lập tức không bị xoay chờ
-      setLoading(false);
-    }
+    initPayment();
 
     return () => {
       isMounted = false;
