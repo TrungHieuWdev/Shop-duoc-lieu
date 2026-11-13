@@ -15,7 +15,7 @@ export const FloatingZaloButton = () => {
     return null;
   }
 
-  const cleanPhone = String(zaloPhone || '0987654321').replace(/\D/g, '');
+  const cleanPhone = String(zaloPhone || '0374276634').replace(/\D/g, '');
   if (!cleanPhone) {
     return null;
   }

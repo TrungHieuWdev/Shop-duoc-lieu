@@ -101,6 +101,18 @@ const ALL_PRODUCTS = [
     is_featured: true,
     thumbnail_url: '/images/herbs/hoa-hong.jpg',
   },
+  {
+    id: 9,
+    category_slug: 'bai-thuoc-xong-tam',
+    category_name: 'Bài Thuốc Xông Tắm',
+    name: 'Thảo Dược Dược Nữ',
+    slug: 'thao-duoc-duoc-nu',
+    unit: '1 bịch (5 gói nhỏ)',
+    price: 60000,
+    original_price: 75000,
+    is_featured: true,
+    thumbnail_url: '/images/products/thao-duoc-duoc-nu.jpg',
+  },
 ];
 
 export const ProductsPage = () => {
@@ -119,11 +131,15 @@ export const ProductsPage = () => {
     const matchKeyword = !keyword || prod.name.toLowerCase().includes(keyword.toLowerCase());
     return matchCategory && matchKeyword;
   }).sort((a, b) => {
-    // Luôn ưu tiên hiển thị Bài thuốc 7 vị lên trên đầu trang
-    const isHeroA = a.id === 1 || (a.slug && a.slug.includes('bai-thuoc'));
-    const isHeroB = b.id === 1 || (b.slug && b.slug.includes('bai-thuoc'));
-    if (isHeroA && !isHeroB) return -1;
-    if (!isHeroA && isHeroB) return 1;
+    // Luôn ưu tiên đưa sản phẩm mới "Thảo Dược Dược Nữ" và Bài thuốc 7 vị lên hàng đầu
+    const getPriority = (item) => {
+      if (item.slug === 'thao-duoc-duoc-nu' || (item.name && item.name.trim().toLowerCase() === 'thảo dược dược nữ')) return 0;
+      if (item.id === 1 || (item.slug && item.slug.includes('bai-thuoc'))) return 1;
+      return 2;
+    };
+    const pA = getPriority(a);
+    const pB = getPriority(b);
+    if (pA !== pB) return pA - pB;
 
     if (sortBy === 'price_asc') return a.price - b.price;
     if (sortBy === 'price_desc') return b.price - a.price;

@@ -3,6 +3,19 @@ import { create } from 'zustand';
 // Danh sách dược liệu mẫu ban đầu
 const DEFAULT_PRODUCTS = [
   {
+    id: 9,
+    name: 'Thảo Dược Dược Nữ',
+    slug: 'thao-duoc-duoc-nu',
+    category_slug: 'bai-thuoc-xong-tam',
+    category_name: 'Bài Thuốc Xông Tắm',
+    unit: '1 bịch (5 gói nhỏ)',
+    price: 60000,
+    original_price: 75000,
+    stock: 80,
+    status: 'Còn hàng',
+    thumbnail_url: '/images/products/thao-duoc-duoc-nu.jpg',
+  },
+  {
     id: 1,
     name: 'Bài Thuốc Xông Tắm Tổng Hợp 7 Vị Thảo Dược (Phơi Khô)',
     slug: 'bai-thuoc-xong-tam-tong-hop-7-vi-thao-duoc',
@@ -170,7 +183,7 @@ const DEFAULT_SETTINGS = {
   bank_account: '0983124567', // Số tài khoản ngân hàng
   account_name: 'TIỆM THẢO DƯỢC NGÂN HÀ', // Tên chủ tài khoản
   admin_email: 'hieunedz@gmail.com', // Gmail chủ tiệm để nhận thông tin đơn hàng đi đơn
-  zalo_phone: '0987654321', // Số điện thoại Zalo chủ cửa hàng
+  zalo_phone: '0374276634', // Số điện thoại Zalo chủ cửa hàng
   default_shipping_fee: 30000, // Phí ship mặc định
   free_shipping_threshold: 350000, // Ngưỡng miễn phí ship
 };
@@ -184,6 +197,10 @@ const getSavedSettings = () => {
     // Tự động nâng cấp nếu đang lưu email mẫu cũ
     if (!merged.admin_email || merged.admin_email === 'tiemthaomocnganha@gmail.com') {
       merged.admin_email = 'hieunedz@gmail.com';
+    }
+    // Tự động nâng cấp nếu đang lưu SĐT Zalo mẫu cũ
+    if (!merged.zalo_phone || merged.zalo_phone === '0987654321') {
+      merged.zalo_phone = '0374276634';
     }
     return merged;
   } catch (e) {
@@ -204,7 +221,41 @@ const getSavedProducts = () => {
     const raw = localStorage.getItem('nganha_admin_products');
     if (!raw) return DEFAULT_PRODUCTS;
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) && parsed.length > 0 ? parsed : DEFAULT_PRODUCTS;
+    if (!Array.isArray(parsed) || parsed.length === 0) return DEFAULT_PRODUCTS;
+
+    // Loại bỏ sản phẩm trùng tên/slug (giữ 1 bản duy nhất) và đưa Thảo Dược Dược Nữ lên đầu
+    const seenSlugs = new Set();
+    const seenNames = new Set();
+    const deduped = [];
+
+    for (const p of parsed) {
+      if (!p || !p.name) continue;
+      const normName = p.name.trim().toLowerCase();
+      if ((p.slug && seenSlugs.has(p.slug)) || seenNames.has(normName)) continue;
+      if (p.slug) seenSlugs.add(p.slug);
+      seenNames.add(normName);
+      deduped.push(p);
+    }
+
+    for (const def of DEFAULT_PRODUCTS) {
+      const normName = def.name.trim().toLowerCase();
+      if (!seenSlugs.has(def.slug) && !seenNames.has(normName)) {
+        seenSlugs.add(def.slug);
+        seenNames.add(normName);
+        deduped.push(def);
+      }
+    }
+
+    // Đưa sản phẩm mới "Thảo Dược Dược Nữ" lên vị trí đầu tiên
+    const topIdx = deduped.findIndex(
+      (p) => p.slug === 'thao-duoc-duoc-nu' || p.name.trim().toLowerCase() === 'thảo dược dược nữ'
+    );
+    if (topIdx > 0) {
+      const [topItem] = deduped.splice(topIdx, 1);
+      deduped.unshift(topItem);
+    }
+
+    return deduped;
   } catch (e) {
     return DEFAULT_PRODUCTS;
   }

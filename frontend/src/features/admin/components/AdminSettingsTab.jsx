@@ -21,7 +21,7 @@ export const AdminSettingsTab = ({ settings, onSaveSettings, requestConfirmation
       (settings?.admin_email && settings?.admin_email !== 'tiemthaomocnganha@gmail.com')
         ? settings.admin_email
         : 'hieunedz@gmail.com',
-    zalo_phone: settings?.zalo_phone || '0987654321',
+    zalo_phone: settings?.zalo_phone || '0374276634',
     default_shipping_fee: settings?.default_shipping_fee || 30000,
     free_shipping_threshold: settings?.free_shipping_threshold || 350000,
   });

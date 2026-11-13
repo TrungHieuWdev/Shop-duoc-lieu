@@ -109,6 +109,19 @@ const MOCK_DETAILS = {
     usage: 'Dùng 15 - 20g thả vào nồi nước xông, bồn tắm nước ấm hoặc hãm với nước sôi thưởng trà.',
     image_url: '/images/herbs/hoa-hong.jpg',
   },
+  'thao-duoc-duoc-nu': {
+    id: 9,
+    name: 'Thảo Dược Dược Nữ',
+    category_name: 'Bài Thuốc Xông Tắm',
+    unit: '1 bịch (5 gói nhỏ)',
+    price: 60000,
+    original_price: 75000,
+    summary: 'Thảo dược xông tắm dành riêng cho phái nữ (1 bịch gồm 5 gói nhỏ tiện lợi), kết hợp từ 3 vị thuần tự nhiên: Hoa hồng khô, lá trầu không phơi khô và gừng phơi khô.',
+    description: 'Sự kết hợp hài hòa giữa hương hoa hồng khô dịu ngọt dưỡng nhan, lá trầu không phơi khô giúp làm sạch và kháng khuẩn dịu nhẹ, cùng gừng phơi khô ấm nồng giúp giữ ấm cơ thể, lưu thông khí huyết và thư giãn sâu sau ngày dài.',
+    ingredients: '1. Hoa hồng khô • 2. Lá trầu không phơi khô • 3. Gừng phơi khô.',
+    usage: 'Mỗi lần dùng lấy 1 gói nhỏ cho vào nồi cùng khoảng 2 - 3 lít nước (hoặc 10 - 15 lít nếu xông toàn thân), đun sôi rồi hạ nhỏ lửa 15 - 20 phút cho tinh dầu hòa quyện. Dùng xông hơi ấm 10 - 15 phút hoặc pha nước ấm vừa phải (38°C - 40°C) để rửa, tắm vệ sinh dịu nhẹ và thư giãn.',
+    image_url: '/images/products/thao-duoc-duoc-nu.jpg',
+  },
 };
 
 export const ProductDetailPage = () => {

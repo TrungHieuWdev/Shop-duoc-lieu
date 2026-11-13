@@ -8,6 +8,17 @@ import { useAdminStore } from '@/store/useAdminStore';
 // Dữ liệu mẫu đồng bộ với danh mục thảo mộc phơi khô thực tế của shop
 const FEATURED_PRODUCTS = [
   {
+    id: 9,
+    name: 'Thảo Dược Dược Nữ',
+    slug: 'thao-duoc-duoc-nu',
+    category_name: 'Bài Thuốc Xông Tắm',
+    unit: '1 bịch (5 gói nhỏ)',
+    price: 60000,
+    original_price: 75000,
+    is_featured: true,
+    thumbnail_url: '/images/products/thao-duoc-duoc-nu.jpg',
+  },
+  {
     id: 1,
     name: 'Bài Thuốc Xông Tắm Tổng Hợp 7 Vị Thảo Dược (Phơi Khô)',
     slug: 'bai-thuoc-xong-tam-tong-hop-7-vi-thao-duoc',
