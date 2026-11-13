@@ -7,45 +7,49 @@ import { useAdminStore } from '../store/useAdminStore';
  */
 export const createOrderEmailContent = (order) => {
   const subject = `[ĐƠN HÀNG MỚI #${order.order_code}] ${order.customer_name} - ${formatCurrency(order.total || 0)}`;
+  const orderTime = order.created_at
+    ? new Date(order.created_at).toLocaleString('vi-VN')
+    : new Date().toLocaleString('vi-VN');
 
   const itemsList = (order.items || [])
     .map(
       (it, idx) =>
-        `  ${idx + 1}. ${it.name} (${it.unit || 'Gói/Túi'}) - Số lượng: ${it.quantity} gói - Đơn giá: ${formatCurrency(it.price)}`
+        `  ${idx + 1}. ${it.name}${it.unit ? ` (${it.unit})` : ''} × ${it.quantity || 1} — ${formatCurrency(
+          (it.price || 0) * (it.quantity || 1)
+        )}`
     )
     .join('\n');
 
-  const body = `Kính gửi Chủ Tiệm Thảo Dược Ngân Hà,
+  const paymentMethodLabel =
+    order.payment_method === 'VIETQR' ? 'Chuyển khoản VietQR' : 'Tiền mặt (COD)';
+  const paymentStatusLabel =
+    order.payment_status === 'PAID' ? 'Đã thanh toán' : 'Chưa thanh toán';
+  const shippingLabel =
+    order.shipping_fee > 0 ? formatCurrency(order.shipping_fee) : 'Miễn phí vận chuyển';
 
-Hệ thống vừa tiếp nhận 01 đơn hàng mới từ khách hàng. Dưới đây là thông tin chi tiết để shop chuẩn bị đóng gói và đi đơn ngay:
+  const noteLine =
+    order.customer_note && String(order.customer_note).trim()
+      ? `\n• Ghi chú: ${String(order.customer_note).trim()}`
+      : '';
 
-==================================================
-1. THÔNG TIN KHÁCH HÀNG & GIAO HÀNG
-==================================================
-- Mã đơn hàng: #${order.order_code}
-- Họ và tên người nhận: ${order.customer_name}
-- Số điện thoại: ${order.customer_phone}
-- Địa chỉ giao hàng: ${order.customer_address}
-- Ghi chú khách dặn: ${order.customer_note || 'Không có ghi chú'}
-- Hình thức thanh toán: ${order.payment_method === 'VIETQR' ? 'Chuyển khoản VietQR' : 'Tiền mặt (COD)'}
-- Trạng thái thanh toán: ${order.payment_status === 'PAID' ? 'ĐÃ THANH TOÁN (PAID)' : 'CHƯA THANH TOÁN'}
-- Thời gian đặt: ${order.created_at ? new Date(order.created_at).toLocaleString('vi-VN') : new Date().toLocaleString('vi-VN')}
+  const body = `THẢO DƯỢC NGÂN HÀ — PHIẾU ĐƠN HÀNG MỚI #${order.order_code}
+Thời gian đặt: ${orderTime}
 
-==================================================
-2. DANH SÁCH DƯỢC LIỆU CẦN SOẠN ĐI ĐƠN
-==================================================
-${itemsList || '  (Chưa có danh sách mặt hàng)'}
+1. THÔNG TIN GIAO HÀNG
+• Người nhận: ${order.customer_name}
+• Số điện thoại: ${order.customer_phone}
+• Địa chỉ: ${order.customer_address}${noteLine}
 
-==================================================
-3. TỔNG KẾT TIỀN ĐƠN HÀNG
-==================================================
-- Tiền hàng (tạm tính): ${formatCurrency(order.subtotal || 0)}
-- Tiền phí ship: ${order.shipping_fee > 0 ? formatCurrency(order.shipping_fee) : 'Miễn phí vận chuyển'}
-- TỔNG CỘNG THU: ${formatCurrency(order.total || 0)}
+2. CHI TIẾT SẢN PHẨM
+${itemsList || '  (Chưa có danh sách sản phẩm)'}
 
-==================================================
-Vui lòng kiểm tra kho và xuất dược liệu đóng gói túi zip gửi cho đơn vị vận chuyển sớm nhất!
-Tiệm Thảo Dược Ngân Hà - Đơn giản, tinh tế, an lành.`;
+3. TỔNG KẾT THANH TOÁN
+• Tiền hàng: ${formatCurrency(order.subtotal || 0)}
+• Phí vận chuyển: ${shippingLabel}
+• Tổng thanh toán: ${formatCurrency(order.total || 0)}
+• Hình thức: ${paymentMethodLabel} (${paymentStatusLabel})
+
+Thảo Dược Ngân Hà • Đơn giản, tinh tế, an lành.`;
 
   return { subject, body };
 };
@@ -173,7 +177,7 @@ export const sendAutomaticOrderEmail = async (order, targetEmail, senderOptions 
             backendResult = data;
           }
         }
-      } catch (err) {}
+      } catch (err) { }
     }
   }
 
@@ -200,24 +204,42 @@ export const sendAutomaticOrderEmail = async (order, targetEmail, senderOptions 
 
   // 3. Fallback qua FormSubmit khi Backend offline hoặc chưa cấu hình SMTP
   try {
+    const orderTime = order.created_at
+      ? new Date(order.created_at).toLocaleString('vi-VN')
+      : new Date().toLocaleString('vi-VN');
+
+    const conciseItems = (order.items || [])
+      .map(
+        (it, idx) =>
+          `${idx + 1}. ${it.name}${it.unit ? ` (${it.unit})` : ''} × ${it.quantity || 1} — ${formatCurrency(
+            (it.price || 0) * (it.quantity || 1)
+          )}`
+      )
+      .join('\n');
+
+    const paymentLabel = order.payment_method === 'VIETQR' ? 'Chuyển khoản VietQR' : 'COD (Thu hộ)';
+    const paymentState = order.payment_status === 'PAID' ? 'Đã thanh toán' : 'Chưa thanh toán';
+    const shipLabel =
+      order.shipping_fee > 0 ? formatCurrency(order.shipping_fee) : 'Miễn phí vận chuyển';
+
     const formPayload = {
       _subject: subject,
-      _template: 'box',
+      _template: 'table',
       _captcha: 'false',
-      'Mã Đơn Hàng': `#${order.order_code}`,
-      'Khách Hàng': order.customer_name,
-      'Số Điện Thoại': order.customer_phone,
+      'Mã Đơn & Thời Gian': `#${order.order_code} • ${orderTime}`,
+      'Người Nhận & SĐT': `${order.customer_name} — ${order.customer_phone}`,
       'Địa Chỉ Giao Hàng': order.customer_address,
-      'Ghi Chú Khách Dặn': order.customer_note || 'Không có ghi chú',
-      'Hình Thức Thanh Toán': order.payment_method === 'VIETQR' ? 'Chuyển khoản VietQR' : 'Tiền mặt (COD)',
-      'Trạng Thái Thanh Toán': order.payment_status === 'PAID' ? 'ĐÃ THANH TOÁN (PAID)' : 'CHƯA THANH TOÁN',
-      'Tổng Tiền Thu': formatCurrency(order.total || 0),
-      'Chi Tiết Dược Liệu Đi Đơn': body,
+      'Chi Tiết Sản Phẩm': conciseItems || 'Không có sản phẩm',
+      'Tạm Tính & Phí Ship': `Tiền hàng: ${formatCurrency(order.subtotal || 0)} | Phí ship: ${shipLabel}`,
+      'Tổng Thanh Toán': `${formatCurrency(order.total || 0)} (${paymentLabel} • ${paymentState})`,
     };
+
+    if (order.customer_note && String(order.customer_note).trim()) {
+      formPayload['Ghi Chú Khách Hàng'] = String(order.customer_note).trim();
+    }
+
     if (senderEmail) {
-      formPayload.email = senderEmail;
       formPayload._replyto = senderEmail;
-      formPayload['Email Của Shop Gửi Đi'] = senderEmail;
     }
 
     const formRes = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(adminEmail)}`, {
@@ -276,7 +298,7 @@ export const sendAutomaticOrderEmail = async (order, targetEmail, senderOptions 
         message: `Email ${adminEmail} chưa kích hoạt FormSubmit. Vui lòng mở Gmail ${adminEmail} và bấm "Activate Form" trong thư từ FormSubmit (chỉ cần 1 lần duy nhất).`,
       };
     }
-  } catch (e) {}
+  } catch (e) { }
 
   saveEmailDispatchLog({
     order_code: order.order_code,
